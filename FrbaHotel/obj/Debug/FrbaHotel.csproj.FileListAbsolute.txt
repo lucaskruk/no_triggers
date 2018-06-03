@@ -1,0 +1,8 @@
+\\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\bin\Debug\FrbaHotel.exe.config
+\\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\bin\Debug\FrbaHotel.exe
+\\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\bin\Debug\FrbaHotel.pdb
+\\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\obj\Debug\FrbaHotel.csprojResolveAssemblyReference.cache
+\\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\obj\Debug\FrbaHotel.Properties.Resources.resources
+\\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\obj\Debug\FrbaHotel.csproj.GenerateResource.Cache
+\\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\obj\Debug\FrbaHotel.exe
+\\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\obj\Debug\FrbaHotel.pdb
