@@ -6,3 +6,13 @@
 \\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\obj\Debug\FrbaHotel.csproj.GenerateResource.Cache
 \\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\obj\Debug\FrbaHotel.exe
 \\VBOXSVR\Hotel_Frba_1C2018\src\FrbaHotel\obj\Debug\FrbaHotel.pdb
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\bin\Debug\FrbaHotel.exe.config
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.exe
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.pdb
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\bin\Debug\FrbaHotel.exe
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\bin\Debug\FrbaHotel.pdb
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csprojResolveAssemblyReference.cache
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Properties.Resources.resources
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csproj.GenerateResource.Cache
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.Form1.resources
+C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Form1.resources
