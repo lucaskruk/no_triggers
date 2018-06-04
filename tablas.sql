@@ -77,15 +77,15 @@ rol_estado bit, --si devuelve 0 es falso, si de vuelve 1 es true--
 constraint pk_id_rol primary key nonclustered (id_rol),
 )
 
-IF OBJECT_ID ('[no_triggers].rol_x_funcionalidad', 'U') IS NOT NULL
-	DROP TABLE [no_triggers].rol_x_funcionalidad
+IF OBJECT_ID ('[no_triggers].rol_por_funcionalidad', 'U') IS NOT NULL
+	DROP TABLE [no_triggers].rol_por_funcionalidad
 
-create table [no_triggers].rol_x_funcionalidad
+create table [no_triggers].rol_por_funcionalidad
 (
-id_rol_x_funcionalidad int identity (1,1) not null,
+id_rol_por_funcionalidad int identity (1,1) not null,
 id_rol int,
 id_funcionalidad int,
-constraint pk_id_rol_x_funcionalidad primary key nonclustered (id_rol_x_funcionalidad),
+constraint pk_id_rol_por_funcionalidad primary key nonclustered (id_rol_por_funcionalidad),
 constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
 constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad)
 )
@@ -150,13 +150,14 @@ cliente_nombre nvarchar(100),
 cliente_apellido nvarchar(200),
 cliente_email nvarchar (200),
 cliente_fecha_nacimiento datetime,
-cliente_tipo_documento nvarchar(10),
+id_cliente_tipo_documento int,
 cliente_numero_documento nvarchar(50),
 cliente_telefono nvarchar (50),
 ID_direccion int,
 ID_pais int,
 constraint pk_id_cliente primary key nonclustered (id_cliente),
 constraint fk_id_cliente_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion),
+constraint fk_id_cliente_tipo_documento foreign key (id_cliente_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento),
 constraint fk_id_cliente_pais foreign key (id_pais) references [no_triggers].pais(id_pais),
 constraint uk_email_cliente unique (cliente_email)
 )
@@ -249,15 +250,15 @@ constraint fk_id_estadia_cliente foreign key (id_cliente) references [no_trigger
 )
 
 --tabla regimen x hotel
-IF OBJECT_ID ('[no_triggers].regimen_X_hotel' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].regimen_X_hotel;
+IF OBJECT_ID ('[no_triggers].regimen_por_hotel' , 'U' ) IS NOT NULL
+	DROP TABLE [no_triggers].regimen_por_hotel;
 
-create table [no_triggers].regimen_X_hotel
+create table [no_triggers].regimen_por_hotel
 (
-id_regimen_X_hotel int identity (1,1) not null,
+id_regimen_por_hotel int identity (1,1) not null,
 id_regimen int,
 id_hotel int,
-constraint pk_id_regimen_X_hotel primary key nonclustered (id_regimen_X_hotel),
+constraint pk_id_regimen_por_hotel primary key nonclustered (id_regimen_por_hotel),
 constraint fk_id_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
 constraint fk_id_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
 )

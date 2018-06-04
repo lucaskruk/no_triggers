@@ -26,7 +26,7 @@ values
 
 go
 
-insert into [NO_TRIGGERS].rol_x_funcionalidad
+insert into [NO_TRIGGERS].rol_por_funcionalidad
 values
 	(3,1),
 	(3,2),
@@ -62,6 +62,62 @@ values
 	('PASAPORTE'),
 	('LICENCIA DE CONDUCIR')
 go
+
+insert into [NO_TRIGGERS].metodo_de_pago
+values 
+	('TARJETA DE CREDITO','PAGO EN CUOTAS'),
+	('TARJETA DE DEBITO','EN ARS'),
+	('TARJETA DE CREDITO','UNICO PAGO EN ARS'),
+	('TARJETA DE DEBITO','EN USD'),
+	('EFECTIVO','EN ARS'),
+	('EFECTIVO', 'EN USD')
+go
+
+--MIGRACION--
+insert into [NO_TRIGGERS].pais
+    select distinct
+		'Argentina', --Se toma esta decision porque la unica nacionalidad es Argentina.
+		Cliente_nacionalidad
+    from gd_esquema.Maestra 
+go
+
+insert into [NO_TRIGGERS].ciudad
+    select distinct
+	(select id_pais from [NO_TRIGGERS].pais),
+	Hotel_Ciudad
+    from gd_esquema.Maestra 
+go
+
+insert into [NO_TRIGGERS].ciudad
+values
+	((select id_pais from [NO_TRIGGERS].pais),'Desconocido')
+go
+
+
+insert into [NO_TRIGGERS].direccion
+
+select distinct 
+	Hotel_Calle,
+	Hotel_Nro_Calle,
+	NULL,
+	NULL,
+	(select id_ciudad from [NO_TRIGGERS].ciudad
+	where ciudad_nombre=Hotel_Ciudad)
+	from gd_esquema.Maestra
+	union 
+select distinct 
+	Cliente_Dom_Calle,
+	Cliente_Nro_Calle,
+	Cliente_piso,
+	Cliente_Depto,
+	(select id_ciudad from [NO_TRIGGERS].ciudad 
+	where ciudad_nombre='Desconocido')
+	from gd_esquema.Maestra
+
+go
+
+insert into [NO_TRIGGERS].cliente
+select distinct
 
 
 
