@@ -61,7 +61,7 @@ IF OBJECT_ID ('[no_triggers].funcionalidad' , 'U' ) IS NOT NULL
 create table [no_triggers].funcionalidad
 (
 id_funcionalidad int identity (1,1) not null,
-funcionalidad_numero int,
+funcionalidad_descripcion nvarchar(100),
 constraint pk_id_funcionalidad primary key nonclustered (id_funcionalidad)
 )
  
@@ -74,9 +74,20 @@ create table [no_triggers].rol
 id_rol int identity (1,1) not null,
 rol_nombre nvarchar(100),
 rol_estado bit, --si devuelve 0 es falso, si de vuelve 1 es true--
-id_funcionalidad int,
 constraint pk_id_rol primary key nonclustered (id_rol),
-constraint fk_id_rol_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad)
+)
+
+IF OBJECT_ID ('[no_triggers].rol_x_funcionalidad', 'U') IS NOT NULL
+	DROP TABLE [no_triggers].rol_x_funcionalidad
+
+create table [no_triggers].rol_x_funcionalidad
+(
+id_rol_x_funcionalidad int identity (1,1) not null,
+id_rol int,
+id_funcionalidad int,
+constraint pk_id_rol_x_funcionalidad primary key nonclustered (id_rol_x_funcionalidad),
+constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
+constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad)
 )
 
 --Tabla hotel
@@ -93,7 +104,15 @@ hotel_fecha_creacion datetime,
 constraint pk_id_hotel primary key nonclustered (id_hotel),
 constraint fk_id_hotel_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion)
 )
+IF OBJECT_ID ('[no_triggers].tipo_de_documento', 'U') IS NOT NULL
+DROP TABLE [NO_TRIGGERS].tipo_de_documento;
 
+create table [no_triggers].tipo_documento
+(
+id_tipo_documento int identity (1,1) NOT NULL,
+tipo_de_documento_nombre nvarchar(30),
+constraint id_tipo_de_documento primary key nonclustered (id_tipo_documento)
+)
 --Tabla Usuario
 IF OBJECT_ID ('[no_triggers].usuario' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].usuario;
@@ -101,19 +120,23 @@ IF OBJECT_ID ('[no_triggers].usuario' , 'U' ) IS NOT NULL
 create table [no_triggers].usuario
 (
 id_usuario int identity (1,1) not null,
+usuario_username nvarchar (100),
 usuario_nombre nvarchar(200),
 usuario_apellido nvarchar(200),
 usuario_password nvarchar (100),
 usuario_email nvarchar(200),
 usuario_fecha_nacimiento datetime,
-usuario_tipo_documento nvarchar(30),
+id_tipo_documento int,
 usuario_numero_documento nvarchar(50),
 usuario_telefono nvarchar(50),
+usuario_habilitado bit,
 ID_rol int,
 ID_hotel int,
 constraint pk_id_usuario primary key nonclustered (id_usuario),
 constraint fk_id_usuario_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
-constraint fk_id_usuario_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
+constraint fk_id_usuario_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
+constraint fk_id_usuario_tipo_documento foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento),
+constraint uk_usuario_username unique (usuario_username)
 )
 
 --Tabla Cliente
@@ -166,7 +189,7 @@ constraint fk_id_habitacion_hotel foreign key (id_hotel) references [no_triggers
 constraint fk_id_tipo_de_habitacion foreign key (id_tipo_habitacion) references [no_triggers].tipoDeHabitacion(id_tipo_habitacion)
 )
 
---Tabla estado reserva
+--Tabla estado_reserva
 IF OBJECT_ID ('[no_triggers].estado_reserva' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].estado_reserva;
 
@@ -239,7 +262,7 @@ constraint fk_id_regimen foreign key (id_regimen) references [no_triggers].regim
 constraint fk_id_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
 )
 
---Tabla metdo de pago
+--Tabla metodo de pago
 IF OBJECT_ID ('[no_triggers].metodo_de_pago' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].metodo_de_pago;
 create table [no_triggers].metodo_de_pago
@@ -296,3 +319,5 @@ constraint pk_id_item_factura primary key nonclustered (id_item_factura),
 constraint fk_id_numero_factura foreign key (id_factura) references [no_triggers].factura(id_factura),
 constraint fk_id_item_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
 )
+
+--RELACIONES--
