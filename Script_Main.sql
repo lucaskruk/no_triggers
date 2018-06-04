@@ -75,15 +75,15 @@ rol_estado bit, --si devuelve 0 es falso, si de vuelve 1 es true--
 constraint pk_id_rol primary key clustered (id_rol),
 )
 
-IF OBJECT_ID ('[no_triggers].rol_x_funcionalidad', 'U') IS NOT NULL
-	DROP TABLE [no_triggers].rol_x_funcionalidad
+IF OBJECT_ID ('[no_triggers].rol_por_funcionalidad', 'U') IS NOT NULL
+	DROP TABLE [no_triggers].rol_por_funcionalidad
 
-create table [no_triggers].rol_x_funcionalidad
+create table [no_triggers].rol_por_funcionalidad
 (
-id_rol_x_funcionalidad int identity (1,1) not null,
+id_rol_por_funcionalidad int identity (1,1) not null,
 id_rol int,
 id_funcionalidad int,
-constraint pk_id_rol_x_funcionalidad primary key clustered (id_rol_x_funcionalidad),
+constraint pk_id_rol_por_funcionalidad primary key clustered (id_rol_por_funcionalidad)
 )
 
 --Tabla hotel
@@ -141,14 +141,15 @@ cliente_estado bit,
 cliente_nombre nvarchar(100),
 cliente_apellido nvarchar(200),
 cliente_email nvarchar (200),
+email_invalido bit,-- sirve para indicar los correos que estan duplicados
 cliente_fecha_nacimiento datetime,
-cliente_tipo_documento nvarchar(10),
+id_tipo_documento int,
 cliente_numero_documento nvarchar(50),
 cliente_telefono nvarchar (50),
 ID_direccion int,
 ID_pais int,
-constraint pk_id_cliente primary key clustered (id_cliente),
-constraint uk_email_cliente unique (cliente_email)
+constraint pk_id_cliente primary key clustered (id_cliente)
+--constraint uk_email_cliente unique (cliente_email)
 )
 
 --Tabla Tipo De Habitacion
@@ -230,15 +231,15 @@ constraint pk_id_estadia primary key clustered (id_estadia)
 )
 
 --tabla regimen x hotel
-IF OBJECT_ID ('[no_triggers].regimen_X_hotel' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].regimen_X_hotel;
+IF OBJECT_ID ('[no_triggers].regimen_por_hotel' , 'U' ) IS NOT NULL
+	DROP TABLE [no_triggers].regimen_por_hotel;
 
-create table [no_triggers].regimen_X_hotel
+create table [no_triggers].regimen_por_hotel
 (
-id_regimen_X_hotel int identity (1,1) not null,
+id_regimen_por_hotel int identity (1,1) not null,
 id_regimen int,
 id_hotel int,
-constraint pk_id_regimen_X_hotel primary key clustered (id_regimen_X_hotel),
+constraint pk_id_regimen_por_hotel primary key clustered (id_regimen_por_hotel),
 )
 
 --Tabla metodo de pago
@@ -337,6 +338,116 @@ insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values
 ('D.N.I.'),('L.E.'),('C.I.'),('Pasaporte')
 
 --select * from [no_triggers].tipo_documento
+
+
+insert into [NO_TRIGGERS].funcionalidad
+values
+	('ABM ROL'),--1
+	('ABM USUARIO'),--2
+	('ABM CLIENTE'),--3
+	('ABM HOTEL'),--4
+	('ABM HABITACION'),--5
+	('ABM REGIMEN DE ESTADIA'),--6
+	('GENERAR/MODIFICAR RESERVA'),--7
+	('CANCELAR RESERVA'),--8
+	('REGISTRAR ESTADIA/CHECK-IN CHECK-OUT'),--9
+	('REGISTRAR CONSUMIBLE'),--10
+	('FACTURAR ESTADIA'),--11
+	('LISTADO ESTADISTICO'),--12
+	('LOGIN y SEGURIDAD')--13
+go
+
+insert into [NO_TRIGGERS].rol
+values 
+    ('RECEPCIONISTA', 1),--1
+    ('GUEST', 1),--2
+    ('ADMINISTRADOR', 1)--3
+
+go
+
+insert into [NO_TRIGGERS].rol_por_funcionalidad
+values
+	(3,1),
+	(3,2),
+	(1,3),
+	(3,4),
+	(3,5),
+	(3,6),
+	(1,7),
+	(2,7),
+	(1,8),
+	(2,8),
+	(1,9),
+	(1,10), --verificar recepcion
+	(1,11),
+	(3,12),
+	(1,13),
+	(3,13)
+go
+
+insert into [NO_TRIGGERS].estado_reserva
+values
+	('RESERVA CORRECTA'),
+	('RESERVA MODIFICADA'),
+	('RESERVA CANCELADA POR RECEPCION'),
+	('RESERVA CANCELADA POR CLIENTE'),
+	('RESERVA CANCELADA POR NO-SHOW'),
+	('RESERVA EFECTIVIZADA')
+go
+
+insert into [NO_TRIGGERS].metodo_de_pago
+values 
+	('TARJETA DE CREDITO','PAGO EN CUOTAS'),
+	('TARJETA DE DEBITO','EN ARS'),
+	('TARJETA DE CREDITO','UNICO PAGO EN ARS'),
+	('TARJETA DE DEBITO','EN USD'),
+	('EFECTIVO','EN ARS'),
+	('EFECTIVO', 'EN USD')
+go
+
+-- clientes 
+declare @ciudad_indef int 
+select @ciudad_indef=id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida'
+
+insert into [NO_TRIGGERS].cliente
+(cliente_estado
+,cliente_nombre
+,cliente_apellido
+,cliente_email
+,cliente_fecha_nacimiento
+,id_tipo_documento
+,cliente_numero_documento
+,cliente_telefono
+,ID_direccion
+,ID_pais)
+select distinct 1 as cliente_estado,
+Cliente_Nombre, Cliente_Apellido
+,Cliente_Mail,Cliente_Fecha_Nac
+,(select id_tipo_documento from [NO_TRIGGERS].tipo_documento where tipo_de_documento_nombre='Pasaporte')
+,Cliente_Pasaporte_Nro
+,null as cliente_telefono
+,dr.id_direccion
+,ps.id_pais
+from gd_esquema.Maestra mr
+join [NO_TRIGGERS].direccion dr on mr.Cliente_Dom_Calle=dr.direccion_calle and mr.Cliente_Nro_Calle=dr.direccion_altura and mr.Cliente_Depto=dr.direccion_departamento
+and mr.Cliente_Piso=dr.direccion_piso and dr.id_ciudad=@ciudad_indef
+join [NO_TRIGGERS].pais ps on mr.Cliente_Nacionalidad=ps.pais_nacionalidad
+
+--identifico mails invalidos
+select cliente_email into #bad_emails from [NO_TRIGGERS].cliente
+group by cliente_email
+having count(1)>1
+
+update cl 
+set email_invalido=1
+from [NO_TRIGGERS].cliente cl 
+join #bad_emails be on cl.cliente_email=be.cliente_email
+
+drop table #bad_emails
+
+
+
+
 -- Relaciones
 
 Alter table [no_triggers].ciudad add
@@ -344,7 +455,7 @@ constraint fk_id_ciudad_pais foreign key (id_pais) references [no_triggers].pais
 
 Alter table [no_triggers].direccion add constraint fk_id_ciudad_direccion foreign key (id_ciudad) references [no_triggers].ciudad(id_ciudad)
 
-Alter table [no_triggers].rol_x_funcionalidad add
+Alter table [no_triggers].rol_por_funcionalidad add
 constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
 constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad)
 
@@ -358,7 +469,8 @@ constraint fk_id_usuario_tipo_documento foreign key (id_tipo_documento) referenc
 
 Alter table [no_triggers].cliente add
 constraint fk_id_cliente_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion),
-constraint fk_id_cliente_pais foreign key (id_pais) references [no_triggers].pais(id_pais)
+constraint fk_id_cliente_pais foreign key (id_pais) references [no_triggers].pais(id_pais),
+constraint fk_id_cliente_tipo_doc foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento)
 
 Alter table [no_triggers].habitacion add
 constraint fk_id_habitacion_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
@@ -375,7 +487,7 @@ constraint fk_id_estadia_habitacion foreign key (id_habitacion) references [no_t
 constraint fk_id_estadia_reserva foreign key (id_reserva) references [no_triggers].reserva(id_reserva),
 constraint fk_id_estadia_cliente foreign key (id_cliente) references [no_triggers].cliente(id_cliente)
 
-Alter table [no_triggers].regimen_X_hotel add
+Alter table [no_triggers].regimen_por_hotel add
 constraint fk_id_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
 constraint fk_id_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
 
