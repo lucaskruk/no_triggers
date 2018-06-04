@@ -1,6 +1,7 @@
 use GD1C2018
 go
 
+
 --Tabla Pais
 IF OBJECT_ID('[no_triggers].pais', 'U') IS NOT NULL 
   DROP TABLE [no_triggers].pais;
@@ -9,7 +10,7 @@ create table [no_triggers].pais
 (id_pais int identity(1,1) not null,
 pais_nombre nvarchar(40),
 pais_nacionalidad nvarchar(80),
-constraint pk_id_pais primary key nonclustered (id_pais)
+constraint pk_id_pais primary key clustered (id_pais asc)
 )
 
 
@@ -21,8 +22,7 @@ create table [no_triggers].ciudad
 (id_ciudad int identity(1,1) not null,
 id_pais int,
 ciudad_nombre nvarchar(80),
-constraint pk_id_ciudad primary key nonclustered (id_ciudad),
-constraint fk_id_ciudad_pais foreign key (id_pais) references [no_triggers].pais(id_pais)
+constraint pk_id_ciudad primary key clustered (id_ciudad asc) 
 )
 
 
@@ -37,14 +37,13 @@ direccion_altura int,
 direccion_piso int,
 direccion_departamento nvarchar(4),
 id_ciudad int,
-constraint pk_id_direccion primary key nonclustered (id_direccion),
-constraint fk_id_ciudad_direccion foreign key (id_ciudad) references [no_triggers].ciudad(id_ciudad)
+constraint pk_id_direccion primary key clustered (id_direccion asc)
 )
+
 
 /*
 IF OBJECT_ID('[no_triggers].nacionalidad', 'U') IS NOT NULL 
   DROP TABLE [no_triggers].nacionalidad;
-
 create table [no_triggers].nacionalidad
 (
 id_nacionalidad int identity (1,1) not null,
@@ -62,19 +61,19 @@ create table [no_triggers].funcionalidad
 (
 id_funcionalidad int identity (1,1) not null,
 funcionalidad_descripcion nvarchar(100),
-constraint pk_id_funcionalidad primary key nonclustered (id_funcionalidad)
+constraint pk_id_funcionalidad primary key clustered (id_funcionalidad)
 )
  
 --Tabla rol
 IF OBJECT_ID ('[no_triggers].rol' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].nacionalidad;
+	DROP TABLE [no_triggers].rol;
 
 create table [no_triggers].rol
 (
 id_rol int identity (1,1) not null,
 rol_nombre nvarchar(100),
 rol_estado bit, --si devuelve 0 es falso, si de vuelve 1 es true--
-constraint pk_id_rol primary key nonclustered (id_rol),
+constraint pk_id_rol primary key clustered (id_rol),
 )
 
 IF OBJECT_ID ('[no_triggers].rol_por_funcionalidad', 'U') IS NOT NULL
@@ -85,9 +84,7 @@ create table [no_triggers].rol_por_funcionalidad
 id_rol_por_funcionalidad int identity (1,1) not null,
 id_rol int,
 id_funcionalidad int,
-constraint pk_id_rol_por_funcionalidad primary key nonclustered (id_rol_por_funcionalidad),
-constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
-constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad)
+constraint pk_id_rol_por_funcionalidad primary key clustered (id_rol_por_funcionalidad)
 )
 
 --Tabla hotel
@@ -101,8 +98,7 @@ id_direccion int,
 hotel_cantidad_estrellas float,
 hotel_recarga_estrella float,
 hotel_fecha_creacion datetime,
-constraint pk_id_hotel primary key nonclustered (id_hotel),
-constraint fk_id_hotel_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion)
+constraint pk_id_hotel primary key clustered (id_hotel)
 )
 IF OBJECT_ID ('[no_triggers].tipo_de_documento', 'U') IS NOT NULL
 DROP TABLE [NO_TRIGGERS].tipo_de_documento;
@@ -111,7 +107,7 @@ create table [no_triggers].tipo_documento
 (
 id_tipo_documento int identity (1,1) NOT NULL,
 tipo_de_documento_nombre nvarchar(30),
-constraint id_tipo_de_documento primary key nonclustered (id_tipo_documento)
+constraint id_tipo_de_documento primary key clustered (id_tipo_documento)
 )
 --Tabla Usuario
 IF OBJECT_ID ('[no_triggers].usuario' , 'U' ) IS NOT NULL
@@ -132,10 +128,7 @@ usuario_telefono nvarchar(50),
 usuario_habilitado bit,
 ID_rol int,
 ID_hotel int,
-constraint pk_id_usuario primary key nonclustered (id_usuario),
-constraint fk_id_usuario_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
-constraint fk_id_usuario_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
-constraint fk_id_usuario_tipo_documento foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento),
+constraint pk_id_usuario primary key clustered (id_usuario),
 constraint uk_usuario_username unique (usuario_username)
 )
 
@@ -149,17 +142,15 @@ cliente_estado bit,
 cliente_nombre nvarchar(100),
 cliente_apellido nvarchar(200),
 cliente_email nvarchar (200),
+email_invalido bit,-- sirve para indicar los correos que estan duplicados
 cliente_fecha_nacimiento datetime,
-id_cliente_tipo_documento int,
+id_tipo_documento int,
 cliente_numero_documento nvarchar(50),
 cliente_telefono nvarchar (50),
 ID_direccion int,
 ID_pais int,
-constraint pk_id_cliente primary key nonclustered (id_cliente),
-constraint fk_id_cliente_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion),
-constraint fk_id_cliente_tipo_documento foreign key (id_cliente_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento),
-constraint fk_id_cliente_pais foreign key (id_pais) references [no_triggers].pais(id_pais),
-constraint uk_email_cliente unique (cliente_email)
+constraint pk_id_cliente primary key clustered (id_cliente)
+--constraint uk_email_cliente unique (cliente_email)
 )
 
 --Tabla Tipo De Habitacion
@@ -170,7 +161,7 @@ create table [no_triggers].tipoDeHabitacion
 id_tipo_habitacion int identity (1,1) not null,
 tipo_habitacion_descripcion nvarchar(200),
 tipo_habitacion_porcentual float,
-constraint pk_id_tipo_habitacion primary key nonclustered (id_tipo_habitacion)
+constraint pk_id_tipo_habitacion primary key clustered (id_tipo_habitacion)
 )
 
 --Tabla Habitacion
@@ -185,9 +176,7 @@ habitacion_piso int,
 habitacion_frente nvarchar(10),
 ID_tipo_habitacion int,
 ID_hotel int,
-constraint pk_id_habitacion primary key nonclustered (id_habitacion),
-constraint fk_id_habitacion_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
-constraint fk_id_tipo_de_habitacion foreign key (id_tipo_habitacion) references [no_triggers].tipoDeHabitacion(id_tipo_habitacion)
+constraint pk_id_habitacion primary key clustered (id_habitacion)
 )
 
 --Tabla estado_reserva
@@ -198,7 +187,7 @@ create table [no_triggers].estado_reserva
 (
 id_estado_reserva int identity (1,1) not null,
 estado_reserva_descripcion nvarchar(200),
-constraint pk_id_estado_reserva primary key nonclustered (id_estado_reserva)
+constraint pk_id_estado_reserva primary key clustered (id_estado_reserva)
 )
 
 --Tabla Regimen
@@ -210,7 +199,7 @@ id_regimen int identity (1,1) not null,
 regimen_descripcion nvarchar(200),
 regimen_precio float,
 regimen_estado bit, --activo o no activo--
-constraint pk_id_regimen primary key nonclustered (id_regimen)
+constraint pk_id_regimen primary key clustered (id_regimen)
 )
 
 --Tabla Reserva
@@ -225,11 +214,7 @@ ID_hotel int,
 ID_habitacion int,
 ID_reserva_estado int,
 ID_regimen int,
-constraint pk_id_reserva primary key nonclustered (id_reserva),
-constraint fk_id_reserva_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
-constraint fk_id_reserva_habitacion foreign key (id_habitacion) references [no_triggers].habitacion(id_habitacion),
-constraint fk_id_reserva_en_estado foreign key (id_reserva_estado) references [no_triggers].estado_reserva(id_estado_reserva),
-constraint fk_id_reserva_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen)
+constraint pk_id_reserva primary key clustered (id_reserva)
 )
 
 --Tabla Estadia
@@ -243,10 +228,7 @@ estadia_cantidad_noches int,
 id_habitacion int,
 id_reserva int,
 id_cliente int,
-constraint pk_id_estadia primary key nonclustered (id_estadia),
-constraint fk_id_estadia_habitacion foreign key (id_habitacion) references [no_triggers].habitacion(id_habitacion),
-constraint fk_id_estadia_reserva foreign key (id_reserva) references [no_triggers].reserva(id_reserva),
-constraint fk_id_estadia_cliente foreign key (id_cliente) references [no_triggers].cliente(id_cliente)
+constraint pk_id_estadia primary key clustered (id_estadia)
 )
 
 --tabla regimen x hotel
@@ -258,9 +240,7 @@ create table [no_triggers].regimen_por_hotel
 id_regimen_por_hotel int identity (1,1) not null,
 id_regimen int,
 id_hotel int,
-constraint pk_id_regimen_por_hotel primary key nonclustered (id_regimen_por_hotel),
-constraint fk_id_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
-constraint fk_id_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
+constraint pk_id_regimen_por_hotel primary key clustered (id_regimen_por_hotel),
 )
 
 --Tabla metodo de pago
@@ -271,10 +251,10 @@ create table [no_triggers].metodo_de_pago
 id_metodo_de_pago int identity (1,1) not null,
 metodo_de_pago_nombre nvarchar(20),
 metodo_de_pago_detalles nvarchar (300),
-constraint pk_id_metodo_pago primary key nonclustered (id_metodo_de_pago)
+constraint pk_id_metodo_pago primary key clustered (id_metodo_de_pago)
 )
 
---Tabla facatura
+--Tabla factura
 IF OBJECT_ID ('[no_triggers].factura' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].factura;
 create table [no_triggers].factura
@@ -287,10 +267,7 @@ factura_total float,
 id_cliente int,
 id_estadia int,
 id_hotel int,
-constraint pk_id_factura primary key nonclustered (id_factura),
-constraint fk_id_factura_estadia foreign key (id_estadia) references [no_triggers].estadia(id_estadia),
-constraint fk_id_factura_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
-constraint fk_id_factura_cliente foreign key (id_cliente) references [no_triggers].cliente(id_cliente)
+constraint pk_id_factura primary key clustered (id_factura)
 )
 
 --Tabla Consumible
@@ -302,8 +279,7 @@ id_consumible int identity (1,1) not null,
 consumible_descripcion nvarchar(100),
 consumible_precio float,
 id_estadia int,
-constraint pk_id_consumible primary key nonclustered (id_consumible),
-constraint fk_id_consumible_estadia foreign key (id_estadia) references [no_triggers].estadia(id_estadia)
+constraint pk_id_consumible primary key clustered (id_consumible)
 )
 
 --Tabla Item Factura
@@ -316,9 +292,7 @@ item_factura_cantidad int,
 item_factura_monto float,
 id_factura int,
 id_consumible int,
-constraint pk_id_item_factura primary key nonclustered (id_item_factura),
-constraint fk_id_numero_factura foreign key (id_factura) references [no_triggers].factura(id_factura),
-constraint fk_id_item_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
+constraint pk_id_item_factura primary key clustered (id_item_factura)
 )
 
 --RELACIONES--
