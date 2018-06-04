@@ -56,7 +56,7 @@ values
 	('RESERVA EFECTIVIZADA')
 go
 
-insert into [NO_TRIGGERS].tipo_de_documento
+insert into [NO_TRIGGERS].tipo_documento
 values 
 	('DNI'),
 	('PASAPORTE'),
