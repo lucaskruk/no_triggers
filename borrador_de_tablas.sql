@@ -1,23 +1,22 @@
 --Ayuda para DROPPEAR LAS TABLAS :)
 
 DROP TABLE [NO_TRIGGERS].metodo_de_pago
-DROP TABLE [NO_TRIGGERS].rol_x_funcionalidad
+DROP TABLE [NO_TRIGGERS].rol_por_funcionalidad
 DROP TABLE [NO_TRIGGERS].funcionalidad
-DROP TABLE  [NO_TRIGGERS].regimen_X_hotel
+DROP TABLE  [NO_TRIGGERS].regimen_por_hotel
 DROP TABLE [NO_TRIGGERS].item_factura
 DROP TABLE [NO_TRIGGERS].factura
 DROP TABLE [NO_TRIGGERS].consumible
 DROP TABLE [NO_TRIGGERS].estadia
 DROP TABLE [NO_TRIGGERS].reserva
-DROP TABLE [NO_TRIGGERS].regimen_x_hotel
 DROP TABLE [NO_TRIGGERS].regimen
 DROP TABLE [NO_TRIGGERS].usuario
 DROP TABLE [NO_TRIGGERS].rol
 DROP TABLE [NO_TRIGGERS].habitacion
-DROP TABLE [NO_TRIGGERS].tipoDeHabitacion
-DROP TABLE [NO_TRIGGERS].hotel
-DROP TABLE [NO_TRIGGERS].estado_reserva
-DROP TABLE [NO_TRIGGERS].cliente
+DROP TABLE [NO_TRIGGERS].tipoDeHabitacion --ok
+DROP TABLE [NO_TRIGGERS].hotel -- ok
+DROP TABLE [NO_TRIGGERS].estado_reserva --ok
+DROP TABLE [NO_TRIGGERS].cliente -- ok
 DROP TABLE [NO_TRIGGERS].direccion --OK
 DROP TABLE [NO_TRIGGERS].ciudad --OK
 DROP TABLE [NO_TRIGGERS].pais --OK

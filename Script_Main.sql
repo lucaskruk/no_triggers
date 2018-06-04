@@ -4,7 +4,6 @@ go
 --Tabla Pais
 IF OBJECT_ID('[no_triggers].pais', 'U') IS NOT NULL 
   DROP TABLE [no_triggers].pais;
-
 create table [no_triggers].pais
 (id_pais int identity(1,1) not null,
 pais_nombre nvarchar(40),
@@ -12,11 +11,9 @@ pais_nacionalidad nvarchar(80),
 constraint pk_id_pais primary key clustered (id_pais asc)
 )
 
-
 --Tabla Ciudad
 IF OBJECT_ID('[no_triggers].ciudad', 'U') IS NOT NULL 
   DROP TABLE [no_triggers].ciudad;
-
 create table [no_triggers].ciudad
 (id_ciudad int identity(1,1) not null,
 id_pais int,
@@ -24,11 +21,9 @@ ciudad_nombre nvarchar(80),
 constraint pk_id_ciudad primary key clustered (id_ciudad asc) 
 )
 
-
 --Tabla Direccion
 IF OBJECT_ID('[no_triggers].direccion', 'U') IS NOT NULL 
   DROP TABLE [no_triggers].direccion;
-
 create table [no_triggers].direccion
 (id_direccion int identity(1,1) not null, 
 direccion_calle nvarchar(200),
@@ -38,20 +33,6 @@ direccion_departamento nvarchar(4),
 id_ciudad int,
 constraint pk_id_direccion primary key clustered (id_direccion asc)
 )
-
-
-/*
-IF OBJECT_ID('[no_triggers].nacionalidad', 'U') IS NOT NULL 
-  DROP TABLE [no_triggers].nacionalidad;
-create table [no_triggers].nacionalidad
-(
-id_nacionalidad int identity (1,1) not null,
-id_pais int,
-nacionalidad_nombre nvarchar(100),
-constraint pk_id_nacionalidad primary key nonclustered (id_nacionalidad),
-constraint fk_pais_id foreign key (id_pais) references [no_triggers].pais(id_pais)
-)
-*/
 
 --Funcionalidad
 IF OBJECT_ID ('[no_triggers].funcionalidad' , 'U' ) IS NOT NULL
@@ -66,7 +47,6 @@ constraint pk_id_funcionalidad primary key clustered (id_funcionalidad)
 --Tabla rol
 IF OBJECT_ID ('[no_triggers].rol' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].rol;
-
 create table [no_triggers].rol
 (
 id_rol int identity (1,1) not null,
@@ -75,9 +55,9 @@ rol_estado bit, --si devuelve 0 es falso, si de vuelve 1 es true--
 constraint pk_id_rol primary key clustered (id_rol),
 )
 
+-- Tabla Rol por funcionalidad
 IF OBJECT_ID ('[no_triggers].rol_por_funcionalidad', 'U') IS NOT NULL
 	DROP TABLE [no_triggers].rol_por_funcionalidad
-
 create table [no_triggers].rol_por_funcionalidad
 (
 id_rol_por_funcionalidad int identity (1,1) not null,
@@ -89,7 +69,6 @@ constraint pk_id_rol_por_funcionalidad primary key clustered (id_rol_por_funcion
 --Tabla hotel
 IF OBJECT_ID ('[no_triggers].hotel' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].hotel;
-
 create table [no_triggers].hotel
 (
 id_hotel int identity (1,1) not null,
@@ -99,19 +78,20 @@ hotel_recarga_estrella float,
 hotel_fecha_creacion datetime,
 constraint pk_id_hotel primary key clustered (id_hotel)
 )
+
+--Talba Tipo Documento
 IF OBJECT_ID ('[no_triggers].tipo_de_documento', 'U') IS NOT NULL
 DROP TABLE [NO_TRIGGERS].tipo_de_documento;
-
 create table [no_triggers].tipo_documento
 (
 id_tipo_documento int identity (1,1) NOT NULL,
 tipo_de_documento_nombre nvarchar(30),
 constraint id_tipo_de_documento primary key clustered (id_tipo_documento)
 )
+
 --Tabla Usuario
 IF OBJECT_ID ('[no_triggers].usuario' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].usuario;
-
 create table [no_triggers].usuario
 (
 id_usuario int identity (1,1) not null,
@@ -141,7 +121,7 @@ cliente_estado bit,
 cliente_nombre nvarchar(100),
 cliente_apellido nvarchar(200),
 cliente_email nvarchar (200),
-email_invalido bit,-- sirve para indicar los correos que estan duplicados
+cliente_email_invalido bit,-- sirve para indicar los correos que estan duplicados
 cliente_fecha_nacimiento datetime,
 id_tipo_documento int,
 cliente_numero_documento nvarchar(50),
@@ -160,28 +140,27 @@ create table [no_triggers].tipoDeHabitacion
 id_tipo_habitacion int identity (1,1) not null,
 tipo_habitacion_descripcion nvarchar(200),
 tipo_habitacion_porcentual float,
+tipo_habitacion_codigo int
 constraint pk_id_tipo_habitacion primary key clustered (id_tipo_habitacion)
 )
 
 --Tabla Habitacion
 IF OBJECT_ID ('[no_triggers].habitacion' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].habitacion;
-
 create table [no_triggers].habitacion
 (
 id_habitacion int identity (1,1) not null,
 habitacion_numero int,
 habitacion_piso int,
 habitacion_frente nvarchar(10),
-ID_tipo_habitacion int,
-ID_hotel int,
+Id_tipo_habitacion int,
+Id_hotel int,
 constraint pk_id_habitacion primary key clustered (id_habitacion)
 )
 
 --Tabla estado_reserva
 IF OBJECT_ID ('[no_triggers].estado_reserva' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].estado_reserva;
-
 create table [no_triggers].estado_reserva
 (
 id_estado_reserva int identity (1,1) not null,
@@ -233,7 +212,6 @@ constraint pk_id_estadia primary key clustered (id_estadia)
 --tabla regimen x hotel
 IF OBJECT_ID ('[no_triggers].regimen_por_hotel' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].regimen_por_hotel;
-
 create table [no_triggers].regimen_por_hotel
 (
 id_regimen_por_hotel int identity (1,1) not null,
@@ -294,15 +272,14 @@ id_consumible int,
 constraint pk_id_item_factura primary key clustered (id_item_factura)
 )
 
--- Migracion
+-------------------------------- Migracion --------------------------------------------------------------------------
 
 --PAIS
-		INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
-		('Argentina','Argentino'),('Brasil','Brasilero'),('Uruguay','Uruguayo'),('Indefinido','Indefinido');
-
---CIUDAD
+INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
+	('Argentina','ARGENTINO'),('Brasil','BRASILERO'),('Uruguay','URUGUAYO'),('Indefinido','Indefinido');
 --select * from [no_triggers].pais
 
+--CIUDAD
 insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
 select distinct 
 (select id_pais from [NO_TRIGGERS].pais where pais_nombre='Argentina'),
@@ -312,7 +289,6 @@ select id_pais, 'Indefinida' as ciudad_nombre from [NO_TRIGGERS].pais where pais
 --select * from [no_triggers].ciudad
 
 --Direccion
-
 insert into [NO_TRIGGERS].direccion (direccion_calle,direccion_altura,direccion_piso,direccion_departamento, id_ciudad)
 select distinct hotel_calle, hotel_nro_calle, null, null, cd.id_ciudad from gd_esquema.Maestra mr 
 join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
@@ -320,8 +296,7 @@ union
 select distinct 
 cliente_dom_calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto,  (select id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida')
 from gd_esquema.Maestra
-
---select * from [no_triggers].direccion 
+--select * from [no_triggers].direccion
 
 -- Hotel 
 
@@ -408,7 +383,6 @@ go
 -- clientes 
 declare @ciudad_indef int 
 select @ciudad_indef=id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida'
-
 insert into [NO_TRIGGERS].cliente
 (cliente_estado
 ,cliente_nombre
@@ -432,21 +406,43 @@ from gd_esquema.Maestra mr
 join [NO_TRIGGERS].direccion dr on mr.Cliente_Dom_Calle=dr.direccion_calle and mr.Cliente_Nro_Calle=dr.direccion_altura and mr.Cliente_Depto=dr.direccion_departamento
 and mr.Cliente_Piso=dr.direccion_piso and dr.id_ciudad=@ciudad_indef
 join [NO_TRIGGERS].pais ps on mr.Cliente_Nacionalidad=ps.pais_nacionalidad
-
 --identifico mails invalidos
 select cliente_email into #bad_emails from [NO_TRIGGERS].cliente
 group by cliente_email
 having count(1)>1
-
 update cl 
-set email_invalido=1
+set cliente_email_invalido=1
 from [NO_TRIGGERS].cliente cl 
 join #bad_emails be on cl.cliente_email=be.cliente_email
-
 drop table #bad_emails
 
+--select * from [NO_TRIGGERS].cliente
 
+--Tipo Habitacion
+insert into [NO_TRIGGERS].tipoDeHabitacion
+select distinct 
+	Habitacion_Tipo_Descripcion,
+	Habitacion_Tipo_Porcentual,
+	Habitacion_Tipo_Codigo
+from gd_esquema.Maestra
+--select * from [NO_TRIGGERS].tipoDeHabitacion
 
+--Habitacion
+insert into [NO_TRIGGERS].habitacion
+select distinct 
+	Habitacion_Numero,
+	Habitacion_Piso,
+	Habitacion_Frente,
+	(select top 1 id_tipo_habitacion from [NO_TRIGGERS].tipoDeHabitacion
+	where tipo_habitacion_descripcion = Habitacion_Tipo_Descripcion and tipo_habitacion_codigo = Habitacion_Tipo_Codigo and tipo_habitacion_porcentual = Habitacion_Tipo_Porcentual),
+	(select top 1 h.id_hotel from [NO_TRIGGERS].hotel H
+	join [NO_TRIGGERS].direccion D on D.id_direccion = H.id_direccion 
+	where D.direccion_calle = Hotel_Calle and D.direccion_altura = m.Hotel_Nro_Calle)
+from gd_esquema.Maestra m
+
+/*select * from [NO_TRIGGERS].habitacion hab
+join [NO_TRIGGERS].hotel H on hab.ID_hotel = H.id_hotel
+join [NO_TRIGGERS].direccion D on D.id_direccion = h.id_direccion*/
 
 -- Relaciones
 
