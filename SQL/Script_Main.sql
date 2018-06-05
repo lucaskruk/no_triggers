@@ -232,6 +232,7 @@ create table [no_triggers].consumible_por_estadia
 id_consumible_por_estadia int identity (1,1) not null,
 id_consumible int,
 id_estadia int,
+id_cantidad int,
 constraint pk_id_cosumible_por_estadia primary key clustered (id_consumible_por_estadia),
 )
 
@@ -580,23 +581,22 @@ join [NO_TRIGGERS].habitacion hab on m.Habitacion_Piso = hab.habitacion_piso and
 where e.estadia_cantidad_noches is not null*/
 
 --Consumible
-insert into [NO_TRIGGERS].consumible (consumible_descripcion,consumible_precio,consumible_codigo,id_estadia)
+insert into [NO_TRIGGERS].consumible (consumible_descripcion,consumible_precio,consumible_codigo)
 select distinct 
 	m.Consumible_Descripcion,
 	m.Consumible_Precio,
 	m.Consumible_Codigo
+
 from gd_esquema.Maestra m
 
---Consumible por estadia NO FUNCIONA!!!!!!!!!!!!!!!!!!!! REVISAR
-/*
+--Consumible_por_estadia
 insert into [NO_TRIGGERS].consumible_por_estadia
-select distinct
-	e.id_estadia,
-	c.id_consumible
-from gd_esquema.Maestra m
-join [NO_TRIGGERS].estadia e on m.Estadia_Cant_Noches = e.estadia_cantidad_noches and m.Estadia_Fecha_Inicio = e.estadia_fecha_inicio
-join [NO_TRIGGERS].consumible c on m.Consumible_Codigo = c.consumible_codigo and m.Consumible_Descripcion = c.consumible_descripcion and m.Consumible_Precio = c.consumible_precio
-*/
+		SELECT cons.id_consumible,est.id_estadia
+		FROM [NO_TRIGGERS].consumible cons,[NO_TRIGGERS].estadia est, gd_esquema.Maestra m, [NO_TRIGGERS].Reserva res
+		WHERE (m.Consumible_Codigo=cons.consumible_codigo) and (est.id_reserva = res.id_reserva) and (m.Factura_Nro IS NOT NULL) and (m.Reserva_Codigo = res.reserva_numero_codigo)
+
+GO
+
 
 --Factura
 insert into [NO_TRIGGERS].factura (factura_fecha,factura_numero,factura_tipo,factura_total,id_cliente,id_estadia,id_hotel)
@@ -667,8 +667,7 @@ Alter table [no_triggers].factura add
 constraint fk_id_factura_estadia foreign key (id_estadia) references [no_triggers].estadia(id_estadia),
 constraint fk_id_factura_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_factura_cliente foreign key (id_cliente) references [no_triggers].cliente(id_cliente)
-Alter table [no_triggers].consumible add
-constraint fk_id_consumible_estadia foreign key (id_estadia) references [no_triggers].estadia(id_estadia)
+
 Alter table [no_triggers].item_factura add
 constraint fk_id_numero_factura foreign key (id_factura) references [no_triggers].factura(id_factura),
 constraint fk_id_item_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)

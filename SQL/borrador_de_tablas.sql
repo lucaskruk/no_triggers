@@ -4,7 +4,7 @@ DROP TABLE [NO_TRIGGERS].metodo_de_pago --ok
 DROP TABLE [NO_TRIGGERS].rol_por_funcionalidad --ok
 DROP TABLE [NO_TRIGGERS].funcionalidad -- ok
 DROP TABLE  [NO_TRIGGERS].regimen_por_hotel --ok
-DROP TABLE [NO_TRIGGERS].item_factura  
+DROP TABLE [NO_TRIGGERS].item_factura  --ok
 DROP TABLE [NO_TRIGGERS].factura --ok
 DROP TABLE [NO_TRIGGERS].consumible --ok
 DROP TABLE [NO_TRIGGERS].estadia --ok
