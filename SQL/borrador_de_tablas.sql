@@ -1,14 +1,15 @@
 --Ayuda para DROPPEAR LAS TABLAS :)
 
-DROP TABLE [NO_TRIGGERS].metodo_de_pago
-DROP TABLE [NO_TRIGGERS].rol_por_funcionalidad
-DROP TABLE [NO_TRIGGERS].funcionalidad
-DROP TABLE  [NO_TRIGGERS].regimen_por_hotel
-DROP TABLE [NO_TRIGGERS].item_factura
-DROP TABLE [NO_TRIGGERS].factura
-DROP TABLE [NO_TRIGGERS].consumible
-DROP TABLE [NO_TRIGGERS].estadia
-DROP TABLE [NO_TRIGGERS].reserva
+DROP TABLE [NO_TRIGGERS].metodo_de_pago --ok
+DROP TABLE [NO_TRIGGERS].rol_por_funcionalidad --ok
+DROP TABLE [NO_TRIGGERS].funcionalidad -- ok
+DROP TABLE  [NO_TRIGGERS].regimen_por_hotel --ok
+DROP TABLE [NO_TRIGGERS].item_factura  
+DROP TABLE [NO_TRIGGERS].factura --ok
+DROP TABLE [NO_TRIGGERS].consumible --ok
+DROP TABLE [NO_TRIGGERS].estadia --ok
+drop table [NO_TRIGGERS].baja_de_hotel --ok
+DROP TABLE [NO_TRIGGERS].reserva --ok
 DROP TABLE [NO_TRIGGERS].regimen --OK
 DROP TABLE [NO_TRIGGERS].usuario --ok revisar!!!!! :)
 DROP TABLE [NO_TRIGGERS].rol --ok

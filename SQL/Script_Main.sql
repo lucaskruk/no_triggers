@@ -156,7 +156,6 @@ habitacion_piso int,
 habitacion_frente nvarchar(10),
 habitacion_habilitada bit, --va a indicar con 0 que esta dada de baja y con 1 que esta habilitada
 habitacion_ocupada bit, --va a indicar con 0 que esta ocupada y con 1 que esta desocupada
-habitacion_codigo int,
 Id_tipo_habitacion int,
 Id_hotel int,
 constraint pk_id_habitacion primary key clustered (id_habitacion)
@@ -261,6 +260,7 @@ create table [no_triggers].consumible
 id_consumible int identity (1,1) not null,
 consumible_descripcion nvarchar(100),
 consumible_precio float,
+consumible_codigo int,
 id_estadia int,
 constraint pk_id_consumible primary key clustered (id_consumible)
 )
@@ -527,68 +527,124 @@ join [NO_TRIGGERS].habitacion hab on m.Habitacion_Frente = hab.habitacion_frente
 join [NO_TRIGGERS].regimen r on r.regimen_descripcion = m.Regimen_Descripcion and r.regimen_precio = m.Regimen_Precio
 
 /*
-
 select * from [NO_TRIGGERS].reserva r
 join gd_esquema.Maestra mr on mr.Reserva_Codigo=r.reserva_numero_codigo
 select * from [NO_TRIGGERS].regimen
-
 */
 
+--Baja hotel
+insert into [NO_TRIGGERS].baja_de_hotel (baja_hotel_fecha_inicio,baja_hotel_fecha_fin,id_hotel)
+values
+	(null,null,1),
+	(null,null,2),
+	(null,null,3),
+	(null,null,4),
+	(null,null,5),
+	(null,null,6),
+	(null,null,7),
+	(null,null,8),
+	(null,null,9),
+	(null,null,10),
+	(null,null,11),
+	(null,null,12),
+	(null,null,13),
+	(null,null,14),
+	(null,null,15)  
 
+--Estadia
+insert into [NO_TRIGGERS].estadia (estadia_cantidad_noches,estadia_fecha_inicio,id_cliente,id_habitacion,id_reserva)
+select distinct
+	m.Estadia_Cant_Noches,
+	m.Estadia_Fecha_Inicio,
+	c.id_cliente,
+	hab.id_habitacion,
+	r.id_regimen
+from gd_esquema.Maestra m
+join [NO_TRIGGERS].cliente c on m.Cliente_Mail = c.cliente_email and m.Cliente_Apellido = c.cliente_apellido and m.Cliente_Nombre = c.cliente_nombre
+join [NO_TRIGGERS].regimen r on r.regimen_descripcion = m.Regimen_Descripcion and r.regimen_precio = m.Regimen_Precio
+join [NO_TRIGGERS].habitacion hab on m.Habitacion_Piso = hab.habitacion_piso and m.Habitacion_Frente =  hab.habitacion_frente and m.Habitacion_Numero = hab.habitacion_numero 
+
+/*select * from [NO_TRIGGERS].estadia e
+where e.estadia_cantidad_noches is not null*/
+
+--Consumible
+insert into [NO_TRIGGERS].consumible (consumible_descripcion,consumible_precio,consumible_codigo,id_estadia)
+select distinct 
+	m.Consumible_Descripcion,
+	m.Consumible_Precio,
+	m.Consumible_Codigo,
+	e.id_estadia
+from gd_esquema.Maestra m
+join [NO_TRIGGERS].estadia e on e.estadia_cantidad_noches=m.Estadia_Cant_Noches and e.estadia_fecha_inicio = m.Estadia_Fecha_Inicio 
+
+--Factura
+insert into [NO_TRIGGERS].factura (factura_fecha,factura_numero,factura_tipo,factura_total,id_cliente,id_estadia,id_hotel)
+select distinct
+	m.Factura_Fecha,
+	m.Factura_Nro,
+	null as factura_tipo,
+	m.Factura_Total,
+	c.id_cliente,
+	e.id_estadia,
+	h.id_hotel
+from gd_esquema.Maestra m
+join [NO_TRIGGERS].cliente c on m.Cliente_Apellido = c.cliente_apellido and m.Cliente_Mail = c.cliente_email and m.Cliente_Fecha_Nac = c.cliente_fecha_nacimiento and m.Cliente_Pasaporte_Nro = c.cliente_numero_documento
+join [NO_TRIGGERS].estadia e on e.id_cliente = c.id_cliente and m.Estadia_Cant_Noches = e.estadia_cantidad_noches and m.Estadia_Fecha_Inicio = e.estadia_fecha_inicio 
+join [NO_TRIGGERS].direccion d on d.direccion_altura = m.Hotel_Nro_Calle and d.direccion_calle = m.Hotel_Calle and d.direccion_piso is null
+join [NO_TRIGGERS].hotel h on h.id_direccion = d.id_direccion
+
+--Item factura -REVISAR NO TIRA VALOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+insert into [NO_TRIGGERS].item_factura (item_factura_cantidad,item_factura_monto,id_consumible,id_factura)
+select distinct
+	m.Item_Factura_Cantidad,
+	m.Item_Factura_Monto,
+	c.id_consumible,
+	f.id_factura
+from gd_esquema.Maestra m
+join [NO_TRIGGERS].consumible c on m.Consumible_Codigo = c.consumible_codigo and m.Consumible_Descripcion = c.consumible_descripcion and m.Consumible_Precio = c.consumible_precio 
+join [NO_TRIGGERS].factura f on m.Factura_Fecha = f.factura_fecha and m.Factura_Nro = f.factura_numero and m.Factura_Total = f.factura_total
 --Relacion------------------------------------------------------------------------------------------------------------
 Alter table [no_triggers].ciudad add
 constraint fk_id_ciudad_pais foreign key (id_pais) references [no_triggers].pais(id_pais)
-
-Alter table [no_triggers].direccion add constraint fk_id_ciudad_direccion foreign key (id_ciudad) references [no_triggers].ciudad(id_ciudad)
-
+Alter table [no_triggers].direccion 
+add constraint fk_id_ciudad_direccion foreign key (id_ciudad) references [no_triggers].ciudad(id_ciudad)
 Alter table [no_triggers].rol_por_funcionalidad add
 constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
 constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad)
-
 Alter table [no_triggers].hotel add
 constraint fk_id_hotel_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion)
-
 Alter table [no_triggers].usuario add
 constraint fk_id_usuario_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
 constraint fk_id_usuario_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_usuario_tipo_documento foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento)
-
 Alter table [no_triggers].cliente add
 constraint fk_id_cliente_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion),
 constraint fk_id_cliente_pais foreign key (id_pais) references [no_triggers].pais(id_pais),
 constraint fk_id_cliente_tipo_doc foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento)
-
 Alter table [no_triggers].habitacion add
 constraint fk_id_habitacion_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_tipo_de_habitacion foreign key (id_tipo_habitacion) references [no_triggers].tipoDeHabitacion(id_tipo_habitacion)
-
 Alter table[no_triggers].reserva add
 constraint fk_id_reserva_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_reserva_habitacion foreign key (id_habitacion) references [no_triggers].habitacion(id_habitacion),
 constraint fk_id_reserva_en_estado foreign key (id_reserva_estado) references [no_triggers].estado_reserva(id_estado_reserva),
 constraint fk_id_reserva_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
 constraint fk_id_reserva_cambiada_por_user foreign key (id_reserva_cambiada_por_user) references [no_triggers].usuario(id_usuario)
-
 Alter table [no_triggers].estadia add
 constraint fk_id_estadia_habitacion foreign key (id_habitacion) references [no_triggers].habitacion(id_habitacion),
 constraint fk_id_estadia_reserva foreign key (id_reserva) references [no_triggers].reserva(id_reserva),
 constraint fk_id_estadia_cliente foreign key (id_cliente) references [no_triggers].cliente(id_cliente)
-
 Alter table [no_triggers].regimen_por_hotel add
 constraint fk_id_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
 constraint fk_id_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
-
 Alter table [no_triggers].factura add 
 constraint fk_id_factura_estadia foreign key (id_estadia) references [no_triggers].estadia(id_estadia),
 constraint fk_id_factura_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_factura_cliente foreign key (id_cliente) references [no_triggers].cliente(id_cliente)
-
 Alter table [no_triggers].consumible add
 constraint fk_id_consumible_estadia foreign key (id_estadia) references [no_triggers].estadia(id_estadia)
-
 Alter table [no_triggers].item_factura add
 constraint fk_id_numero_factura foreign key (id_factura) references [no_triggers].factura(id_factura),
 constraint fk_id_item_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
-
 Alter table [no_triggers].baja_de_hotel add
 constraint fk_id_hotel_de_Baja foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
