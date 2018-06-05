@@ -76,6 +76,7 @@ id_direccion int,
 hotel_cantidad_estrellas float,
 hotel_recarga_estrella float,
 hotel_fecha_creacion datetime,
+hotel_estado bit,
 constraint pk_id_hotel primary key clustered (id_hotel)
 )
 
@@ -107,8 +108,7 @@ usuario_telefono nvarchar(50),
 usuario_habilitado bit,
 ID_rol int,
 ID_hotel int,
-constraint pk_id_usuario primary key clustered (id_usuario),
-constraint uk_usuario_username unique (usuario_username)
+constraint pk_id_usuario primary key clustered (id_usuario)
 )
 
 --Tabla Cliente
@@ -153,6 +153,10 @@ id_habitacion int identity (1,1) not null,
 habitacion_numero int,
 habitacion_piso int,
 habitacion_frente nvarchar(10),
+habitacion_habilitada bit, --va a indicar con 0 que esta dada de baja y con 1 que esta habilitada
+habitacion_ocupada bit, --va a indicar con 0 que esta ocupada y con 1 que esta desocupada
+habitacion_codigo int,
+
 Id_tipo_habitacion int,
 Id_hotel int,
 constraint pk_id_habitacion primary key clustered (id_habitacion)
@@ -188,6 +192,8 @@ create table [no_triggers].reserva
 id_reserva int identity (1,1) not null,
 reserva_fecha_inicio datetime,
 reserva_cantidad_noches int,
+reserva_numero_codigo int,
+ID_reserva_cambiada_por_user int,
 ID_hotel int,
 ID_habitacion int,
 ID_reserva_estado int,
@@ -271,6 +277,18 @@ id_factura int,
 id_consumible int,
 constraint pk_id_item_factura primary key clustered (id_item_factura)
 )
+--Tabla Baja_de_hotel
+IF OBJECT_ID ('[NO_TRIGGERS].baja_de_hotel','U') IS NOT NULL
+DROP TABLE [no_triggers].baja_de_hotel;
+
+create table [no_triggers].baja_de_hotel
+(
+id_baja_de_hotel int identity (1,1) not null,
+baja_hotel_fecha_inicio datetime,
+baja_hotel_fecha_fin datetime,
+id_hotel int,
+constraint pk_baja_de_hotel primary key clustered (id_baja_de_hotel)
+)
 
 -------------------------------- Migracion --------------------------------------------------------------------------
 
@@ -300,8 +318,9 @@ from gd_esquema.Maestra
 
 -- Hotel 
 
-insert into [NO_TRIGGERS].hotel(id_direccion,hotel_cantidad_estrellas,hotel_recarga_estrella,hotel_fecha_creacion)
-select distinct dr.id_direccion, mr.Hotel_CantEstrella,mr.Hotel_Recarga_Estrella, getdate() from gd_esquema.Maestra mr
+insert into [NO_TRIGGERS].hotel
+select distinct dr.id_direccion, mr.Hotel_CantEstrella,mr.Hotel_Recarga_Estrella, NULL,1 
+from gd_esquema.Maestra mr
 join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
 join [NO_TRIGGERS].direccion dr on mr.Hotel_Calle=dr.direccion_calle and cd.id_ciudad=dr.id_ciudad and mr.Hotel_Nro_Calle=dr.direccion_altura
 
@@ -310,7 +329,7 @@ join [NO_TRIGGERS].direccion dr on mr.Hotel_Calle=dr.direccion_calle and cd.id_c
 -- Tipo de documento
 
 insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values 
-('D.N.I.'),('L.E.'),('C.I.'),('Pasaporte')
+('D.N.I.'),('Pasaporte')
 
 --select * from [no_triggers].tipo_documento
 
@@ -426,7 +445,7 @@ select distinct
 	Habitacion_Tipo_Codigo
 from gd_esquema.Maestra
 --select * from [NO_TRIGGERS].tipoDeHabitacion
-
+go
 --Habitacion
 insert into [NO_TRIGGERS].habitacion
 select distinct 
@@ -440,12 +459,70 @@ select distinct
 	where D.direccion_calle = Hotel_Calle and D.direccion_altura = m.Hotel_Nro_Calle)
 from gd_esquema.Maestra m
 
+go
 /*select * from [NO_TRIGGERS].habitacion hab
 join [NO_TRIGGERS].hotel H on hab.ID_hotel = H.id_hotel
 join [NO_TRIGGERS].direccion D on D.id_direccion = h.id_direccion*/
 
--- Relaciones
+-- Usuarios //REVISAR PORQUE NO TOMA BIEN LA FECHA
+insert into [NO_TRIGGERS].usuario
+values
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,1),--agregar para todos los hoteles
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,2),
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,3),
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,4),
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,5),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,6),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,7),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,8),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,9),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,10),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,11),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,12),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,13),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,14),
 
+
+go
+
+--Regimen
+insert into [NO_TRIGGERS].regimen
+select distinct
+Regimen_Descripcion, Regimen_Precio,1
+from gd_esquema.Maestra
+
+--Reserva
+insert into [NO_TRIGGERS].reserva
+select distinct
+Reserva_Fecha_Inicio,
+Reserva_Cant_Noches,
+Reserva_Codigo,
+NULL,
+(select top 1 h.id_hotel from [NO_TRIGGERS].hotel H
+join [NO_TRIGGERS].direccion D on D.id_direccion = H.id_direccion 
+where D.direccion_calle = Hotel_Calle and D.direccion_altura = m.Hotel_Nro_Calle),
+(select top 1 hab.id_habitacion from [NO_TRIGGERS].habitacion hab
+where hab.habitacion_frente=Habitacion_Frente and hab.habitacion_numero=Habitacion_Numero and hab.habitacion_piso=Habitacion_Piso and Habitacion_Tipo_Codigo=habitacion_codigo),
+NULL,
+(select r.id_regimen from [NO_TRIGGERS].regimen_por_hotel r
+join [NO_TRIGGERS].hotel h on r.id_hotel=h.id_hotel
+join [NO_TRIGGERS].regimen reg on reg.id_regimen=r.id_regimen
+where reg.regimen_descripcion=m.Regimen_Descripcion and reg.regimen_precio=m.Regimen_Precio)
+from gd_esquema.Maestra m
+
+
+
+
+
+
+
+
+
+
+
+
+
+--Relacion------------------------------------------------------------------------------------------------------------
 Alter table [no_triggers].ciudad add
 constraint fk_id_ciudad_pais foreign key (id_pais) references [no_triggers].pais(id_pais)
 
@@ -476,7 +553,8 @@ Alter table[no_triggers].reserva add
 constraint fk_id_reserva_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_reserva_habitacion foreign key (id_habitacion) references [no_triggers].habitacion(id_habitacion),
 constraint fk_id_reserva_en_estado foreign key (id_reserva_estado) references [no_triggers].estado_reserva(id_estado_reserva),
-constraint fk_id_reserva_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen)
+constraint fk_id_reserva_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
+constraint fk_id_reserva_cambiada_por_user foreign key (id_reserva_cambiada_por_user) references [no_triggers].usuario(id_usuario)
 
 Alter table [no_triggers].estadia add
 constraint fk_id_estadia_habitacion foreign key (id_habitacion) references [no_triggers].habitacion(id_habitacion),
@@ -498,3 +576,6 @@ constraint fk_id_consumible_estadia foreign key (id_estadia) references [no_trig
 Alter table [no_triggers].item_factura add
 constraint fk_id_numero_factura foreign key (id_factura) references [no_triggers].factura(id_factura),
 constraint fk_id_item_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
+
+Alter table [no_triggers].baja_de_hotel add
+constraint fk_id_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
