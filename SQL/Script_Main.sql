@@ -82,8 +82,8 @@ constraint pk_id_hotel primary key clustered (id_hotel)
 )
 
 --Talba Tipo Documento
-IF OBJECT_ID ('[no_triggers].tipo_de_documento', 'U') IS NOT NULL
-DROP TABLE [NO_TRIGGERS].tipo_de_documento;
+IF OBJECT_ID ('[no_triggers].tipo_documento', 'U') IS NOT NULL
+DROP TABLE [NO_TRIGGERS].tipo_documento;
 create table [no_triggers].tipo_documento
 (
 id_tipo_documento int identity (1,1) NOT NULL,
@@ -460,7 +460,16 @@ from gd_esquema.Maestra m
 	join [NO_TRIGGERS].direccion dr on m.Hotel_Calle=dr.direccion_calle and m.Hotel_Nro_Calle=dr.direccion_altura and cd.id_ciudad=dr.id_ciudad
 	JOIN [NO_TRIGGERS].hotel hl on hl.id_direccion=dr.id_direccion
 
+--select top 10 * from [no_triggers].habitacion
+
 -- Usuarios //REVISAR PORQUE NO TOMA BIEN LA FECHA
+
+/**  
+
+-->lk comment:
+GETDATE() insertó en  la tabla la hora local de mi equipo al milisegundo. lo veo funcionar OK
+
+**/
 insert into [NO_TRIGGERS].usuario
 values
 ('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,1),--agregar para todos los hoteles
@@ -478,6 +487,8 @@ values
 ('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,13),
 ('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,14)
 
+--select * from [no_triggers].usuario
+
 --Regimen
 insert into [NO_TRIGGERS].regimen (regimen_descripcion,regimen_precio,regimen_estado)
 select distinct 
@@ -486,11 +497,19 @@ select distinct
 	1 
 	from gd_esquema.Maestra
 
---Reserva
+--Reserva 
+
+/*
+Corregido join con hotel
+ID Regimen esta ok... pero... 
+las tablas de mapeos entonces quedaron de adorno? 
+Es decir, estamos usando los mismos regimenes en todos los hoteles...
+
+*/
 declare @reservaCorrecta int 
 select @reservaCorrecta=id_estado_reserva from [NO_TRIGGERS].estado_reserva where estado_reserva_descripcion = 'RESERVA CORRECTA'
  
-insert into [NO_TRIGGERS].reserva
+insert into [NO_TRIGGERS].reserva (reserva_fecha_inicio,reserva_cantidad_noches,reserva_numero_codigo,ID_reserva_cambiada_por_user,ID_hotel,ID_habitacion,ID_reserva_estado,ID_regimen)
 select distinct
 	Reserva_Fecha_Inicio,
 	Reserva_Cant_Noches,
@@ -499,12 +518,22 @@ select distinct
 	h.id_hotel,
 	hab.id_habitacion,
 	@reservaCorrecta,
-	null--r.id_regimen
+	r.id_regimen
 	from gd_esquema.Maestra m
-join [NO_TRIGGERS].direccion d on d.direccion_calle = m.Hotel_Calle and d.direccion_altura = m.Hotel_Nro_Calle and d.direccion_piso is null
+join [NO_TRIGGERS].ciudad cd on m.Hotel_Ciudad=cd.ciudad_nombre
+join [NO_TRIGGERS].direccion d on d.direccion_calle = m.Hotel_Calle and d.direccion_altura = m.Hotel_Nro_Calle and d.direccion_piso is null and d.id_ciudad=cd.id_ciudad
 join [NO_TRIGGERS].hotel h on h.id_direccion = d.id_direccion
 join [NO_TRIGGERS].habitacion hab on m.Habitacion_Frente = hab.habitacion_frente and m.Habitacion_Piso = hab.habitacion_piso and m.Habitacion_Numero = hab.habitacion_numero and h.id_hotel = hab.Id_hotel
 join [NO_TRIGGERS].regimen r on r.regimen_descripcion = m.Regimen_Descripcion and r.regimen_precio = m.Regimen_Precio
+
+/*
+
+select * from [NO_TRIGGERS].reserva r
+join gd_esquema.Maestra mr on mr.Reserva_Codigo=r.reserva_numero_codigo
+select * from [NO_TRIGGERS].regimen
+
+*/
+
 
 --Relacion------------------------------------------------------------------------------------------------------------
 Alter table [no_triggers].ciudad add
