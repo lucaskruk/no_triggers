@@ -80,8 +80,8 @@ constraint pk_id_hotel primary key clustered (id_hotel)
 )
 
 --Talba Tipo Documento
-IF OBJECT_ID ('[no_triggers].tipo_de_documento', 'U') IS NOT NULL
-DROP TABLE [NO_TRIGGERS].tipo_de_documento;
+IF OBJECT_ID ('[no_triggers].tipo_documento', 'U') IS NOT NULL
+DROP TABLE [NO_TRIGGERS].tipo_documento;
 create table [no_triggers].tipo_documento
 (
 id_tipo_documento int identity (1,1) NOT NULL,
@@ -406,7 +406,8 @@ from gd_esquema.Maestra mr
 join [NO_TRIGGERS].direccion dr on mr.Cliente_Dom_Calle=dr.direccion_calle and mr.Cliente_Nro_Calle=dr.direccion_altura and mr.Cliente_Depto=dr.direccion_departamento
 and mr.Cliente_Piso=dr.direccion_piso and dr.id_ciudad=@ciudad_indef
 join [NO_TRIGGERS].pais ps on mr.Cliente_Nacionalidad=ps.pais_nacionalidad
---identifico mails invalidos
+
+--identifico mails invalidos`---------------- #bad_emails es una tabla temporal que me ayuda a sacar que correos son invalidos, la uso y la dropeo.
 select cliente_email into #bad_emails from [NO_TRIGGERS].cliente
 group by cliente_email
 having count(1)>1
@@ -419,7 +420,7 @@ drop table #bad_emails
 --select * from [NO_TRIGGERS].cliente
 
 --Tipo Habitacion
-insert into [NO_TRIGGERS].tipoDeHabitacion
+insert into [NO_TRIGGERS].tipoDeHabitacion (tipo_habitacion_descripcion,tipo_habitacion_porcentual,tipo_habitacion_codigo)
 select distinct 
 	Habitacion_Tipo_Descripcion,
 	Habitacion_Tipo_Porcentual,
@@ -428,21 +429,40 @@ from gd_esquema.Maestra
 --select * from [NO_TRIGGERS].tipoDeHabitacion
 
 --Habitacion
-insert into [NO_TRIGGERS].habitacion
+insert into [NO_TRIGGERS].habitacion (habitacion_numero,habitacion_piso,habitacion_frente,Id_tipo_habitacion,Id_hotel)
 select distinct 
 	Habitacion_Numero,
 	Habitacion_Piso,
 	Habitacion_Frente,
-	(select top 1 id_tipo_habitacion from [NO_TRIGGERS].tipoDeHabitacion
-	where tipo_habitacion_descripcion = Habitacion_Tipo_Descripcion and tipo_habitacion_codigo = Habitacion_Tipo_Codigo and tipo_habitacion_porcentual = Habitacion_Tipo_Porcentual),
-	(select top 1 h.id_hotel from [NO_TRIGGERS].hotel H
-	join [NO_TRIGGERS].direccion D on D.id_direccion = H.id_direccion 
-	where D.direccion_calle = Hotel_Calle and D.direccion_altura = m.Hotel_Nro_Calle)
+	th.id_tipo_habitacion,
+	
+	hl.id_hotel
+	
+	--(select top 1 id_tipo_habitacion from [NO_TRIGGERS].tipoDeHabitacion
+	--where tipo_habitacion_descripcion = Habitacion_Tipo_Descripcion and tipo_habitacion_codigo = Habitacion_Tipo_Codigo and tipo_habitacion_porcentual = Habitacion_Tipo_Porcentual),
+	--(select top 1 h.id_hotel from [NO_TRIGGERS].hotel H
+	--join [NO_TRIGGERS].direccion D on D.id_direccion = H.id_direccion 
+	--where D.direccion_calle = Hotel_Calle and D.direccion_altura = m.Hotel_Nro_Calle)
+
 from gd_esquema.Maestra m
+join [NO_TRIGGERS].tipoDeHabitacion th on m.Habitacion_Tipo_Codigo=th.tipo_habitacion_codigo
+join [NO_TRIGGERS].ciudad cd on m.Hotel_Ciudad=cd.ciudad_nombre
+join [NO_TRIGGERS].direccion dr on m.Hotel_Calle=dr.direccion_calle and m.Hotel_Nro_Calle=dr.direccion_altura and cd.id_ciudad=dr.id_ciudad
+JOIN [NO_TRIGGERS].hotel hl on hl.id_direccion=dr.id_direccion
+
 
 /*select * from [NO_TRIGGERS].habitacion hab
 join [NO_TRIGGERS].hotel H on hab.ID_hotel = H.id_hotel
 join [NO_TRIGGERS].direccion D on D.id_direccion = h.id_direccion*/
+
+--Regimen
+
+insert into [NO_TRIGGERS].regimen (regimen_descripcion,regimen_precio,regimen_estado)
+select distinct Regimen_Descripcion, Regimen_Precio, 1 from gd_esquema.Maestra
+
+--select * from [no_triggers].regimen
+
+
 
 -- Relaciones
 
