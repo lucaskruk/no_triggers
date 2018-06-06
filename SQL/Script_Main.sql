@@ -227,7 +227,7 @@ constraint pk_id_regimen_por_hotel primary key clustered (id_regimen_por_hotel),
 )
 
 --tabla consumibles x estadia
-IF OBJECT_ID ('[no_triggers].consumibles_por_estadia' , 'U' ) IS NOT NULL
+IF OBJECT_ID ('[no_triggers].consumible_por_estadia' , 'U' ) IS NOT NULL
 	DROP TABLE [no_triggers].consumible_por_estadia;
 create table [no_triggers].consumible_por_estadia
 (
@@ -395,13 +395,14 @@ values
 ('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,11),
 ('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,12),
 ('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,13),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,14)
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,14),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,15)
 
 --select * from [no_triggers].usuario
 
 
 
---CIUDAD
+--CIUDAD------------------------11
 insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
 select distinct 
 (select id_pais from [NO_TRIGGERS].pais where pais_nombre='Argentina'),
@@ -410,17 +411,18 @@ insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
 select id_pais, 'Indefinida' as ciudad_nombre from [NO_TRIGGERS].pais where pais_nombre='Indefinido'
 --select * from [no_triggers].ciudad
 
---Direccion
+--Direccion--------------------96958 (96943 + 15)
 insert into [NO_TRIGGERS].direccion (direccion_calle,direccion_altura,direccion_piso,direccion_departamento, id_ciudad)
 select distinct hotel_calle, hotel_nro_calle, null, null, cd.id_ciudad from gd_esquema.Maestra mr 
 join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
-union
+union 
 select distinct 
 cliente_dom_calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto,  (select id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida')
 from gd_esquema.Maestra
+
 --select * from [no_triggers].direccion
 
--- Hotel 
+-- Hotel  ---- 15
 insert into [NO_TRIGGERS].hotel(id_direccion,hotel_cantidad_estrellas,hotel_recarga_estrella,hotel_fecha_creacion,hotel_estado)
 select distinct dr.id_direccion, mr.Hotel_CantEstrella,mr.Hotel_Recarga_Estrella, NULL,1 
 from gd_esquema.Maestra mr
@@ -428,7 +430,7 @@ join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
 join [NO_TRIGGERS].direccion dr on mr.Hotel_Calle=dr.direccion_calle and cd.id_ciudad=dr.id_ciudad and mr.Hotel_Nro_Calle=dr.direccion_altura
 --select * from [no_triggers].hotel
 
--- Clientes
+-- Clientes ----------------------------- 96944
 declare @ciudad_indef int 
 select @ciudad_indef=id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida'
 insert into [NO_TRIGGERS].cliente
@@ -465,7 +467,7 @@ join #bad_emails be on cl.cliente_email=be.cliente_email
 drop table #bad_emails
 --select * from [NO_TRIGGERS].cliente
 
---Tipo de Habitacion
+--Tipo de Habitacion ------- 5
 insert into [NO_TRIGGERS].tipoDeHabitacion (tipo_habitacion_descripcion,tipo_habitacion_porcentual,tipo_habitacion_codigo)
 select distinct 
 	Habitacion_Tipo_Descripcion,
@@ -475,7 +477,7 @@ from gd_esquema.Maestra
 --select * from [NO_TRIGGERS].tipoDeHabitacion
 go
 
---Habitacion
+--Habitacion -----------------------------  332
 insert into [NO_TRIGGERS].habitacion (habitacion_numero,habitacion_piso,habitacion_frente,Id_tipo_habitacion,Id_hotel)
 select distinct 
 	Habitacion_Numero,
@@ -497,8 +499,7 @@ select distinct
 	1 
 	from gd_esquema.Maestra
 
---Reserva 
-
+--Reserva ---------------------------96944
 declare @reservaCorrecta int 
 select @reservaCorrecta=id_estado_reserva from [NO_TRIGGERS].estado_reserva where estado_reserva_descripcion = 'RESERVA CORRECTA'
  
@@ -519,7 +520,7 @@ join [NO_TRIGGERS].hotel h on h.id_direccion = d.id_direccion
 join [NO_TRIGGERS].habitacion hab on m.Habitacion_Frente = hab.habitacion_frente and m.Habitacion_Piso = hab.habitacion_piso and m.Habitacion_Numero = hab.habitacion_numero and h.id_hotel = hab.Id_hotel
 join [NO_TRIGGERS].regimen r on r.regimen_descripcion = m.Regimen_Descripcion and r.regimen_precio = m.Regimen_Precio
 
---Estadia
+--Estadia -------------------------86300
 insert into [NO_TRIGGERS].estadia (estadia_cantidad_noches,estadia_fecha_inicio,id_cliente,id_habitacion,id_reserva)
 select distinct
 	m.Estadia_Cant_Noches,
@@ -528,23 +529,30 @@ select distinct
 	hab.id_habitacion,
 	r.id_regimen
 from gd_esquema.Maestra m
-join [NO_TRIGGERS].cliente c on m.Cliente_Mail = c.cliente_email and m.Cliente_Apellido = c.cliente_apellido and m.Cliente_Nombre = c.cliente_nombre
+join [NO_TRIGGERS].cliente c on m.Cliente_Mail = c.cliente_email and m.Cliente_Apellido = c.cliente_apellido and m.Cliente_Nombre = c.cliente_nombre and c.cliente_numero_documento=m.Cliente_Pasaporte_Nro
 join [NO_TRIGGERS].regimen r on r.regimen_descripcion = m.Regimen_Descripcion and r.regimen_precio = m.Regimen_Precio
+join [NO_TRIGGERS].direccion dr on m.Hotel_Calle = dr.direccion_calle and m.Hotel_Nro_Calle=dr.direccion_altura
+join [NO_TRIGGERS].hotel  h on dr.id_direccion=h.id_direccion
 join [NO_TRIGGERS].habitacion hab on m.Habitacion_Piso = hab.habitacion_piso and m.Habitacion_Frente =  hab.habitacion_frente and m.Habitacion_Numero = hab.habitacion_numero 
+and hab.Id_hotel=h.id_hotel
+where m.Estadia_Cant_Noches is not null
+
+--max 96944
+
 
 /*select * from [NO_TRIGGERS].estadia e
 where e.estadia_cantidad_noches is not null*/
 
---Consumible
+--Consumible ------4
 insert into [NO_TRIGGERS].consumible (consumible_descripcion,consumible_precio,consumible_codigo)
 select distinct 
 	m.Consumible_Descripcion,
 	m.Consumible_Precio,
 	m.Consumible_Codigo
-
 from gd_esquema.Maestra m
+where Consumible_Codigo is not null
 
---Consumible_por_estadia
+--Consumible_por_estadia------------------¿? No le encuentro proposito, y no me da con el total de items facturados, creo que item factura cumple la funcion de esta tabla
 insert into [NO_TRIGGERS].consumible_por_estadia
 		SELECT cons.id_consumible,est.id_estadia, count(cons.id_consumible)
 		FROM [NO_TRIGGERS].consumible cons,[NO_TRIGGERS].estadia est, gd_esquema.Maestra m, [NO_TRIGGERS].Reserva res
@@ -553,7 +561,8 @@ insert into [NO_TRIGGERS].consumible_por_estadia
 		ORDER BY 1
 GO
 
---Factura
+
+--Factura ------------------86300
 insert into [NO_TRIGGERS].factura (factura_fecha,factura_numero,factura_tipo,factura_total,id_cliente,id_estadia,id_hotel)
 select distinct
  m.Factura_Fecha,
@@ -568,18 +577,26 @@ join [NO_TRIGGERS].cliente c on m.Cliente_Apellido = c.cliente_apellido and m.Cl
 join [NO_TRIGGERS].estadia e on e.id_cliente = c.id_cliente and m.Estadia_Cant_Noches = e.estadia_cantidad_noches and m.Estadia_Fecha_Inicio = e.estadia_fecha_inicio 
 join [NO_TRIGGERS].direccion d on d.direccion_altura = m.Hotel_Nro_Calle and d.direccion_calle = m.Hotel_Calle and d.direccion_piso is null
 join [NO_TRIGGERS].hotel h on h.id_direccion = d.id_direccion
+where m.Factura_Nro is not null
 
---Item factura 
+
+--Item factura ---286003 
 insert into [NO_TRIGGERS].item_factura (item_factura_cantidad,item_factura_monto,id_consumible,id_factura)
 select distinct
 	m.Item_Factura_Cantidad,
 	m.Item_Factura_Monto,
 	c.id_consumible,
+	--m.Consumible_Codigo,
+	--m.Factura_Nro
 	f.id_factura
-from gd_esquema.Maestra m
+from gd_esquema.Maestra m 
 join [NO_TRIGGERS].factura f on m.Factura_Fecha = f.factura_fecha and m.Factura_Nro = f.factura_numero and m.Factura_Total = f.factura_total
 join [NO_TRIGGERS].estadia e on e.id_estadia = f.id_estadia and m.Estadia_Cant_Noches = e.estadia_cantidad_noches and m.Estadia_Fecha_Inicio = e.estadia_fecha_inicio
-join [NO_TRIGGERS].consumible c on m.Consumible_Codigo = c.consumible_codigo and m.Consumible_Descripcion = c.consumible_descripcion and m.Consumible_Precio = c.consumible_precio 
+left join [NO_TRIGGERS].consumible c on m.Consumible_Codigo = c.consumible_codigo and m.Consumible_Descripcion = c.consumible_descripcion and m.Consumible_Precio = c.consumible_precio 
+
+
+
+
 
 ------------------------------------------------------------------------------------------------------------------------
 --Relaciones------------------------------------------------------------------------------------------------------------
@@ -588,8 +605,8 @@ constraint fk_id_ciudad_pais foreign key (id_pais) references [no_triggers].pais
 Alter table [no_triggers].direccion 
 add constraint fk_id_ciudad_direccion foreign key (id_ciudad) references [no_triggers].ciudad(id_ciudad)
 Alter table [no_triggers].rol_por_funcionalidad add
-constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
-constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad)
+constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol)
+--,constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad) ----------revisar puede que falten
 Alter table [no_triggers].hotel add
 constraint fk_id_hotel_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion)
 Alter table [no_triggers].usuario add
