@@ -4,100 +4,101 @@ go
 /*Creación de tablas */---------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------
 --Tabla Pais
-IF OBJECT_ID('[no_triggers].pais', 'U') IS NOT NULL 
-  DROP TABLE [no_triggers].pais;
-create table [no_triggers].pais
-(id_pais int identity(1,1) not null,
+IF OBJECT_ID('[NO_TRIGGERS].Pais', 'U') IS NOT NULL 
+  DROP TABLE [NO_TRIGGERS].Pais;
+CREATE TABLE [NO_TRIGGERS].Pais
+(id_pais int identity(1,1) NOT NULL,
 pais_nombre nvarchar(40),
 pais_nacionalidad nvarchar(80),
-constraint pk_id_pais primary key clustered (id_pais asc)
+CONSTRAINT pk_id_pais PRIMARY KEY CLUSTERED (id_pais asc)
 )
 
 --Tabla Ciudad
-IF OBJECT_ID('[no_triggers].ciudad', 'U') IS NOT NULL 
-  DROP TABLE [no_triggers].ciudad;
-create table [no_triggers].ciudad
-(id_ciudad int identity(1,1) not null,
+IF OBJECT_ID('[NO_TRIGGERS].Ciudad', 'U') IS NOT NULL 
+  DROP TABLE [NO_TRIGGERS].Ciudad;
+CREATE TABLE [NO_TRIGGERS].Ciudad
+(
+id_ciudad int identity(1,1) NOT NULL,
 id_pais int,
 ciudad_nombre nvarchar(80),
-constraint pk_id_ciudad primary key clustered (id_ciudad asc) 
+CONSTRAINT pk_id_ciudad PRIMARY KEY CLUSTERED (id_ciudad asc) 
 )
 
 --Tabla Direccion
-IF OBJECT_ID('[no_triggers].direccion', 'U') IS NOT NULL 
-  DROP TABLE [no_triggers].direccion;
-create table [no_triggers].direccion
-(id_direccion int identity(1,1) not null, 
+IF OBJECT_ID('[NO_TRIGGERS].Direccion', 'U') IS NOT NULL 
+  DROP TABLE [NO_TRIGGERS].Direccion;
+CREATE TABLE [NO_TRIGGERS].Direccion
+(id_direccion int identity(1,1) NOT NULL, 
 direccion_calle nvarchar(200),
 direccion_altura int,
 direccion_piso int,
 direccion_departamento nvarchar(4),
 id_ciudad int,
-constraint pk_id_direccion primary key clustered (id_direccion asc)
+CONSTRAINT pk_id_direccion PRIMARY KEY CLUSTERED (id_direccion asc)
 )
 
 --Funcionalidad
-IF OBJECT_ID ('[no_triggers].funcionalidad' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].funcionalidad;
-create table [no_triggers].funcionalidad
+IF OBJECT_ID ('[NO_TRIGGERS].Funcionalidad' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Funcionalidad;
+CREATE TABLE [NO_TRIGGERS].Funcionalidad
 (
-id_funcionalidad int identity (1,1) not null,
+id_funcionalidad int identity (1,1) NOT NULL,
 funcionalidad_descripcion nvarchar(100),
-constraint pk_id_funcionalidad primary key clustered (id_funcionalidad)
+CONSTRAINT pk_id_funcionalidad PRIMARY KEY CLUSTERED (id_funcionalidad)
 )
  
 --Tabla rol
-IF OBJECT_ID ('[no_triggers].rol' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].rol;
-create table [no_triggers].rol
+IF OBJECT_ID ('[NO_TRIGGERS].Rol' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Rol;
+CREATE TABLE [NO_TRIGGERS].Rol
 (
-id_rol int identity (1,1) not null,
+id_rol int identity (1,1) NOT NULL,
 rol_nombre nvarchar(100),
 rol_estado bit, --si devuelve 0 es falso, si de vuelve 1 es true--
-constraint pk_id_rol primary key clustered (id_rol),
+CONSTRAINT pk_id_rol PRIMARY KEY CLUSTERED  (id_rol),
 )
 
 -- Tabla Rol por funcionalidad
-IF OBJECT_ID ('[no_triggers].rol_por_funcionalidad', 'U') IS NOT NULL
-	DROP TABLE [no_triggers].rol_por_funcionalidad
-create table [no_triggers].rol_por_funcionalidad
+IF OBJECT_ID ('[NO_TRIGGERS].Rol_por_funcionalidad', 'U') IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Rol_por_funcionalidad
+CREATE TABLE [NO_TRIGGERS].Rol_por_funcionalidad
 (
-id_rol_por_funcionalidad int identity (1,1) not null,
+id_rol_por_funcionalidad int identity (1,1) NOT NULL,
 id_rol int,
 id_funcionalidad int,
-constraint pk_id_rol_por_funcionalidad primary key clustered (id_rol_por_funcionalidad)
+CONSTRAINT pk_id_rol_por_funcionalidad PRIMARY KEY CLUSTERED (id_rol_por_funcionalidad)
 )
 
 --Tabla hotel
-IF OBJECT_ID ('[no_triggers].hotel' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].hotel;
-create table [no_triggers].hotel
+IF OBJECT_ID ('[NO_TRIGGERS].Hotel' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Hotel;
+CREATE TABLE [NO_TRIGGERS].Hotel
 (
-id_hotel int identity (1,1) not null,
+id_hotel int identity (1,1) NOT NULL,
 id_direccion int,
 hotel_cantidad_estrellas float,
 hotel_recarga_estrella float,
 hotel_fecha_creacion datetime,
 hotel_estado bit,
-constraint pk_id_hotel primary key clustered (id_hotel)
+CONSTRAINT pk_id_hotel PRIMARY KEY CLUSTERED  (id_hotel)
 )
 
 --Talba Tipo Documento
-IF OBJECT_ID ('[no_triggers].tipo_documento', 'U') IS NOT NULL
-DROP TABLE [NO_TRIGGERS].tipo_documento;
-create table [no_triggers].tipo_documento
+IF OBJECT_ID ('[NO_TRIGGERS].Tipo_documento', 'U') IS NOT NULL
+DROP TABLE [NO_TRIGGERS].Tipo_documento;
+CREATE TABLE [NO_TRIGGERS].Tipo_documento
 (
 id_tipo_documento int identity (1,1) NOT NULL,
 tipo_de_documento_nombre nvarchar(30),
-constraint id_tipo_de_documento primary key clustered (id_tipo_documento)
+CONSTRAINT id_tipo_de_documento PRIMARY KEY CLUSTERED (id_tipo_documento)
 )
 
 --Tabla Usuario
-IF OBJECT_ID ('[no_triggers].usuario' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].usuario;
-create table [no_triggers].usuario
+IF OBJECT_ID ('[NO_TRIGGERS].Usuario' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Usuario;
+CREATE TABLE [NO_TRIGGERS].Usuario
 (
-id_usuario int identity (1,1) not null,
+id_usuario int identity (1,1) NOT NULL,
 usuario_username nvarchar (100),
 usuario_nombre nvarchar(200),
 usuario_apellido nvarchar(200),
@@ -109,17 +110,17 @@ id_tipo_documento int,
 usuario_numero_documento nvarchar(50),
 usuario_telefono nvarchar(50),
 usuario_habilitado bit,
-Id_rol int,
-Id_hotel int,
-constraint pk_id_usuario primary key clustered (id_usuario)
+id_rol int,
+id_hotel int,
+CONSTRAINT pk_id_usuario PRIMARY KEY CLUSTERED (id_usuario)
 )
 
 --Tabla Cliente
-IF OBJECT_ID ('[no_triggers].cliente' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].cliente;
-create table [no_triggers].cliente
+IF OBJECT_ID ('[NO_TRIGGERS].Cliente' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Cliente;
+CREATE TABLE [NO_TRIGGERS].Cliente
 (
-id_cliente int identity (1,1) not null,
+id_cliente int identity (1,1) NOT NULL,
 cliente_estado bit,
 cliente_nombre nvarchar(100),
 cliente_apellido nvarchar(200),
@@ -129,132 +130,132 @@ cliente_fecha_nacimiento datetime,
 id_tipo_documento int,
 cliente_numero_documento nvarchar(50),
 cliente_telefono nvarchar (50),
-Id_direccion int,
-Id_pais int,
-constraint pk_id_cliente primary key clustered (id_cliente)
+id_direccion int,
+id_pais int,
+CONSTRAINT pk_id_cliente PRIMARY KEY CLUSTERED (id_cliente)
 
 )
 
 --Tabla Tipo De Habitacion
-IF OBJECT_ID ('[no_triggers].tipoDeHabitacion' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].tipoDeHabitacion;
-create table [no_triggers].tipoDeHabitacion
+IF OBJECT_ID ('[NO_TRIGGERS].TipoDeHabitacion' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].TipoDeHabitacion;
+CREATE TABLE [NO_TRIGGERS].TipoDeHabitacion
 (
-id_tipo_habitacion int identity (1,1) not null,
+id_tipo_habitacion int identity (1,1) NOT NULL,
 tipo_habitacion_descripcion nvarchar(200),
 tipo_habitacion_porcentual float,
 tipo_habitacion_codigo int
-constraint pk_id_tipo_habitacion primary key clustered (id_tipo_habitacion)
+CONSTRAINT pk_id_tipo_habitacion PRIMARY KEY CLUSTERED (id_tipo_habitacion)
 )
 
 --Tabla Habitacion
-IF OBJECT_ID ('[no_triggers].habitacion' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].habitacion;
-create table [no_triggers].habitacion
+IF OBJECT_ID ('[NO_TRIGGERS].Habitacion' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Habitacion;
+CREATE TABLE [NO_TRIGGERS].Habitacion
 (
-id_habitacion int identity (1,1) not null,
+id_habitacion int identity (1,1) NOT NULL,
 habitacion_numero int,
 habitacion_piso int,
 habitacion_frente nvarchar(10),
 habitacion_habilitada bit, --va a indicar con 0 que esta dada de baja y con 1 que esta habilitada
 habitacion_ocupada bit, --va a indicar con 0 que esta ocupada y con 1 que esta desocupada
-Id_tipo_habitacion int,
-Id_hotel int,
-constraint pk_id_habitacion primary key clustered (id_habitacion)
+id_tipo_habitacion int,
+id_hotel int,
+CONSTRAINT pk_id_habitacion PRIMARY KEY CLUSTERED (id_habitacion)
 )
 
 --Tabla estado_reserva
-IF OBJECT_ID ('[no_triggers].estado_reserva' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].estado_reserva;
-create table [no_triggers].estado_reserva
+IF OBJECT_ID ('[NO_TRIGGERS].Estado_reserva' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Estado_reserva;
+CREATE TABLE [NO_TRIGGERS].Estado_reserva
 (
-id_estado_reserva int identity (1,1) not null,
+id_estado_reserva int identity (1,1) NOT NULL,
 estado_reserva_descripcion nvarchar(200),
-constraint pk_id_estado_reserva primary key clustered (id_estado_reserva)
+CONSTRAINT pk_id_estado_reserva PRIMARY KEY CLUSTERED (id_estado_reserva)
 )
 
 --Tabla Regimen
-IF OBJECT_ID ('[no_triggers].regimen' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].regimen;
-create table [no_triggers].regimen
+IF OBJECT_ID ('[NO_TRIGGERS].Regimen' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Regimen;
+CREATE TABLE [NO_TRIGGERS].Regimen
 (
-id_regimen int identity (1,1) not null,
+id_regimen int identity (1,1) NOT NULL,
 regimen_descripcion nvarchar(200),
 regimen_precio float,
 regimen_estado bit, --activo o no activo--
-constraint pk_id_regimen primary key clustered (id_regimen)
+CONSTRAINT pk_id_regimen PRIMARY KEY CLUSTERED (id_regimen)
 )
 
 --Tabla Reserva
-IF OBJECT_ID ('[no_triggers].reserva' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].reserva;
-create table [no_triggers].reserva
+IF OBJECT_ID ('[NO_TRIGGERS].Reserva' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Reserva;
+CREATE TABLE [NO_TRIGGERS].Reserva
 (
-id_reserva int identity (1,1) not null,
+id_reserva int identity (1,1) NOT NULL,
 reserva_fecha_inicio datetime,
 reserva_cantidad_noches int,
 reserva_numero_codigo int,
-Id_reserva_cambiada_por_user int,
-Id_hotel int,
-Id_habitacion int,
-Id_reserva_estado int,
-Id_regimen int,
-constraint pk_id_reserva primary key clustered (id_reserva)
+id_reserva_cambiada_por_user int,
+id_hotel int,
+id_habitacion int,
+id_reserva_estado int,
+id_regimen int,
+CONSTRAINT pk_id_reserva PRIMARY KEY CLUSTERED (id_reserva)
 )
 
 --Tabla Estadia
-IF OBJECT_ID ('[no_triggers].estadia' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].estadia;
-create table [no_triggers].estadia
+IF OBJECT_ID ('[NO_TRIGGERS].Estadia' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Estadia;
+CREATE TABLE  [NO_TRIGGERS].Estadia
 (
-id_estadia int identity(1,1) not null,
+id_estadia int identity(1,1) NOT NULL,
 estadia_fecha_inicio datetime,
 estadia_cantidad_noches int,
 id_habitacion int,
 id_reserva int,
 id_cliente int,
-constraint pk_id_estadia primary key clustered (id_estadia)
+CONSTRAINT pk_id_estadia PRIMARY KEY CLUSTERED (id_estadia)
 )
 
 --tabla regimen x hotel
-IF OBJECT_ID ('[no_triggers].regimen_por_hotel' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].regimen_por_hotel;
-create table [no_triggers].regimen_por_hotel
+IF OBJECT_ID ('[NO_TRIGGERS].Regimen_por_hotel' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Regimen_por_hotel;
+CREATE TABLE [NO_TRIGGERS].Regimen_por_hotel
 (
-id_regimen_por_hotel int identity (1,1) not null,
+id_regimen_por_hotel int identity (1,1) NOT NULL,
 id_regimen int,
 id_hotel int,
-constraint pk_id_regimen_por_hotel primary key clustered (id_regimen_por_hotel),
+CONSTRAINT pk_id_regimen_por_hotel PRIMARY KEY CLUSTERED (id_regimen_por_hotel),
 )
 
 --tabla consumibles x estadia
-IF OBJECT_ID ('[no_triggers].consumible_por_estadia' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].consumible_por_estadia;
-create table [no_triggers].consumible_por_estadia
+IF OBJECT_ID ('[NO_TRIGGERS].Consumible_por_estadia' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Consumible_por_estadia;
+CREATE TABLE [NO_TRIGGERS].Consumible_por_estadia
 (
-id_consumible_por_estadia int identity (1,1) not null,
+id_consumible_por_estadia int identity (1,1) NOT NULL,
 id_consumible int,
 id_estadia int,
-constraint pk_id_cosumible_por_estadia primary key clustered (id_consumible_por_estadia),
+CONSTRAINT pk_id_cosumible_por_estadia PRIMARY KEY CLUSTERED (id_consumible_por_estadia),
 )
 
 --Tabla metodo de pago
-IF OBJECT_ID ('[no_triggers].metodo_de_pago' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].metodo_de_pago;
-create table [no_triggers].metodo_de_pago
+IF OBJECT_ID ('[NO_TRIGGERS].Metodo_de_pago' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Metodo_de_pago;
+CREATE TABLE [NO_TRIGGERS].Metodo_de_pago
 (
-id_metodo_de_pago int identity (1,1) not null,
+id_metodo_de_pago int identity (1,1) NOT NULL,
 metodo_de_pago_nombre nvarchar(20),
 metodo_de_pago_detalles nvarchar (300),
-constraint pk_id_metodo_pago primary key clustered (id_metodo_de_pago)
+CONSTRAINT pk_id_metodo_pago PRIMARY KEY CLUSTERED (id_metodo_de_pago)
 )
 
 --Tabla factura
-IF OBJECT_ID ('[no_triggers].factura' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].factura;
-create table [no_triggers].factura
+IF OBJECT_ID ('[NO_TRIGGERS].Factura' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Factura;
+CREATE TABLE [NO_TRIGGERS].Factura
 (
-id_factura int identity (1,1) not null,
+id_factura int identity (1,1) NOT NULL,
 factura_numero int,
 factura_tipo char(1),
 factura_fecha datetime,
@@ -262,44 +263,44 @@ factura_total float,
 id_cliente int,
 id_estadia int,
 id_hotel int,
-constraint pk_id_factura primary key clustered (id_factura)
+CONSTRAINT pk_id_factura PRIMARY KEY CLUSTERED (id_factura)
 )
 
 --Tabla Consumible
-IF OBJECT_ID ('[no_triggers].consumible' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].consumible;
-create table [no_triggers].consumible
+IF OBJECT_ID ('[NO_TRIGGERS].Consumible' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Consumible;
+CREATE TABLE [NO_TRIGGERS].Consumible
 (
-id_consumible int identity (1,1) not null,
+id_consumible int identity (1,1) NOT NULL,
 consumible_descripcion nvarchar(100),
 consumible_precio float,
 consumible_codigo int,
-constraint pk_id_consumible primary key clustered (id_consumible)
+CONSTRAINT pk_id_consumible PRIMARY KEY CLUSTERED (id_consumible)
 )
 
 --Tabla Item Factura
-IF OBJECT_ID ('[no_triggers].item_factura' , 'U' ) IS NOT NULL
-	DROP TABLE [no_triggers].item_factura;
-create table [no_triggers].item_factura
+IF OBJECT_ID ('[NO_TRIGGERS].Item_factura' , 'U' ) IS NOT NULL
+	DROP TABLE [NO_TRIGGERS].Item_factura;
+CREATE TABLE [NO_TRIGGERS].Item_factura
 (
-id_item_factura int identity (1,1) not null,
+id_item_factura int identity (1,1) NOT NULL,
 item_factura_cantidad int,
 item_factura_monto float,
 id_factura int,
 id_consumible int,
-constraint pk_id_item_factura primary key clustered (id_item_factura)
+CONSTRAINT pk_id_item_factura PRIMARY KEY CLUSTERED (id_item_factura)
 )
 
 --Tabla Baja_de_hotel
-IF OBJECT_ID ('[NO_TRIGGERS].baja_de_hotel','U') IS NOT NULL
-DROP TABLE [no_triggers].baja_de_hotel;
-create table [no_triggers].baja_de_hotel
+IF OBJECT_ID ('[NO_TRIGGERS].Baja_de_hotel','U') IS NOT NULL
+DROP TABLE [NO_TRIGGERS].Baja_de_hotel;
+CREATE TABLE [NO_TRIGGERS].Baja_de_hotel
 (
-id_baja_de_hotel int identity (1,1) not null,
+id_baja_de_hotel int identity (1,1) NOT NULL,
 baja_hotel_fecha_inicio datetime,
 baja_hotel_fecha_fin datetime,
 id_hotel int,
-constraint pk_baja_de_hotel primary key clustered (id_baja_de_hotel)
+CONSTRAINT pk_baja_de_hotel PRIMARY KEY CLUSTERED (id_baja_de_hotel)
 )
 
 --------------------------------------------------------------------------------------------------------------------------
@@ -585,8 +586,6 @@ select distinct
 	m.Item_Factura_Cantidad,
 	m.Item_Factura_Monto,
 	c.id_consumible,
-	--m.Consumible_Codigo,
-	--m.Factura_Nro
 	f.id_factura
 from gd_esquema.Maestra m 
 join [NO_TRIGGERS].factura f on m.Factura_Fecha = f.factura_fecha and m.Factura_Nro = f.factura_numero and m.Factura_Total = f.factura_total
@@ -608,24 +607,31 @@ where (m.Regimen_Descripcion=reg.regimen_descripcion and m.Regimen_Precio=reg.re
 --Relaciones------------------------------------------------------------------------------------------------------------
 Alter table [no_triggers].ciudad add
 constraint fk_id_ciudad_pais foreign key (id_pais) references [no_triggers].pais(id_pais)
+
 Alter table [no_triggers].direccion 
 add constraint fk_id_ciudad_direccion foreign key (id_ciudad) references [no_triggers].ciudad(id_ciudad)
+
 Alter table [no_triggers].rol_por_funcionalidad add
 constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol)
+
 --,constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad) ----------revisar puede que falten
 Alter table [no_triggers].hotel add
 constraint fk_id_hotel_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion)
+
 Alter table [no_triggers].usuario add
 constraint fk_id_usuario_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
 constraint fk_id_usuario_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_usuario_tipo_documento foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento)
+
 Alter table [no_triggers].cliente add
 constraint fk_id_cliente_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion),
 constraint fk_id_cliente_pais foreign key (id_pais) references [no_triggers].pais(id_pais),
 constraint fk_id_cliente_tipo_doc foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento)
+
 Alter table [no_triggers].habitacion add
 constraint fk_id_habitacion_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_tipo_de_habitacion foreign key (id_tipo_habitacion) references [no_triggers].tipoDeHabitacion(id_tipo_habitacion)
+
 Alter table[no_triggers].reserva add
 constraint fk_id_reserva_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_reserva_habitacion foreign key (id_habitacion) references [no_triggers].habitacion(id_habitacion),
@@ -641,6 +647,7 @@ constraint fk_id_estadia_cliente foreign key (id_cliente) references [no_trigger
 Alter table [no_triggers].regimen_por_hotel add
 constraint fk_id_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
 constraint fk_id_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
+
 Alter table [no_triggers].factura add 
 constraint fk_id_factura_estadia foreign key (id_estadia) references [no_triggers].estadia(id_estadia),
 constraint fk_id_factura_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
@@ -649,8 +656,10 @@ constraint fk_id_factura_cliente foreign key (id_cliente) references [no_trigger
 Alter table [no_triggers].item_factura add
 constraint fk_id_numero_factura foreign key (id_factura) references [no_triggers].factura(id_factura),
 constraint fk_id_item_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
+
 Alter table [no_triggers].baja_de_hotel add
 constraint fk_id_hotel_de_Baja foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
+
 Alter table [no_triggers].consumible_por_estadia add
 constraint fk_estadia_por_consumible foreign key (id_estadia) references [no_triggers].estadia(id_estadia),
 constraint fk_consumiblePor_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
@@ -752,3 +761,7 @@ as begin
     return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @contrasenia)), 3, 255))
 end
 go
+
+
+/***********************PARA USUARIO*************************************/
+
