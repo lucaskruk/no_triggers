@@ -301,6 +301,7 @@ baja_hotel_fecha_fin datetime,
 id_hotel int,
 constraint pk_baja_de_hotel primary key clustered (id_baja_de_hotel)
 )
+
 --------------------------------------------------------------------------------------------------------------------------
 -------------------------------- Migracion De datos-----------------------------------------------------------------------
 -- Funcuionalidad
@@ -732,8 +733,7 @@ create procedure [NO_TRIGGERS].sp_mostrar_roles
 AS
 select * from [NO_TRIGGERS].rol
 GO
-------------------------------------------------------------------------------------------------------------------------
-------------------------------STORED PROCEDURES-------------------------------------------------------------------------
+
 /*******************PARA LOGIN*******************************************/
 create procedure [NO_TRIGGERS].sp_chequear_intentos_fallidos
 @Nombre_usuario nvarchar (100)
@@ -746,3 +746,9 @@ else
 set @habilitado=0
 GO
 
+create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(255))
+returns nvarchar(255)
+as begin
+    return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @contrasenia)), 3, 255))
+end
+go
