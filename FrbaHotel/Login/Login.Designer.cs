@@ -1,6 +1,6 @@
 ﻿namespace FrbaHotel.Login
 {
-    partial class Form1
+    partial class Login
     {
         /// <summary>
         /// Required designer variable.
@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.usuario = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.Iniciar_Sesion = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.Ir_a_pantalla_principal = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -103,18 +103,18 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
-            // button1
+            // Iniciar_Sesion
             // 
-            this.button1.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.button1.Location = new System.Drawing.Point(224, 242);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(211, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Iniciar sesión";
-            this.button1.UseVisualStyleBackColor = false;
+            this.Iniciar_Sesion.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.Iniciar_Sesion.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.Iniciar_Sesion.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Iniciar_Sesion.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Iniciar_Sesion.Location = new System.Drawing.Point(224, 242);
+            this.Iniciar_Sesion.Name = "Iniciar_Sesion";
+            this.Iniciar_Sesion.Size = new System.Drawing.Size(211, 23);
+            this.Iniciar_Sesion.TabIndex = 5;
+            this.Iniciar_Sesion.Text = "Iniciar sesión";
+            this.Iniciar_Sesion.UseVisualStyleBackColor = false;
             // 
             // pictureBox2
             // 
@@ -126,30 +126,30 @@
             this.pictureBox2.TabIndex = 6;
             this.pictureBox2.TabStop = false;
             // 
-            // button2
+            // Ir_a_pantalla_principal
             // 
-            this.button2.BackColor = System.Drawing.Color.DarkSlateGray;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button2.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.button2.Location = new System.Drawing.Point(532, 285);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(114, 23);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Atrás";
-            this.button2.UseVisualStyleBackColor = false;
+            this.Ir_a_pantalla_principal.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.Ir_a_pantalla_principal.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.Ir_a_pantalla_principal.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Ir_a_pantalla_principal.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Ir_a_pantalla_principal.Location = new System.Drawing.Point(532, 285);
+            this.Ir_a_pantalla_principal.Name = "Ir_a_pantalla_principal";
+            this.Ir_a_pantalla_principal.Size = new System.Drawing.Size(114, 23);
+            this.Ir_a_pantalla_principal.TabIndex = 7;
+            this.Ir_a_pantalla_principal.Text = "Atrás";
+            this.Ir_a_pantalla_principal.UseVisualStyleBackColor = false;
             // 
             // Form1
             // 
-            this.AcceptButton = this.button1;
+            this.AcceptButton = this.Iniciar_Sesion;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(658, 320);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.Ir_a_pantalla_principal);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Iniciar_Sesion);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.usuario);
@@ -173,8 +173,8 @@
         private System.Windows.Forms.TextBox usuario;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button Iniciar_Sesion;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button Ir_a_pantalla_principal;
     }
 }

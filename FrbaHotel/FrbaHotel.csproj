@@ -81,17 +81,17 @@
     <Compile Include="CancelarReserva\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="FRBAhotel.cs">
+    <Compile Include="FRBAhotel_pantallaPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FRBAhotel.Designer.cs">
-      <DependentUpon>FRBAhotel.cs</DependentUpon>
+    <Compile Include="FRBAhotel_pantallaPrincipal.Designer.cs">
+      <DependentUpon>FRBAhotel_pantallaPrincipal.cs</DependentUpon>
     </Compile>
-    <Compile Include="GenerarModificacionReserva\Form1.cs">
+    <Compile Include="GenerarModificacionReserva\Crear.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GenerarModificacionReserva\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="GenerarModificacionReserva\Crear.Designer.cs">
+      <DependentUpon>Crear.cs</DependentUpon>
     </Compile>
     <Compile Include="ListadoEstadistico\Form1.cs">
       <SubType>Form</SubType>
@@ -99,17 +99,29 @@
     <Compile Include="ListadoEstadistico\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login\Form1.cs">
+    <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Login\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login\Form2.cs">
+    <Compile Include="Login\Seleccion_de_hotel_optativo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <Compile Include="Login\Seleccion_de_hotel_optativo.Designer.cs">
+      <DependentUpon>Seleccion_de_hotel_optativo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\Seleccion_de_funcionalidad_obligatorio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\Seleccion_de_funcionalidad_obligatorio.Designer.cs">
+      <DependentUpon>Seleccion_de_funcionalidad_obligatorio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\RESERVA_valido_huesped_y_login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\RESERVA_valido_huesped_y_login.Designer.cs">
+      <DependentUpon>RESERVA_valido_huesped_y_login.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -128,14 +140,23 @@
     <EmbeddedResource Include="AbmRol\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FRBAhotel.resx">
-      <DependentUpon>FRBAhotel.cs</DependentUpon>
+    <EmbeddedResource Include="FRBAhotel_pantallaPrincipal.resx">
+      <DependentUpon>FRBAhotel_pantallaPrincipal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="GenerarModificacionReserva\Crear.resx">
+      <DependentUpon>Crear.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login\Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <EmbeddedResource Include="Login\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\Seleccion_de_hotel_optativo.resx">
+      <DependentUpon>Seleccion_de_hotel_optativo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\Seleccion_de_funcionalidad_obligatorio.resx">
+      <DependentUpon>Seleccion_de_funcionalidad_obligatorio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\RESERVA_valido_huesped_y_login.resx">
+      <DependentUpon>RESERVA_valido_huesped_y_login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

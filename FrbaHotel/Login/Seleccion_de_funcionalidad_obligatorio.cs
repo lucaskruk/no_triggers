@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.GenerarModificacionReserva
+namespace FrbaHotel.Login
 {
-    public partial class Form1 : Form
+    public partial class Seleccion_de_funcionalidad_obligatorio : Form
     {
-        public Form1()
+        public Seleccion_de_funcionalidad_obligatorio()
         {
             InitializeComponent();
+        }
+
+        private void Form3_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -19,7 +19,7 @@ namespace FrbaHotel
 
         private void button1_Click(object sender, EventArgs e)
         {
-            new Login.Form1().Show();
+            new Login.Login().Show();
         }
 
         private void button1_Click_1(object sender, EventArgs e)

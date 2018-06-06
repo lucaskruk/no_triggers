@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.Login
 {
-    public partial class Form2 : Form
+    public partial class RESERVA_valido_huesped_y_login : Form
     {
-        public Form2()
+        public RESERVA_valido_huesped_y_login()
         {
             InitializeComponent();
         }
