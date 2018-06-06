@@ -10,21 +10,11 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.GenerarModificacionReserva
 {
-    public partial class Crear : Form
+    public partial class Confirmacion_de_reserva : Form
     {
-        public Crear()
+        public Confirmacion_de_reserva()
         {
             InitializeComponent();
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void mostrar_hotel_solo_usuario_guest_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

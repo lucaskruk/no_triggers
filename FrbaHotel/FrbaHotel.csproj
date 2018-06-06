@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -94,6 +95,18 @@
     </Compile>
     <Compile Include="GenerarModificacionReserva\Buscar disponibilidad.Designer.cs">
       <DependentUpon>Buscar disponibilidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GenerarModificacionReserva\CrearReserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerarModificacionReserva\CrearReserva.Designer.cs">
+      <DependentUpon>CrearReserva.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GenerarModificacionReserva\Confirmacion_de_reserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerarModificacionReserva\Confirmacion_de_reserva.Designer.cs">
+      <DependentUpon>Confirmacion_de_reserva.cs</DependentUpon>
     </Compile>
     <Compile Include="GenerarModificacionReserva\Ver_disponibilidad.cs">
       <SubType>Form</SubType>
@@ -153,6 +166,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GenerarModificacionReserva\Buscar disponibilidad.resx">
       <DependentUpon>Buscar disponibilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerarModificacionReserva\CrearReserva.resx">
+      <DependentUpon>CrearReserva.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerarModificacionReserva\Confirmacion_de_reserva.resx">
+      <DependentUpon>Confirmacion_de_reserva.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GenerarModificacionReserva\Ver_disponibilidad.resx">
       <DependentUpon>Ver_disponibilidad.cs</DependentUpon>

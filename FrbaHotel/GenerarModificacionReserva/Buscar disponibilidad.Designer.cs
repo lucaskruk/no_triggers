@@ -39,9 +39,10 @@
             this.mostrar_tipo_regimen = new System.Windows.Forms.ComboBox();
             this.Buscar_disponibilidad = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.mostrar_hotel = new System.Windows.Forms.ComboBox();
-            this.Lista_de_numeros = new System.Windows.Forms.ComboBox();
+            this.mostrar_hotel_solo_usuario_guest = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.cantidad_de_personas = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.cantidad_de_personas)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -137,21 +138,14 @@
             this.label5.TabIndex = 21;
             this.label5.Text = "Seleccionar hotel";
             // 
-            // mostrar_hotel
+            // mostrar_hotel_solo_usuario_guest
             // 
-            this.mostrar_hotel.FormattingEnabled = true;
-            this.mostrar_hotel.Location = new System.Drawing.Point(131, 100);
-            this.mostrar_hotel.Name = "mostrar_hotel";
-            this.mostrar_hotel.Size = new System.Drawing.Size(121, 21);
-            this.mostrar_hotel.TabIndex = 22;
-            // 
-            // Lista_de_numeros
-            // 
-            this.Lista_de_numeros.FormattingEnabled = true;
-            this.Lista_de_numeros.Location = new System.Drawing.Point(451, 95);
-            this.Lista_de_numeros.Name = "Lista_de_numeros";
-            this.Lista_de_numeros.Size = new System.Drawing.Size(121, 21);
-            this.Lista_de_numeros.TabIndex = 23;
+            this.mostrar_hotel_solo_usuario_guest.FormattingEnabled = true;
+            this.mostrar_hotel_solo_usuario_guest.Location = new System.Drawing.Point(131, 100);
+            this.mostrar_hotel_solo_usuario_guest.Name = "mostrar_hotel_solo_usuario_guest";
+            this.mostrar_hotel_solo_usuario_guest.Size = new System.Drawing.Size(121, 21);
+            this.mostrar_hotel_solo_usuario_guest.TabIndex = 22;
+            this.mostrar_hotel_solo_usuario_guest.SelectedIndexChanged += new System.EventHandler(this.mostrar_hotel_solo_usuario_guest_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -164,15 +158,22 @@
             this.label6.Text = "Cantidad de personas";
             this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
+            // cantidad_de_personas
+            // 
+            this.cantidad_de_personas.Location = new System.Drawing.Point(451, 101);
+            this.cantidad_de_personas.Name = "cantidad_de_personas";
+            this.cantidad_de_personas.Size = new System.Drawing.Size(120, 20);
+            this.cantidad_de_personas.TabIndex = 25;
+            // 
             // Crear
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(663, 261);
+            this.Controls.Add(this.cantidad_de_personas);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.Lista_de_numeros);
-            this.Controls.Add(this.mostrar_hotel);
+            this.Controls.Add(this.mostrar_hotel_solo_usuario_guest);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.Buscar_disponibilidad);
             this.Controls.Add(this.mostrar_tipo_regimen);
@@ -186,6 +187,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Crear";
             this.Text = "Buscar disponibilidad - FRBA hotel";
+            ((System.ComponentModel.ISupportInitialize)(this.cantidad_de_personas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,8 +205,8 @@
         private System.Windows.Forms.ComboBox mostrar_tipo_regimen;
         private System.Windows.Forms.Button Buscar_disponibilidad;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox mostrar_hotel;
-        private System.Windows.Forms.ComboBox Lista_de_numeros;
+        private System.Windows.Forms.ComboBox mostrar_hotel_solo_usuario_guest;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown cantidad_de_personas;
     }
 }
