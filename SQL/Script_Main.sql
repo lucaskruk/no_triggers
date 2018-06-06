@@ -635,3 +635,55 @@ constraint fk_id_hotel_de_Baja foreign key (id_hotel) references [no_triggers].h
 Alter table [no_triggers].consumible_por_estadia add
 constraint fk_estadia_por_consumible foreign key (id_estadia) references [no_triggers].estadia(id_estadia),
 constraint fk_consumiblePor_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
+
+------------------------------------------------------------------------------------------------------------------------
+------------------------------STORED PROCEDURES-------------------------------------------------------------------------
+/*******************PARA ROL*******************************************/
+/*Se decide que se creen los roles en estado ACTIVO*/
+
+GO
+create procedure [NO_TRIGGERS].sp_rol_crear 
+@Nombre_rol varchar (100)
+AS
+insert into 
+	[NO_TRIGGERS].rol values (@Nombre_rol, 1)
+
+GO
+--exec [NO_TRIGGERS].sp_rol_crear 'Rey de los minisupers'
+GO
+create procedure [no_triggers].sp_rol_dar_de_baja
+@Nombre_rol varchar (100)
+AS
+update [NO_TRIGGERS].rol set rol_estado=0
+WHERE @Nombre_rol=rol_nombre
+GO
+-- exec [NO_TRIGGERS].sp_rol_dar_de_baja 'Rey de los minisupers'
+GO
+create procedure [NO_TRIGGERS].sp_asignar_funcionalidad
+@Rol_nombre varchar (100), @Funcionalidad int
+AS
+	insert into [NO_TRIGGERS].rol_por_funcionalidad values ((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre),@Funcionalidad)
+GO
+create procedure [NO_TRIGGERS].sp_chequear_asignacion_rol --probarlo!!!!!!!!!!!!!!!!!!!!!!!!
+@Rol_nombre varchar(100), @Funcionalidad int
+AS
+declare @Resultado bit
+	if( (select id_rol_por_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rf, [NO_TRIGGERS].rol r, [NO_TRIGGERS].funcionalidad f
+	    where r.rol_nombre=@Rol_nombre and f.id_funcionalidad=@Funcionalidad and rf.id_rol=r.id_rol and rf.id_funcionalidad=f.id_funcionalidad)is NOT NULL)
+		set @Resultado=1
+	else
+		set @Resultado=0
+return @resultado
+GO
+-- exec [NO_TRIGGERS].sp_chequear_asignacion_rol 'ADMINISTRADOR' ,1
+create procedure [NO_TRIGGERS].sp_chequear_existencia_rol
+@Rol_nombre varchar(100)
+AS 
+declare @Resultado bit
+if((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre)IS NOT NULL)
+	set @Resultado=1
+else
+	set @Resultado=0
+return @Resultado
+
+GO
