@@ -113,6 +113,7 @@
             this.Iniciar_Sesion.TabIndex = 5;
             this.Iniciar_Sesion.Text = "Iniciar sesión";
             this.Iniciar_Sesion.UseVisualStyleBackColor = false;
+            this.Iniciar_Sesion.Click += new System.EventHandler(this.Iniciar_Sesion_Click);
             // 
             // pictureBox2
             // 

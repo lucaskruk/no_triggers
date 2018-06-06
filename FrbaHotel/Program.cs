@@ -1,4 +1,7 @@
-﻿using System;
+﻿using FrbaHotel.Entity;
+using System;
+using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace FrbaHotel
