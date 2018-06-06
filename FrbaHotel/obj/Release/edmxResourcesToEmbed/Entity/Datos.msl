@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="GD1C2018ModelStoreContainer" CdmEntityContainer="GD1C2018Entities1">
+    <EntitySetMapping Name="baja_de_hotel">
+      <EntityTypeMapping TypeName="GD1C2018Model.baja_de_hotel">
+        <MappingFragment StoreEntitySet="baja_de_hotel">
+          <ScalarProperty Name="id_baja_de_hotel" ColumnName="id_baja_de_hotel" />
+          <ScalarProperty Name="baja_hotel_fecha_inicio" ColumnName="baja_hotel_fecha_inicio" />
+          <ScalarProperty Name="baja_hotel_fecha_fin" ColumnName="baja_hotel_fecha_fin" />
+          <ScalarProperty Name="id_hotel" ColumnName="id_hotel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ciudad">
+      <EntityTypeMapping TypeName="GD1C2018Model.ciudad">
+        <MappingFragment StoreEntitySet="ciudad">
+          <ScalarProperty Name="id_ciudad" ColumnName="id_ciudad" />
+          <ScalarProperty Name="id_pais" ColumnName="id_pais" />
+          <ScalarProperty Name="ciudad_nombre" ColumnName="ciudad_nombre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="cliente">
+      <EntityTypeMapping TypeName="GD1C2018Model.cliente">
+        <MappingFragment StoreEntitySet="cliente">
+          <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+          <ScalarProperty Name="cliente_estado" ColumnName="cliente_estado" />
+          <ScalarProperty Name="cliente_nombre" ColumnName="cliente_nombre" />
+          <ScalarProperty Name="cliente_apellido" ColumnName="cliente_apellido" />
+          <ScalarProperty Name="cliente_email" ColumnName="cliente_email" />
+          <ScalarProperty Name="cliente_email_invalido" ColumnName="cliente_email_invalido" />
+          <ScalarProperty Name="cliente_fecha_nacimiento" ColumnName="cliente_fecha_nacimiento" />
+          <ScalarProperty Name="id_tipo_documento" ColumnName="id_tipo_documento" />
+          <ScalarProperty Name="cliente_numero_documento" ColumnName="cliente_numero_documento" />
+          <ScalarProperty Name="cliente_telefono" ColumnName="cliente_telefono" />
+          <ScalarProperty Name="Id_direccion" ColumnName="Id_direccion" />
+          <ScalarProperty Name="Id_pais" ColumnName="Id_pais" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="consumible">
+      <EntityTypeMapping TypeName="GD1C2018Model.consumible">
+        <MappingFragment StoreEntitySet="consumible">
+          <ScalarProperty Name="id_consumible" ColumnName="id_consumible" />
+          <ScalarProperty Name="consumible_descripcion" ColumnName="consumible_descripcion" />
+          <ScalarProperty Name="consumible_precio" ColumnName="consumible_precio" />
+          <ScalarProperty Name="consumible_codigo" ColumnName="consumible_codigo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="consumible_por_estadia">
+      <EntityTypeMapping TypeName="GD1C2018Model.consumible_por_estadia">
+        <MappingFragment StoreEntitySet="consumible_por_estadia">
+          <ScalarProperty Name="id_consumible_por_estadia" ColumnName="id_consumible_por_estadia" />
+          <ScalarProperty Name="id_consumible" ColumnName="id_consumible" />
+          <ScalarProperty Name="id_estadia" ColumnName="id_estadia" />
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="direccion">
+      <EntityTypeMapping TypeName="GD1C2018Model.direccion">
+        <MappingFragment StoreEntitySet="direccion">
+          <ScalarProperty Name="id_direccion" ColumnName="id_direccion" />
+          <ScalarProperty Name="direccion_calle" ColumnName="direccion_calle" />
+          <ScalarProperty Name="direccion_altura" ColumnName="direccion_altura" />
+          <ScalarProperty Name="direccion_piso" ColumnName="direccion_piso" />
+          <ScalarProperty Name="direccion_departamento" ColumnName="direccion_departamento" />
+          <ScalarProperty Name="id_ciudad" ColumnName="id_ciudad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="estadia">
+      <EntityTypeMapping TypeName="GD1C2018Model.estadia">
+        <MappingFragment StoreEntitySet="estadia">
+          <ScalarProperty Name="id_estadia" ColumnName="id_estadia" />
+          <ScalarProperty Name="estadia_fecha_inicio" ColumnName="estadia_fecha_inicio" />
+          <ScalarProperty Name="estadia_cantidad_noches" ColumnName="estadia_cantidad_noches" />
+          <ScalarProperty Name="id_habitacion" ColumnName="id_habitacion" />
+          <ScalarProperty Name="id_reserva" ColumnName="id_reserva" />
+          <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="estado_reserva">
+      <EntityTypeMapping TypeName="GD1C2018Model.estado_reserva">
+        <MappingFragment StoreEntitySet="estado_reserva">
+          <ScalarProperty Name="id_estado_reserva" ColumnName="id_estado_reserva" />
+          <ScalarProperty Name="estado_reserva_descripcion" ColumnName="estado_reserva_descripcion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="factura">
+      <EntityTypeMapping TypeName="GD1C2018Model.factura">
+        <MappingFragment StoreEntitySet="factura">
+          <ScalarProperty Name="id_factura" ColumnName="id_factura" />
+          <ScalarProperty Name="factura_numero" ColumnName="factura_numero" />
+          <ScalarProperty Name="factura_tipo" ColumnName="factura_tipo" />
+          <ScalarProperty Name="factura_fecha" ColumnName="factura_fecha" />
+          <ScalarProperty Name="factura_total" ColumnName="factura_total" />
+          <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+          <ScalarProperty Name="id_estadia" ColumnName="id_estadia" />
+          <ScalarProperty Name="id_hotel" ColumnName="id_hotel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="funcionalidad">
+      <EntityTypeMapping TypeName="GD1C2018Model.funcionalidad">
+        <MappingFragment StoreEntitySet="funcionalidad">
+          <ScalarProperty Name="id_funcionalidad" ColumnName="id_funcionalidad" />
+          <ScalarProperty Name="funcionalidad_descripcion" ColumnName="funcionalidad_descripcion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="habitacion">
+      <EntityTypeMapping TypeName="GD1C2018Model.habitacion">
+        <MappingFragment StoreEntitySet="habitacion">
+          <ScalarProperty Name="id_habitacion" ColumnName="id_habitacion" />
+          <ScalarProperty Name="habitacion_numero" ColumnName="habitacion_numero" />
+          <ScalarProperty Name="habitacion_piso" ColumnName="habitacion_piso" />
+          <ScalarProperty Name="habitacion_frente" ColumnName="habitacion_frente" />
+          <ScalarProperty Name="habitacion_habilitada" ColumnName="habitacion_habilitada" />
+          <ScalarProperty Name="habitacion_ocupada" ColumnName="habitacion_ocupada" />
+          <ScalarProperty Name="Id_tipo_habitacion" ColumnName="Id_tipo_habitacion" />
+          <ScalarProperty Name="Id_hotel" ColumnName="Id_hotel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hotel">
+      <EntityTypeMapping TypeName="GD1C2018Model.hotel">
+        <MappingFragment StoreEntitySet="hotel">
+          <ScalarProperty Name="id_hotel" ColumnName="id_hotel" />
+          <ScalarProperty Name="id_direccion" ColumnName="id_direccion" />
+          <ScalarProperty Name="hotel_cantidad_estrellas" ColumnName="hotel_cantidad_estrellas" />
+          <ScalarProperty Name="hotel_recarga_estrella" ColumnName="hotel_recarga_estrella" />
+          <ScalarProperty Name="hotel_fecha_creacion" ColumnName="hotel_fecha_creacion" />
+          <ScalarProperty Name="hotel_estado" ColumnName="hotel_estado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="item_factura">
+      <EntityTypeMapping TypeName="GD1C2018Model.item_factura">
+        <MappingFragment StoreEntitySet="item_factura">
+          <ScalarProperty Name="id_item_factura" ColumnName="id_item_factura" />
+          <ScalarProperty Name="item_factura_cantidad" ColumnName="item_factura_cantidad" />
+          <ScalarProperty Name="item_factura_monto" ColumnName="item_factura_monto" />
+          <ScalarProperty Name="id_factura" ColumnName="id_factura" />
+          <ScalarProperty Name="id_consumible" ColumnName="id_consumible" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="metodo_de_pago">
+      <EntityTypeMapping TypeName="GD1C2018Model.metodo_de_pago">
+        <MappingFragment StoreEntitySet="metodo_de_pago">
+          <ScalarProperty Name="id_metodo_de_pago" ColumnName="id_metodo_de_pago" />
+          <ScalarProperty Name="metodo_de_pago_nombre" ColumnName="metodo_de_pago_nombre" />
+          <ScalarProperty Name="metodo_de_pago_detalles" ColumnName="metodo_de_pago_detalles" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="pais">
+      <EntityTypeMapping TypeName="GD1C2018Model.pais">
+        <MappingFragment StoreEntitySet="pais">
+          <ScalarProperty Name="id_pais" ColumnName="id_pais" />
+          <ScalarProperty Name="pais_nombre" ColumnName="pais_nombre" />
+          <ScalarProperty Name="pais_nacionalidad" ColumnName="pais_nacionalidad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="regimen">
+      <EntityTypeMapping TypeName="GD1C2018Model.regimen">
+        <MappingFragment StoreEntitySet="regimen">
+          <ScalarProperty Name="id_regimen" ColumnName="id_regimen" />
+          <ScalarProperty Name="regimen_descripcion" ColumnName="regimen_descripcion" />
+          <ScalarProperty Name="regimen_precio" ColumnName="regimen_precio" />
+          <ScalarProperty Name="regimen_estado" ColumnName="regimen_estado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="regimen_por_hotel">
+      <EntityTypeMapping TypeName="GD1C2018Model.regimen_por_hotel">
+        <MappingFragment StoreEntitySet="regimen_por_hotel">
+          <ScalarProperty Name="id_regimen_por_hotel" ColumnName="id_regimen_por_hotel" />
+          <ScalarProperty Name="id_regimen" ColumnName="id_regimen" />
+          <ScalarProperty Name="id_hotel" ColumnName="id_hotel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="reserva">
+      <EntityTypeMapping TypeName="GD1C2018Model.reserva">
+        <MappingFragment StoreEntitySet="reserva">
+          <ScalarProperty Name="id_reserva" ColumnName="id_reserva" />
+          <ScalarProperty Name="reserva_fecha_inicio" ColumnName="reserva_fecha_inicio" />
+          <ScalarProperty Name="reserva_cantidad_noches" ColumnName="reserva_cantidad_noches" />
+          <ScalarProperty Name="reserva_numero_codigo" ColumnName="reserva_numero_codigo" />
+          <ScalarProperty Name="Id_reserva_cambiada_por_user" ColumnName="Id_reserva_cambiada_por_user" />
+          <ScalarProperty Name="Id_hotel" ColumnName="Id_hotel" />
+          <ScalarProperty Name="Id_habitacion" ColumnName="Id_habitacion" />
+          <ScalarProperty Name="Id_reserva_estado" ColumnName="Id_reserva_estado" />
+          <ScalarProperty Name="Id_regimen" ColumnName="Id_regimen" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="rol">
+      <EntityTypeMapping TypeName="GD1C2018Model.rol">
+        <MappingFragment StoreEntitySet="rol">
+          <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+          <ScalarProperty Name="rol_nombre" ColumnName="rol_nombre" />
+          <ScalarProperty Name="rol_estado" ColumnName="rol_estado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="rol_por_funcionalidad">
+      <EntityTypeMapping TypeName="GD1C2018Model.rol_por_funcionalidad">
+        <MappingFragment StoreEntitySet="rol_por_funcionalidad">
+          <ScalarProperty Name="id_rol_por_funcionalidad" ColumnName="id_rol_por_funcionalidad" />
+          <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+          <ScalarProperty Name="id_funcionalidad" ColumnName="id_funcionalidad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tipo_documento">
+      <EntityTypeMapping TypeName="GD1C2018Model.tipo_documento">
+        <MappingFragment StoreEntitySet="tipo_documento">
+          <ScalarProperty Name="id_tipo_documento" ColumnName="id_tipo_documento" />
+          <ScalarProperty Name="tipo_de_documento_nombre" ColumnName="tipo_de_documento_nombre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tipoDeHabitacion">
+      <EntityTypeMapping TypeName="GD1C2018Model.tipoDeHabitacion">
+        <MappingFragment StoreEntitySet="tipoDeHabitacion">
+          <ScalarProperty Name="id_tipo_habitacion" ColumnName="id_tipo_habitacion" />
+          <ScalarProperty Name="tipo_habitacion_descripcion" ColumnName="tipo_habitacion_descripcion" />
+          <ScalarProperty Name="tipo_habitacion_porcentual" ColumnName="tipo_habitacion_porcentual" />
+          <ScalarProperty Name="tipo_habitacion_codigo" ColumnName="tipo_habitacion_codigo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="usuario">
+      <EntityTypeMapping TypeName="GD1C2018Model.usuario">
+        <MappingFragment StoreEntitySet="usuario">
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+          <ScalarProperty Name="usuario_username" ColumnName="usuario_username" />
+          <ScalarProperty Name="usuario_nombre" ColumnName="usuario_nombre" />
+          <ScalarProperty Name="usuario_apellido" ColumnName="usuario_apellido" />
+          <ScalarProperty Name="usuario_password" ColumnName="usuario_password" />
+          <ScalarProperty Name="usuario_email" ColumnName="usuario_email" />
+          <ScalarProperty Name="usuario_fecha_nacimiento" ColumnName="usuario_fecha_nacimiento" />
+          <ScalarProperty Name="id_tipo_documento" ColumnName="id_tipo_documento" />
+          <ScalarProperty Name="usuario_numero_documento" ColumnName="usuario_numero_documento" />
+          <ScalarProperty Name="usuario_telefono" ColumnName="usuario_telefono" />
+          <ScalarProperty Name="usuario_habilitado" ColumnName="usuario_habilitado" />
+          <ScalarProperty Name="Id_rol" ColumnName="Id_rol" />
+          <ScalarProperty Name="Id_hotel" ColumnName="Id_hotel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_asignar_funcionalidad" FunctionName="GD1C2018Model.Store.sp_asignar_funcionalidad" />
+    <FunctionImportMapping FunctionImportName="sp_chequear_asignacion_rol" FunctionName="GD1C2018Model.Store.sp_chequear_asignacion_rol" />
+    <FunctionImportMapping FunctionImportName="sp_chequear_existencia_rol" FunctionName="GD1C2018Model.Store.sp_chequear_existencia_rol" />
+    <FunctionImportMapping FunctionImportName="sp_desasignar_funcionalidad" FunctionName="GD1C2018Model.Store.sp_desasignar_funcionalidad" />
+    <FunctionImportMapping FunctionImportName="sp_modificar_rol" FunctionName="GD1C2018Model.Store.sp_modificar_rol" />
+    <FunctionImportMapping FunctionImportName="sp_mostrar_roles" FunctionName="GD1C2018Model.Store.sp_mostrar_roles">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="GD1C2018Model.sp_mostrar_roles_Result">
+          <ScalarProperty Name="id_rol" ColumnName="id_rol" />
+          <ScalarProperty Name="rol_nombre" ColumnName="rol_nombre" />
+          <ScalarProperty Name="rol_estado" ColumnName="rol_estado" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_rol_crear" FunctionName="GD1C2018Model.Store.sp_rol_crear" />
+    <FunctionImportMapping FunctionImportName="sp_rol_dar_de_baja" FunctionName="GD1C2018Model.Store.sp_rol_dar_de_baja" />
+    <FunctionImportMapping FunctionImportName="sp_rol_modificar_estado" FunctionName="GD1C2018Model.Store.sp_rol_modificar_estado" />
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,855 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GD1C2018Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="baja_de_hotel">
+    <Key>
+      <PropertyRef Name="id_baja_de_hotel" />
+    </Key>
+    <Property Name="id_baja_de_hotel" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="baja_hotel_fecha_inicio" Type="DateTime" Precision="3" />
+    <Property Name="baja_hotel_fecha_fin" Type="DateTime" Precision="3" />
+    <Property Name="id_hotel" Type="Int32" />
+    <NavigationProperty Name="hotel" Relationship="Self.fk_id_hotel_de_Baja" FromRole="baja_de_hotel" ToRole="hotel" />
+  </EntityType>
+  <EntityType Name="ciudad">
+    <Key>
+      <PropertyRef Name="id_ciudad" />
+    </Key>
+    <Property Name="id_ciudad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_pais" Type="Int32" />
+    <Property Name="ciudad_nombre" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="direccion" Relationship="Self.fk_id_ciudad_direccion" FromRole="ciudad" ToRole="direccion" />
+    <NavigationProperty Name="pais" Relationship="Self.fk_id_ciudad_pais" FromRole="ciudad" ToRole="pais" />
+  </EntityType>
+  <EntityType Name="cliente">
+    <Key>
+      <PropertyRef Name="id_cliente" />
+    </Key>
+    <Property Name="id_cliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="cliente_estado" Type="Boolean" />
+    <Property Name="cliente_nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="cliente_apellido" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="cliente_email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="cliente_email_invalido" Type="Boolean" />
+    <Property Name="cliente_fecha_nacimiento" Type="DateTime" Precision="3" />
+    <Property Name="id_tipo_documento" Type="Int32" />
+    <Property Name="cliente_numero_documento" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="cliente_telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Id_direccion" Type="Int32" />
+    <Property Name="Id_pais" Type="Int32" />
+    <NavigationProperty Name="direccion" Relationship="Self.fk_id_cliente_direccion" FromRole="cliente" ToRole="direccion" />
+    <NavigationProperty Name="pais" Relationship="Self.fk_id_cliente_pais" FromRole="cliente" ToRole="pais" />
+    <NavigationProperty Name="tipo_documento" Relationship="Self.fk_id_cliente_tipo_doc" FromRole="cliente" ToRole="tipo_documento" />
+    <NavigationProperty Name="estadia" Relationship="Self.fk_id_estadia_cliente" FromRole="cliente" ToRole="estadia" />
+    <NavigationProperty Name="factura" Relationship="Self.fk_id_factura_cliente" FromRole="cliente" ToRole="factura" />
+  </EntityType>
+  <EntityType Name="consumible">
+    <Key>
+      <PropertyRef Name="id_consumible" />
+    </Key>
+    <Property Name="id_consumible" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="consumible_descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="consumible_precio" Type="Double" />
+    <Property Name="consumible_codigo" Type="Int32" />
+    <NavigationProperty Name="consumible_por_estadia" Relationship="Self.fk_consumiblePor_consumible" FromRole="consumible" ToRole="consumible_por_estadia" />
+    <NavigationProperty Name="item_factura" Relationship="Self.fk_id_item_consumible" FromRole="consumible" ToRole="item_factura" />
+  </EntityType>
+  <EntityType Name="consumible_por_estadia">
+    <Key>
+      <PropertyRef Name="id_consumible_por_estadia" />
+    </Key>
+    <Property Name="id_consumible_por_estadia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_consumible" Type="Int32" />
+    <Property Name="id_estadia" Type="Int32" />
+    <Property Name="cantidad" Type="Int32" />
+    <NavigationProperty Name="consumible" Relationship="Self.fk_consumiblePor_consumible" FromRole="consumible_por_estadia" ToRole="consumible" />
+    <NavigationProperty Name="estadia" Relationship="Self.fk_estadia_por_consumible" FromRole="consumible_por_estadia" ToRole="estadia" />
+  </EntityType>
+  <EntityType Name="direccion">
+    <Key>
+      <PropertyRef Name="id_direccion" />
+    </Key>
+    <Property Name="id_direccion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="direccion_calle" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="direccion_altura" Type="Int32" />
+    <Property Name="direccion_piso" Type="Int32" />
+    <Property Name="direccion_departamento" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+    <Property Name="id_ciudad" Type="Int32" />
+    <NavigationProperty Name="ciudad" Relationship="Self.fk_id_ciudad_direccion" FromRole="direccion" ToRole="ciudad" />
+    <NavigationProperty Name="cliente" Relationship="Self.fk_id_cliente_direccion" FromRole="direccion" ToRole="cliente" />
+    <NavigationProperty Name="hotel" Relationship="Self.fk_id_hotel_direccion" FromRole="direccion" ToRole="hotel" />
+  </EntityType>
+  <EntityType Name="estadia">
+    <Key>
+      <PropertyRef Name="id_estadia" />
+    </Key>
+    <Property Name="id_estadia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="estadia_fecha_inicio" Type="DateTime" Precision="3" />
+    <Property Name="estadia_cantidad_noches" Type="Int32" />
+    <Property Name="id_habitacion" Type="Int32" />
+    <Property Name="id_reserva" Type="Int32" />
+    <Property Name="id_cliente" Type="Int32" />
+    <NavigationProperty Name="cliente" Relationship="Self.fk_id_estadia_cliente" FromRole="estadia" ToRole="cliente" />
+    <NavigationProperty Name="consumible_por_estadia" Relationship="Self.fk_estadia_por_consumible" FromRole="estadia" ToRole="consumible_por_estadia" />
+    <NavigationProperty Name="habitacion" Relationship="Self.fk_id_estadia_habitacion" FromRole="estadia" ToRole="habitacion" />
+    <NavigationProperty Name="reserva" Relationship="Self.fk_id_estadia_reserva" FromRole="estadia" ToRole="reserva" />
+    <NavigationProperty Name="factura" Relationship="Self.fk_id_factura_estadia" FromRole="estadia" ToRole="factura" />
+  </EntityType>
+  <EntityType Name="estado_reserva">
+    <Key>
+      <PropertyRef Name="id_estado_reserva" />
+    </Key>
+    <Property Name="id_estado_reserva" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="estado_reserva_descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="reserva" Relationship="Self.fk_id_reserva_en_estado" FromRole="estado_reserva" ToRole="reserva" />
+  </EntityType>
+  <EntityType Name="factura">
+    <Key>
+      <PropertyRef Name="id_factura" />
+    </Key>
+    <Property Name="id_factura" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="factura_numero" Type="Int32" />
+    <Property Name="factura_tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="factura_fecha" Type="DateTime" Precision="3" />
+    <Property Name="factura_total" Type="Double" />
+    <Property Name="id_cliente" Type="Int32" />
+    <Property Name="id_estadia" Type="Int32" />
+    <Property Name="id_hotel" Type="Int32" />
+    <NavigationProperty Name="cliente" Relationship="Self.fk_id_factura_cliente" FromRole="factura" ToRole="cliente" />
+    <NavigationProperty Name="estadia" Relationship="Self.fk_id_factura_estadia" FromRole="factura" ToRole="estadia" />
+    <NavigationProperty Name="hotel" Relationship="Self.fk_id_factura_hotel" FromRole="factura" ToRole="hotel" />
+    <NavigationProperty Name="item_factura" Relationship="Self.fk_id_numero_factura" FromRole="factura" ToRole="item_factura" />
+  </EntityType>
+  <EntityType Name="funcionalidad">
+    <Key>
+      <PropertyRef Name="id_funcionalidad" />
+    </Key>
+    <Property Name="id_funcionalidad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="funcionalidad_descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="rol_por_funcionalidad" Relationship="Self.fk_id_funcionalidad" FromRole="funcionalidad" ToRole="rol_por_funcionalidad" />
+  </EntityType>
+  <EntityType Name="habitacion">
+    <Key>
+      <PropertyRef Name="id_habitacion" />
+    </Key>
+    <Property Name="id_habitacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="habitacion_numero" Type="Int32" />
+    <Property Name="habitacion_piso" Type="Int32" />
+    <Property Name="habitacion_frente" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="habitacion_habilitada" Type="Boolean" />
+    <Property Name="habitacion_ocupada" Type="Boolean" />
+    <Property Name="Id_tipo_habitacion" Type="Int32" />
+    <Property Name="Id_hotel" Type="Int32" />
+    <NavigationProperty Name="estadia" Relationship="Self.fk_id_estadia_habitacion" FromRole="habitacion" ToRole="estadia" />
+    <NavigationProperty Name="hotel" Relationship="Self.fk_id_habitacion_hotel" FromRole="habitacion" ToRole="hotel" />
+    <NavigationProperty Name="reserva" Relationship="Self.fk_id_reserva_habitacion" FromRole="habitacion" ToRole="reserva" />
+    <NavigationProperty Name="tipoDeHabitacion" Relationship="Self.fk_id_tipo_de_habitacion" FromRole="habitacion" ToRole="tipoDeHabitacion" />
+  </EntityType>
+  <EntityType Name="hotel">
+    <Key>
+      <PropertyRef Name="id_hotel" />
+    </Key>
+    <Property Name="id_hotel" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_direccion" Type="Int32" />
+    <Property Name="hotel_cantidad_estrellas" Type="Double" />
+    <Property Name="hotel_recarga_estrella" Type="Double" />
+    <Property Name="hotel_fecha_creacion" Type="DateTime" Precision="3" />
+    <Property Name="hotel_estado" Type="Boolean" />
+    <NavigationProperty Name="baja_de_hotel" Relationship="Self.fk_id_hotel_de_Baja" FromRole="hotel" ToRole="baja_de_hotel" />
+    <NavigationProperty Name="direccion" Relationship="Self.fk_id_hotel_direccion" FromRole="hotel" ToRole="direccion" />
+    <NavigationProperty Name="factura" Relationship="Self.fk_id_factura_hotel" FromRole="hotel" ToRole="factura" />
+    <NavigationProperty Name="habitacion" Relationship="Self.fk_id_habitacion_hotel" FromRole="hotel" ToRole="habitacion" />
+    <NavigationProperty Name="regimen_por_hotel" Relationship="Self.fk_id_hotel" FromRole="hotel" ToRole="regimen_por_hotel" />
+    <NavigationProperty Name="reserva" Relationship="Self.fk_id_reserva_hotel" FromRole="hotel" ToRole="reserva" />
+    <NavigationProperty Name="usuario" Relationship="Self.fk_id_usuario_hotel" FromRole="hotel" ToRole="usuario" />
+  </EntityType>
+  <EntityType Name="item_factura">
+    <Key>
+      <PropertyRef Name="id_item_factura" />
+    </Key>
+    <Property Name="id_item_factura" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="item_factura_cantidad" Type="Int32" />
+    <Property Name="item_factura_monto" Type="Double" />
+    <Property Name="id_factura" Type="Int32" />
+    <Property Name="id_consumible" Type="Int32" />
+    <NavigationProperty Name="consumible" Relationship="Self.fk_id_item_consumible" FromRole="item_factura" ToRole="consumible" />
+    <NavigationProperty Name="factura" Relationship="Self.fk_id_numero_factura" FromRole="item_factura" ToRole="factura" />
+  </EntityType>
+  <EntityType Name="metodo_de_pago">
+    <Key>
+      <PropertyRef Name="id_metodo_de_pago" />
+    </Key>
+    <Property Name="id_metodo_de_pago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="metodo_de_pago_nombre" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="metodo_de_pago_detalles" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="pais">
+    <Key>
+      <PropertyRef Name="id_pais" />
+    </Key>
+    <Property Name="id_pais" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="pais_nombre" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="pais_nacionalidad" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ciudad" Relationship="Self.fk_id_ciudad_pais" FromRole="pais" ToRole="ciudad" />
+    <NavigationProperty Name="cliente" Relationship="Self.fk_id_cliente_pais" FromRole="pais" ToRole="cliente" />
+  </EntityType>
+  <EntityType Name="regimen">
+    <Key>
+      <PropertyRef Name="id_regimen" />
+    </Key>
+    <Property Name="id_regimen" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="regimen_descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="regimen_precio" Type="Double" />
+    <Property Name="regimen_estado" Type="Boolean" />
+    <NavigationProperty Name="regimen_por_hotel" Relationship="Self.fk_id_regimen" FromRole="regimen" ToRole="regimen_por_hotel" />
+    <NavigationProperty Name="reserva" Relationship="Self.fk_id_reserva_regimen" FromRole="regimen" ToRole="reserva" />
+  </EntityType>
+  <EntityType Name="regimen_por_hotel">
+    <Key>
+      <PropertyRef Name="id_regimen_por_hotel" />
+    </Key>
+    <Property Name="id_regimen_por_hotel" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_regimen" Type="Int32" />
+    <Property Name="id_hotel" Type="Int32" />
+    <NavigationProperty Name="hotel" Relationship="Self.fk_id_hotel" FromRole="regimen_por_hotel" ToRole="hotel" />
+    <NavigationProperty Name="regimen" Relationship="Self.fk_id_regimen" FromRole="regimen_por_hotel" ToRole="regimen" />
+  </EntityType>
+  <EntityType Name="reserva">
+    <Key>
+      <PropertyRef Name="id_reserva" />
+    </Key>
+    <Property Name="id_reserva" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="reserva_fecha_inicio" Type="DateTime" Precision="3" />
+    <Property Name="reserva_cantidad_noches" Type="Int32" />
+    <Property Name="reserva_numero_codigo" Type="Int32" />
+    <Property Name="Id_reserva_cambiada_por_user" Type="Int32" />
+    <Property Name="Id_hotel" Type="Int32" />
+    <Property Name="Id_habitacion" Type="Int32" />
+    <Property Name="Id_reserva_estado" Type="Int32" />
+    <Property Name="Id_regimen" Type="Int32" />
+    <NavigationProperty Name="estadia" Relationship="Self.fk_id_estadia_reserva" FromRole="reserva" ToRole="estadia" />
+    <NavigationProperty Name="estado_reserva" Relationship="Self.fk_id_reserva_en_estado" FromRole="reserva" ToRole="estado_reserva" />
+    <NavigationProperty Name="habitacion" Relationship="Self.fk_id_reserva_habitacion" FromRole="reserva" ToRole="habitacion" />
+    <NavigationProperty Name="hotel" Relationship="Self.fk_id_reserva_hotel" FromRole="reserva" ToRole="hotel" />
+    <NavigationProperty Name="regimen" Relationship="Self.fk_id_reserva_regimen" FromRole="reserva" ToRole="regimen" />
+    <NavigationProperty Name="usuario" Relationship="Self.fk_id_reserva_cambiada_por_user" FromRole="reserva" ToRole="usuario" />
+  </EntityType>
+  <EntityType Name="rol">
+    <Key>
+      <PropertyRef Name="id_rol" />
+    </Key>
+    <Property Name="id_rol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="rol_nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="rol_estado" Type="Boolean" />
+    <NavigationProperty Name="rol_por_funcionalidad" Relationship="Self.fk_id_rol" FromRole="rol" ToRole="rol_por_funcionalidad" />
+    <NavigationProperty Name="usuario" Relationship="Self.fk_id_usuario_rol" FromRole="rol" ToRole="usuario" />
+  </EntityType>
+  <EntityType Name="rol_por_funcionalidad">
+    <Key>
+      <PropertyRef Name="id_rol_por_funcionalidad" />
+    </Key>
+    <Property Name="id_rol_por_funcionalidad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_rol" Type="Int32" />
+    <Property Name="id_funcionalidad" Type="Int32" />
+    <NavigationProperty Name="funcionalidad" Relationship="Self.fk_id_funcionalidad" FromRole="rol_por_funcionalidad" ToRole="funcionalidad" />
+    <NavigationProperty Name="rol" Relationship="Self.fk_id_rol" FromRole="rol_por_funcionalidad" ToRole="rol" />
+  </EntityType>
+  <EntityType Name="tipo_documento">
+    <Key>
+      <PropertyRef Name="id_tipo_documento" />
+    </Key>
+    <Property Name="id_tipo_documento" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tipo_de_documento_nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="cliente" Relationship="Self.fk_id_cliente_tipo_doc" FromRole="tipo_documento" ToRole="cliente" />
+    <NavigationProperty Name="usuario" Relationship="Self.fk_id_usuario_tipo_documento" FromRole="tipo_documento" ToRole="usuario" />
+  </EntityType>
+  <EntityType Name="tipoDeHabitacion">
+    <Key>
+      <PropertyRef Name="id_tipo_habitacion" />
+    </Key>
+    <Property Name="id_tipo_habitacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tipo_habitacion_descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="tipo_habitacion_porcentual" Type="Double" />
+    <Property Name="tipo_habitacion_codigo" Type="Int32" />
+    <NavigationProperty Name="habitacion" Relationship="Self.fk_id_tipo_de_habitacion" FromRole="tipoDeHabitacion" ToRole="habitacion" />
+  </EntityType>
+  <EntityType Name="usuario">
+    <Key>
+      <PropertyRef Name="id_usuario" />
+    </Key>
+    <Property Name="id_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="usuario_username" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="usuario_nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="usuario_apellido" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="usuario_password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="usuario_email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="usuario_fecha_nacimiento" Type="DateTime" Precision="3" />
+    <Property Name="id_tipo_documento" Type="Int32" />
+    <Property Name="usuario_numero_documento" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="usuario_telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="usuario_habilitado" Type="Boolean" />
+    <Property Name="Id_rol" Type="Int32" />
+    <Property Name="Id_hotel" Type="Int32" />
+    <NavigationProperty Name="hotel" Relationship="Self.fk_id_usuario_hotel" FromRole="usuario" ToRole="hotel" />
+    <NavigationProperty Name="reserva" Relationship="Self.fk_id_reserva_cambiada_por_user" FromRole="usuario" ToRole="reserva" />
+    <NavigationProperty Name="rol" Relationship="Self.fk_id_usuario_rol" FromRole="usuario" ToRole="rol" />
+    <NavigationProperty Name="tipo_documento" Relationship="Self.fk_id_usuario_tipo_documento" FromRole="usuario" ToRole="tipo_documento" />
+  </EntityType>
+  <Association Name="fk_id_hotel_de_Baja">
+    <End Role="hotel" Type="Self.hotel" Multiplicity="0..1" />
+    <End Role="baja_de_hotel" Type="Self.baja_de_hotel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hotel">
+        <PropertyRef Name="id_hotel" />
+      </Principal>
+      <Dependent Role="baja_de_hotel">
+        <PropertyRef Name="id_hotel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_ciudad_direccion">
+    <End Role="ciudad" Type="Self.ciudad" Multiplicity="0..1" />
+    <End Role="direccion" Type="Self.direccion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ciudad">
+        <PropertyRef Name="id_ciudad" />
+      </Principal>
+      <Dependent Role="direccion">
+        <PropertyRef Name="id_ciudad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_ciudad_pais">
+    <End Role="pais" Type="Self.pais" Multiplicity="0..1" />
+    <End Role="ciudad" Type="Self.ciudad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="pais">
+        <PropertyRef Name="id_pais" />
+      </Principal>
+      <Dependent Role="ciudad">
+        <PropertyRef Name="id_pais" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_cliente_direccion">
+    <End Role="direccion" Type="Self.direccion" Multiplicity="0..1" />
+    <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="direccion">
+        <PropertyRef Name="id_direccion" />
+      </Principal>
+      <Dependent Role="cliente">
+        <PropertyRef Name="Id_direccion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_cliente_pais">
+    <End Role="pais" Type="Self.pais" Multiplicity="0..1" />
+    <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="pais">
+        <PropertyRef Name="id_pais" />
+      </Principal>
+      <Dependent Role="cliente">
+        <PropertyRef Name="Id_pais" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_cliente_tipo_doc">
+    <End Role="tipo_documento" Type="Self.tipo_documento" Multiplicity="0..1" />
+    <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tipo_documento">
+        <PropertyRef Name="id_tipo_documento" />
+      </Principal>
+      <Dependent Role="cliente">
+        <PropertyRef Name="id_tipo_documento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_estadia_cliente">
+    <End Role="cliente" Type="Self.cliente" Multiplicity="0..1" />
+    <End Role="estadia" Type="Self.estadia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cliente">
+        <PropertyRef Name="id_cliente" />
+      </Principal>
+      <Dependent Role="estadia">
+        <PropertyRef Name="id_cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_factura_cliente">
+    <End Role="cliente" Type="Self.cliente" Multiplicity="0..1" />
+    <End Role="factura" Type="Self.factura" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cliente">
+        <PropertyRef Name="id_cliente" />
+      </Principal>
+      <Dependent Role="factura">
+        <PropertyRef Name="id_cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_consumiblePor_consumible">
+    <End Role="consumible" Type="Self.consumible" Multiplicity="0..1" />
+    <End Role="consumible_por_estadia" Type="Self.consumible_por_estadia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="consumible">
+        <PropertyRef Name="id_consumible" />
+      </Principal>
+      <Dependent Role="consumible_por_estadia">
+        <PropertyRef Name="id_consumible" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_item_consumible">
+    <End Role="consumible" Type="Self.consumible" Multiplicity="0..1" />
+    <End Role="item_factura" Type="Self.item_factura" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="consumible">
+        <PropertyRef Name="id_consumible" />
+      </Principal>
+      <Dependent Role="item_factura">
+        <PropertyRef Name="id_consumible" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_estadia_por_consumible">
+    <End Role="estadia" Type="Self.estadia" Multiplicity="0..1" />
+    <End Role="consumible_por_estadia" Type="Self.consumible_por_estadia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="estadia">
+        <PropertyRef Name="id_estadia" />
+      </Principal>
+      <Dependent Role="consumible_por_estadia">
+        <PropertyRef Name="id_estadia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_hotel_direccion">
+    <End Role="direccion" Type="Self.direccion" Multiplicity="0..1" />
+    <End Role="hotel" Type="Self.hotel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="direccion">
+        <PropertyRef Name="id_direccion" />
+      </Principal>
+      <Dependent Role="hotel">
+        <PropertyRef Name="id_direccion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_estadia_habitacion">
+    <End Role="habitacion" Type="Self.habitacion" Multiplicity="0..1" />
+    <End Role="estadia" Type="Self.estadia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="habitacion">
+        <PropertyRef Name="id_habitacion" />
+      </Principal>
+      <Dependent Role="estadia">
+        <PropertyRef Name="id_habitacion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_estadia_reserva">
+    <End Role="reserva" Type="Self.reserva" Multiplicity="0..1" />
+    <End Role="estadia" Type="Self.estadia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="reserva">
+        <PropertyRef Name="id_reserva" />
+      </Principal>
+      <Dependent Role="estadia">
+        <PropertyRef Name="id_reserva" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_factura_estadia">
+    <End Role="estadia" Type="Self.estadia" Multiplicity="0..1" />
+    <End Role="factura" Type="Self.factura" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="estadia">
+        <PropertyRef Name="id_estadia" />
+      </Principal>
+      <Dependent Role="factura">
+        <PropertyRef Name="id_estadia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_reserva_en_estado">
+    <End Role="estado_reserva" Type="Self.estado_reserva" Multiplicity="0..1" />
+    <End Role="reserva" Type="Self.reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="estado_reserva">
+        <PropertyRef Name="id_estado_reserva" />
+      </Principal>
+      <Dependent Role="reserva">
+        <PropertyRef Name="Id_reserva_estado" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_factura_hotel">
+    <End Role="hotel" Type="Self.hotel" Multiplicity="0..1" />
+    <End Role="factura" Type="Self.factura" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hotel">
+        <PropertyRef Name="id_hotel" />
+      </Principal>
+      <Dependent Role="factura">
+        <PropertyRef Name="id_hotel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_numero_factura">
+    <End Role="factura" Type="Self.factura" Multiplicity="0..1" />
+    <End Role="item_factura" Type="Self.item_factura" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="factura">
+        <PropertyRef Name="id_factura" />
+      </Principal>
+      <Dependent Role="item_factura">
+        <PropertyRef Name="id_factura" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_funcionalidad">
+    <End Role="funcionalidad" Type="Self.funcionalidad" Multiplicity="0..1" />
+    <End Role="rol_por_funcionalidad" Type="Self.rol_por_funcionalidad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="funcionalidad">
+        <PropertyRef Name="id_funcionalidad" />
+      </Principal>
+      <Dependent Role="rol_por_funcionalidad">
+        <PropertyRef Name="id_funcionalidad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_habitacion_hotel">
+    <End Role="hotel" Type="Self.hotel" Multiplicity="0..1" />
+    <End Role="habitacion" Type="Self.habitacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hotel">
+        <PropertyRef Name="id_hotel" />
+      </Principal>
+      <Dependent Role="habitacion">
+        <PropertyRef Name="Id_hotel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_reserva_habitacion">
+    <End Role="habitacion" Type="Self.habitacion" Multiplicity="0..1" />
+    <End Role="reserva" Type="Self.reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="habitacion">
+        <PropertyRef Name="id_habitacion" />
+      </Principal>
+      <Dependent Role="reserva">
+        <PropertyRef Name="Id_habitacion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_tipo_de_habitacion">
+    <End Role="tipoDeHabitacion" Type="Self.tipoDeHabitacion" Multiplicity="0..1" />
+    <End Role="habitacion" Type="Self.habitacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tipoDeHabitacion">
+        <PropertyRef Name="id_tipo_habitacion" />
+      </Principal>
+      <Dependent Role="habitacion">
+        <PropertyRef Name="Id_tipo_habitacion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_hotel">
+    <End Role="hotel" Type="Self.hotel" Multiplicity="0..1" />
+    <End Role="regimen_por_hotel" Type="Self.regimen_por_hotel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hotel">
+        <PropertyRef Name="id_hotel" />
+      </Principal>
+      <Dependent Role="regimen_por_hotel">
+        <PropertyRef Name="id_hotel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_reserva_hotel">
+    <End Role="hotel" Type="Self.hotel" Multiplicity="0..1" />
+    <End Role="reserva" Type="Self.reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hotel">
+        <PropertyRef Name="id_hotel" />
+      </Principal>
+      <Dependent Role="reserva">
+        <PropertyRef Name="Id_hotel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_usuario_hotel">
+    <End Role="hotel" Type="Self.hotel" Multiplicity="0..1" />
+    <End Role="usuario" Type="Self.usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hotel">
+        <PropertyRef Name="id_hotel" />
+      </Principal>
+      <Dependent Role="usuario">
+        <PropertyRef Name="Id_hotel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_regimen">
+    <End Role="regimen" Type="Self.regimen" Multiplicity="0..1" />
+    <End Role="regimen_por_hotel" Type="Self.regimen_por_hotel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="regimen">
+        <PropertyRef Name="id_regimen" />
+      </Principal>
+      <Dependent Role="regimen_por_hotel">
+        <PropertyRef Name="id_regimen" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_reserva_regimen">
+    <End Role="regimen" Type="Self.regimen" Multiplicity="0..1" />
+    <End Role="reserva" Type="Self.reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="regimen">
+        <PropertyRef Name="id_regimen" />
+      </Principal>
+      <Dependent Role="reserva">
+        <PropertyRef Name="Id_regimen" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_reserva_cambiada_por_user">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="reserva" Type="Self.reserva" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="reserva">
+        <PropertyRef Name="Id_reserva_cambiada_por_user" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_rol">
+    <End Role="rol" Type="Self.rol" Multiplicity="0..1" />
+    <End Role="rol_por_funcionalidad" Type="Self.rol_por_funcionalidad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="rol">
+        <PropertyRef Name="id_rol" />
+      </Principal>
+      <Dependent Role="rol_por_funcionalidad">
+        <PropertyRef Name="id_rol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_usuario_rol">
+    <End Role="rol" Type="Self.rol" Multiplicity="0..1" />
+    <End Role="usuario" Type="Self.usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="rol">
+        <PropertyRef Name="id_rol" />
+      </Principal>
+      <Dependent Role="usuario">
+        <PropertyRef Name="Id_rol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_id_usuario_tipo_documento">
+    <End Role="tipo_documento" Type="Self.tipo_documento" Multiplicity="0..1" />
+    <End Role="usuario" Type="Self.usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tipo_documento">
+        <PropertyRef Name="id_tipo_documento" />
+      </Principal>
+      <Dependent Role="usuario">
+        <PropertyRef Name="id_tipo_documento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="GD1C2018Entities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="baja_de_hotel" EntityType="Self.baja_de_hotel" />
+    <EntitySet Name="ciudad" EntityType="Self.ciudad" />
+    <EntitySet Name="cliente" EntityType="Self.cliente" />
+    <EntitySet Name="consumible" EntityType="Self.consumible" />
+    <EntitySet Name="consumible_por_estadia" EntityType="Self.consumible_por_estadia" />
+    <EntitySet Name="direccion" EntityType="Self.direccion" />
+    <EntitySet Name="estadia" EntityType="Self.estadia" />
+    <EntitySet Name="estado_reserva" EntityType="Self.estado_reserva" />
+    <EntitySet Name="factura" EntityType="Self.factura" />
+    <EntitySet Name="funcionalidad" EntityType="Self.funcionalidad" />
+    <EntitySet Name="habitacion" EntityType="Self.habitacion" />
+    <EntitySet Name="hotel" EntityType="Self.hotel" />
+    <EntitySet Name="item_factura" EntityType="Self.item_factura" />
+    <EntitySet Name="metodo_de_pago" EntityType="Self.metodo_de_pago" />
+    <EntitySet Name="pais" EntityType="Self.pais" />
+    <EntitySet Name="regimen" EntityType="Self.regimen" />
+    <EntitySet Name="regimen_por_hotel" EntityType="Self.regimen_por_hotel" />
+    <EntitySet Name="reserva" EntityType="Self.reserva" />
+    <EntitySet Name="rol" EntityType="Self.rol" />
+    <EntitySet Name="rol_por_funcionalidad" EntityType="Self.rol_por_funcionalidad" />
+    <EntitySet Name="tipo_documento" EntityType="Self.tipo_documento" />
+    <EntitySet Name="tipoDeHabitacion" EntityType="Self.tipoDeHabitacion" />
+    <EntitySet Name="usuario" EntityType="Self.usuario" />
+    <AssociationSet Name="fk_id_hotel_de_Baja" Association="Self.fk_id_hotel_de_Baja">
+      <End Role="hotel" EntitySet="hotel" />
+      <End Role="baja_de_hotel" EntitySet="baja_de_hotel" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_ciudad_direccion" Association="Self.fk_id_ciudad_direccion">
+      <End Role="ciudad" EntitySet="ciudad" />
+      <End Role="direccion" EntitySet="direccion" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_ciudad_pais" Association="Self.fk_id_ciudad_pais">
+      <End Role="pais" EntitySet="pais" />
+      <End Role="ciudad" EntitySet="ciudad" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_cliente_direccion" Association="Self.fk_id_cliente_direccion">
+      <End Role="direccion" EntitySet="direccion" />
+      <End Role="cliente" EntitySet="cliente" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_cliente_pais" Association="Self.fk_id_cliente_pais">
+      <End Role="pais" EntitySet="pais" />
+      <End Role="cliente" EntitySet="cliente" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_cliente_tipo_doc" Association="Self.fk_id_cliente_tipo_doc">
+      <End Role="tipo_documento" EntitySet="tipo_documento" />
+      <End Role="cliente" EntitySet="cliente" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_estadia_cliente" Association="Self.fk_id_estadia_cliente">
+      <End Role="cliente" EntitySet="cliente" />
+      <End Role="estadia" EntitySet="estadia" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_factura_cliente" Association="Self.fk_id_factura_cliente">
+      <End Role="cliente" EntitySet="cliente" />
+      <End Role="factura" EntitySet="factura" />
+    </AssociationSet>
+    <AssociationSet Name="fk_consumiblePor_consumible" Association="Self.fk_consumiblePor_consumible">
+      <End Role="consumible" EntitySet="consumible" />
+      <End Role="consumible_por_estadia" EntitySet="consumible_por_estadia" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_item_consumible" Association="Self.fk_id_item_consumible">
+      <End Role="consumible" EntitySet="consumible" />
+      <End Role="item_factura" EntitySet="item_factura" />
+    </AssociationSet>
+    <AssociationSet Name="fk_estadia_por_consumible" Association="Self.fk_estadia_por_consumible">
+      <End Role="estadia" EntitySet="estadia" />
+      <End Role="consumible_por_estadia" EntitySet="consumible_por_estadia" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_hotel_direccion" Association="Self.fk_id_hotel_direccion">
+      <End Role="direccion" EntitySet="direccion" />
+      <End Role="hotel" EntitySet="hotel" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_estadia_habitacion" Association="Self.fk_id_estadia_habitacion">
+      <End Role="habitacion" EntitySet="habitacion" />
+      <End Role="estadia" EntitySet="estadia" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_estadia_reserva" Association="Self.fk_id_estadia_reserva">
+      <End Role="reserva" EntitySet="reserva" />
+      <End Role="estadia" EntitySet="estadia" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_factura_estadia" Association="Self.fk_id_factura_estadia">
+      <End Role="estadia" EntitySet="estadia" />
+      <End Role="factura" EntitySet="factura" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_reserva_en_estado" Association="Self.fk_id_reserva_en_estado">
+      <End Role="estado_reserva" EntitySet="estado_reserva" />
+      <End Role="reserva" EntitySet="reserva" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_factura_hotel" Association="Self.fk_id_factura_hotel">
+      <End Role="hotel" EntitySet="hotel" />
+      <End Role="factura" EntitySet="factura" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_numero_factura" Association="Self.fk_id_numero_factura">
+      <End Role="factura" EntitySet="factura" />
+      <End Role="item_factura" EntitySet="item_factura" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_funcionalidad" Association="Self.fk_id_funcionalidad">
+      <End Role="funcionalidad" EntitySet="funcionalidad" />
+      <End Role="rol_por_funcionalidad" EntitySet="rol_por_funcionalidad" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_habitacion_hotel" Association="Self.fk_id_habitacion_hotel">
+      <End Role="hotel" EntitySet="hotel" />
+      <End Role="habitacion" EntitySet="habitacion" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_reserva_habitacion" Association="Self.fk_id_reserva_habitacion">
+      <End Role="habitacion" EntitySet="habitacion" />
+      <End Role="reserva" EntitySet="reserva" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_tipo_de_habitacion" Association="Self.fk_id_tipo_de_habitacion">
+      <End Role="tipoDeHabitacion" EntitySet="tipoDeHabitacion" />
+      <End Role="habitacion" EntitySet="habitacion" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_hotel" Association="Self.fk_id_hotel">
+      <End Role="hotel" EntitySet="hotel" />
+      <End Role="regimen_por_hotel" EntitySet="regimen_por_hotel" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_reserva_hotel" Association="Self.fk_id_reserva_hotel">
+      <End Role="hotel" EntitySet="hotel" />
+      <End Role="reserva" EntitySet="reserva" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_usuario_hotel" Association="Self.fk_id_usuario_hotel">
+      <End Role="hotel" EntitySet="hotel" />
+      <End Role="usuario" EntitySet="usuario" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_regimen" Association="Self.fk_id_regimen">
+      <End Role="regimen" EntitySet="regimen" />
+      <End Role="regimen_por_hotel" EntitySet="regimen_por_hotel" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_reserva_regimen" Association="Self.fk_id_reserva_regimen">
+      <End Role="regimen" EntitySet="regimen" />
+      <End Role="reserva" EntitySet="reserva" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_reserva_cambiada_por_user" Association="Self.fk_id_reserva_cambiada_por_user">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="reserva" EntitySet="reserva" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_rol" Association="Self.fk_id_rol">
+      <End Role="rol" EntitySet="rol" />
+      <End Role="rol_por_funcionalidad" EntitySet="rol_por_funcionalidad" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_usuario_rol" Association="Self.fk_id_usuario_rol">
+      <End Role="rol" EntitySet="rol" />
+      <End Role="usuario" EntitySet="usuario" />
+    </AssociationSet>
+    <AssociationSet Name="fk_id_usuario_tipo_documento" Association="Self.fk_id_usuario_tipo_documento">
+      <End Role="tipo_documento" EntitySet="tipo_documento" />
+      <End Role="usuario" EntitySet="usuario" />
+    </AssociationSet>
+    <FunctionImport Name="sp_asignar_funcionalidad">
+      <Parameter Name="Rol_nombre" Mode="In" Type="String" />
+      <Parameter Name="Funcionalidad" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_chequear_asignacion_rol">
+      <Parameter Name="Rol_nombre" Mode="In" Type="String" />
+      <Parameter Name="Funcionalidad" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_chequear_existencia_rol">
+      <Parameter Name="Rol_nombre" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_desasignar_funcionalidad">
+      <Parameter Name="Rol_nombre" Mode="In" Type="String" />
+      <Parameter Name="Funcionalidad" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_modificar_rol">
+      <Parameter Name="Nombre_rol_a_modificar" Mode="In" Type="String" />
+      <Parameter Name="Nuevo_nombre" Mode="In" Type="String" />
+      <Parameter Name="estado_nuevo" Mode="In" Type="Int32" />
+      <Parameter Name="funcionalidad_nueva" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_mostrar_roles" ReturnType="Collection(GD1C2018Model.sp_mostrar_roles_Result)" />
+    <FunctionImport Name="sp_rol_crear">
+      <Parameter Name="Nombre_rol" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_rol_dar_de_baja">
+      <Parameter Name="Nombre_rol" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_rol_modificar_estado">
+      <Parameter Name="Nombre_rol" Mode="In" Type="String" />
+      <Parameter Name="estado_modificado" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="sp_mostrar_roles_Result">
+    <Property Type="Int32" Name="id_rol" Nullable="false" />
+    <Property Type="String" Name="rol_nombre" Nullable="true" MaxLength="100" />
+    <Property Type="Boolean" Name="rol_estado" Nullable="true" />
+  </ComplexType>
+</Schema>

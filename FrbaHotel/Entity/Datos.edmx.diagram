@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="714cf228187d4a1f99d354e3abfacff0" Name="Diagram1">
+        <EntityTypeShape EntityType="GD1C2018Model.baja_de_hotel" Width="1.5" PointX="9.75" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.ciudad" Width="1.5" PointX="3" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.cliente" Width="1.5" PointX="7.5" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.consumible" Width="1.5" PointX="15" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.consumible_por_estadia" Width="1.5" PointX="17.25" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.direccion" Width="1.5" PointX="5.25" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.estadia" Width="1.5" PointX="15" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.estado_reserva" Width="1.5" PointX="12.75" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.factura" Width="1.5" PointX="20.25" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.funcionalidad" Width="1.5" PointX="10.5" PointY="24.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.habitacion" Width="1.5" PointX="12.75" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.hotel" Width="1.5" PointX="7.5" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.item_factura" Width="1.5" PointX="22.5" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.metodo_de_pago" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.pais" Width="1.5" PointX="0.75" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.regimen" Width="1.5" PointX="12.75" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.regimen_por_hotel" Width="1.5" PointX="9.75" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.reserva" Width="1.5" PointX="15" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.rol" Width="1.5" PointX="7.5" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.rol_por_funcionalidad" Width="1.5" PointX="12.75" PointY="23.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.tipo_documento" Width="1.5" PointX="5.25" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.tipoDeHabitacion" Width="1.5" PointX="10.5" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GD1C2018Model.usuario" Width="1.5" PointX="9.75" PointY="19.5" IsExpanded="true" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_hotel_de_Baja" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_ciudad_direccion" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_ciudad_pais" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_cliente_direccion" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_cliente_pais" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_cliente_tipo_doc" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_estadia_cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_factura_cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_consumiblePor_consumible" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_item_consumible" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_estadia_por_consumible" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_hotel_direccion" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_estadia_habitacion" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_estadia_reserva" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_factura_estadia" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_reserva_en_estado" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_factura_hotel" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_numero_factura" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_funcionalidad" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_habitacion_hotel" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_reserva_habitacion" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_tipo_de_habitacion" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_hotel" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_reserva_hotel" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_usuario_hotel" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_regimen" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_reserva_regimen" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_reserva_cambiada_por_user" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_rol" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_usuario_rol" ManuallyRouted="false" />
+        <AssociationConnector Association="GD1C2018Model.fk_id_usuario_tipo_documento" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

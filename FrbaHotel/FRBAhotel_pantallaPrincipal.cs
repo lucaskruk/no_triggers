@@ -17,29 +17,10 @@ namespace FrbaHotel
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Ingresar_hotel_Click(object sender, EventArgs e)
         {
+            this.Hide();
             new Login.Login().Show();
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FRBAhotel_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -50,7 +50,6 @@
             this.label1.Size = new System.Drawing.Size(281, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "Bienvenido a FRBA hotel";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -90,7 +89,6 @@
             this.textBox1.Text = "Contraseña";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox1.UseSystemPasswordChar = true;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // pictureBox1
             // 
@@ -138,8 +136,9 @@
             this.Ir_a_pantalla_principal.TabIndex = 7;
             this.Ir_a_pantalla_principal.Text = "Atrás";
             this.Ir_a_pantalla_principal.UseVisualStyleBackColor = false;
+            this.Ir_a_pantalla_principal.Click += new System.EventHandler(this.Ir_a_pantalla_principal_Click);
             // 
-            // Form1
+            // Login
             // 
             this.AcceptButton = this.Iniciar_Sesion;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -156,9 +155,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "Login";
             this.Text = "Login -FRBA Hotel";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);

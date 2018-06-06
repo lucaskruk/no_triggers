@@ -47,7 +47,6 @@
             this.Ingresar_para_huespedes.TabIndex = 6;
             this.Ingresar_para_huespedes.Text = "Ingreso huespedes";
             this.Ingresar_para_huespedes.UseVisualStyleBackColor = false;
-            this.Ingresar_para_huespedes.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // label2
             // 
@@ -69,7 +68,6 @@
             this.label1.Size = new System.Drawing.Size(264, 16);
             this.label1.TabIndex = 10;
             this.label1.Text = "Por favor, seleccione la opción adecuada";
-            this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // Ingresar_hotel
             // 
@@ -83,6 +81,7 @@
             this.Ingresar_hotel.TabIndex = 11;
             this.Ingresar_hotel.Text = "Ingreso personal del hotel";
             this.Ingresar_hotel.UseVisualStyleBackColor = false;
+            this.Ingresar_hotel.Click += new System.EventHandler(this.Ingresar_hotel_Click);
             // 
             // FRBAhotel_pantallaPrincipal
             // 
@@ -97,7 +96,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FRBAhotel_pantallaPrincipal";
             this.Text = "FRBA hotel";
-            this.Load += new System.EventHandler(this.FRBAhotel_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

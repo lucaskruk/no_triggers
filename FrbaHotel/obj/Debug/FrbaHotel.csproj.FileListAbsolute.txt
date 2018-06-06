@@ -16,3 +16,32 @@ C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Prop
 C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csproj.GenerateResource.Cache
 C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.Form1.resources
 C:\Users\Samantha Billino\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Form1.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csprojResolveAssemblyReference.cache
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.exe
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.pdb
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\bin\Debug\FrbaHotel.exe.config
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\bin\Debug\FrbaHotel.exe
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\bin\Debug\FrbaHotel.pdb
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\bin\Debug\EntityFramework.dll
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\bin\Debug\Microsoft.VisualBasic.PowerPacks.Vs.dll
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\bin\Debug\EntityFramework.xml
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\bin\Debug\Microsoft.VisualBasic.PowerPacks.Vs.xml
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.AbmRol.Form1.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.CancelarReserva.Cancelar_Reserva.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.Confirmacion_de_reserva.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.FRBAhotel_pantallaPrincipal.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.Crear.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.CrearReserva.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.Form1.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.Modificar_reserva.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.Ver_disponibilidad.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.Login.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.Seleccion_de_hotel_optativo.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.Seleccion_de_funcionalidad_obligatorio.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.RESERVA_valido_huesped_y_login.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Properties.Resources.resources
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csproj.GenerateResource.cache
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csproj.CoreCompileInputs.cache
+C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csproj.CopyComplete
