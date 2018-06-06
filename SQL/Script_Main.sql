@@ -234,7 +234,6 @@ create table [no_triggers].consumible_por_estadia
 id_consumible_por_estadia int identity (1,1) not null,
 id_consumible int,
 id_estadia int,
-cantidad int,
 constraint pk_id_cosumible_por_estadia primary key clustered (id_consumible_por_estadia),
 )
 
@@ -546,11 +545,9 @@ from gd_esquema.Maestra m
 
 --Consumible_por_estadia
 insert into [NO_TRIGGERS].consumible_por_estadia
-		SELECT cons.id_consumible,est.id_estadia, count(cons.id_consumible)
+		SELECT cons.id_consumible,est.id_estadia
 		FROM [NO_TRIGGERS].consumible cons,[NO_TRIGGERS].estadia est, gd_esquema.Maestra m, [NO_TRIGGERS].Reserva res
 		WHERE (m.Consumible_Codigo=cons.consumible_codigo) and (est.id_reserva = res.id_reserva) and (m.Factura_Nro IS NOT NULL) and (m.Reserva_Codigo = res.reserva_numero_codigo)
-		GROUP BY cons.id_consumible, est.id_estadia
-		ORDER BY 1
 GO
 
 --Factura
@@ -580,6 +577,13 @@ from gd_esquema.Maestra m
 join [NO_TRIGGERS].factura f on m.Factura_Fecha = f.factura_fecha and m.Factura_Nro = f.factura_numero and m.Factura_Total = f.factura_total
 join [NO_TRIGGERS].estadia e on e.id_estadia = f.id_estadia and m.Estadia_Cant_Noches = e.estadia_cantidad_noches and m.Estadia_Fecha_Inicio = e.estadia_fecha_inicio
 join [NO_TRIGGERS].consumible c on m.Consumible_Codigo = c.consumible_codigo and m.Consumible_Descripcion = c.consumible_descripcion and m.Consumible_Precio = c.consumible_precio 
+
+--Regimen por hotel--
+
+insert into [NO_TRIGGERS].regimen_por_hotel
+Select distinct reg.id_regimen, hot.id_hotel
+FROM [NO_TRIGGERS].regimen reg, [NO_TRIGGERS].hotel hot, gd_esquema.Maestra m, [NO_TRIGGERS].direccion dir
+where (m.Regimen_Descripcion=reg.regimen_descripcion and m.Regimen_Precio=reg.regimen_precio) and (m.Hotel_Calle=dir.direccion_calle and m.Hotel_Nro_Calle=dir.direccion_altura) and (hot.hotel_cantidad_estrellas=m.Hotel_CantEstrella and hot.hotel_recarga_estrella=m.Hotel_Recarga_Estrella)
 
 ------------------------------------------------------------------------------------------------------------------------
 --Relaciones------------------------------------------------------------------------------------------------------------
