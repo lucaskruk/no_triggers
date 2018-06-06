@@ -1,6 +1,6 @@
 ﻿namespace FrbaHotel.GenerarModificacionReserva
 {
-    partial class Crear
+    partial class Ver_disponibilidad
     {
         /// <summary>
         /// Required designer variable.
@@ -28,16 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ver_disponibilidad));
             this.SuspendLayout();
             // 
-            // Crear
+            // Ver_disponibilidad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(663, 261);
-            this.Name = "Crear";
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(653, 261);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "Ver_disponibilidad";
+            this.Text = "Disponibilidad - Hotel FRBA";
+            this.Load += new System.EventHandler(this.Ver_disponibilidad_Load);
             this.ResumeLayout(false);
 
         }
