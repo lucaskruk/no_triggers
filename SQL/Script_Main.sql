@@ -104,6 +104,7 @@ usuario_apellido nvarchar(200),
 usuario_password nvarchar (100),
 usuario_email nvarchar(200),
 usuario_fecha_nacimiento datetime,
+usuario_cantidad_intentos_fallidos int, /*Se decide guardarlo en la BD para que el usuario no pueda cerrar el programa y volver a intentar ingresar*/
 id_tipo_documento int,
 usuario_numero_documento nvarchar(50),
 usuario_telefono nvarchar(50),
@@ -381,21 +382,21 @@ INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
 --select * from [no_triggers].pais
 insert into [NO_TRIGGERS].usuario
 values
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,1),--agregar para todos los hoteles
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,2),
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,3),
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,4),
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,5),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,6),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,7),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,8),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,9),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,10),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,11),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,12),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,13),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,14),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,15)
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,1),--agregar para todos los hoteles
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,2),
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,3),
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,4),
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,5),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,6),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,7),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,8),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,9),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,10),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,11),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,12),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,13),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,14),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,15)
 
 --select * from [no_triggers].usuario
 
@@ -674,12 +675,23 @@ AS
 update [NO_TRIGGERS].rol set rol_estado=0
 WHERE @Nombre_rol=rol_nombre
 GO
+create procedure [no_triggers].sp_rol_modificar_estado
+@Nombre_rol varchar (100), @estado_modificado int
+AS
+update [NO_TRIGGERS].rol set rol_estado=@estado_modificado
+WHERE @Nombre_rol=rol_nombre
+GO
 -- exec [NO_TRIGGERS].sp_rol_dar_de_baja 'Rey de los minisupers'
 GO
 create procedure [NO_TRIGGERS].sp_asignar_funcionalidad
 @Rol_nombre varchar (100), @Funcionalidad int
 AS
 	insert into [NO_TRIGGERS].rol_por_funcionalidad values ((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre),@Funcionalidad)
+GO
+create procedure [NO_TRIGGERS].sp_desasignar_funcionalidad
+@Rol_nombre varchar (100), @Funcionalidad int
+AS
+	delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=(select id_rol from [NO_TRIGGERS].rol where rol_nombre=@Rol_nombre)
 GO
 create procedure [NO_TRIGGERS].sp_chequear_asignacion_rol --probarlo!!!!!!!!!!!!!!!!!!!!!!!!
 @Rol_nombre varchar(100), @Funcionalidad int
@@ -704,3 +716,33 @@ else
 return @Resultado
 
 GO
+create procedure [NO_TRIGGERS].sp_modificar_rol /*Se decide que todos los campos pueden ser modificados a la vez, por lo cual se verifica cuales campos quiere modificar el usuario*/
+@Nombre_rol_a_modificar varchar (100), @Nuevo_nombre varchar (100), @estado_nuevo int, @funcionalidad_nueva int
+AS
+if ( @Nuevo_nombre ='')
+update [NO_TRIGGERS].rol set rol_nombre=@Nuevo_nombre where @Nombre_rol_a_modificar=rol_nombre
+if (@estado_nuevo ='')
+update [NO_TRIGGERS].rol set rol_estado=@estado_nuevo where @Nombre_rol_a_modificar=rol_nombre
+if(@funcionalidad_nueva ='')
+
+exec [NO_TRIGGERS].sp_rol_modificar_estado @Nombre_rol_a_modificar, @estado_nuevo
+
+GO
+create procedure [NO_TRIGGERS].sp_mostrar_roles
+AS
+select * from [NO_TRIGGERS].rol
+GO
+------------------------------------------------------------------------------------------------------------------------
+------------------------------STORED PROCEDURES-------------------------------------------------------------------------
+/*******************PARA LOGIN*******************************************/
+create procedure [NO_TRIGGERS].sp_chequear_intentos_fallidos
+@Nombre_usuario nvarchar (100)
+AS
+declare @cantidad_intentos int, @habilitado bit
+set @cantidad_intentos= (select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].usuario us where us.usuario_nombre=@Nombre_usuario)
+if (@cantidad_intentos<3)
+set @habilitado=1
+else
+set @habilitado=0
+GO
+
