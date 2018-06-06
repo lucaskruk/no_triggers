@@ -78,11 +78,17 @@
     <Compile Include="AbmRol\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="CancelarReserva\Form1.cs">
+    <Compile Include="CancelarReserva\Cancelar_Reserva.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CancelarReserva\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="CancelarReserva\Cancelar_Reserva.Designer.cs">
+      <DependentUpon>Cancelar_Reserva.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CancelarReserva\Confirmacion_de_cancelacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CancelarReserva\Confirmacion_de_cancelacion.Designer.cs">
+      <DependentUpon>Confirmacion_de_cancelacion.cs</DependentUpon>
     </Compile>
     <Compile Include="FRBAhotel_pantallaPrincipal.cs">
       <SubType>Form</SubType>
@@ -107,6 +113,18 @@
     </Compile>
     <Compile Include="GenerarModificacionReserva\Confirmacion_de_reserva.Designer.cs">
       <DependentUpon>Confirmacion_de_reserva.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GenerarModificacionReserva\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerarModificacionReserva\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GenerarModificacionReserva\Modificar_reserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerarModificacionReserva\Modificar_reserva.Designer.cs">
+      <DependentUpon>Modificar_reserva.cs</DependentUpon>
     </Compile>
     <Compile Include="GenerarModificacionReserva\Ver_disponibilidad.cs">
       <SubType>Form</SubType>
@@ -161,6 +179,12 @@
     <EmbeddedResource Include="AbmRol\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CancelarReserva\Cancelar_Reserva.resx">
+      <DependentUpon>Cancelar_Reserva.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CancelarReserva\Confirmacion_de_cancelacion.resx">
+      <DependentUpon>Confirmacion_de_cancelacion.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FRBAhotel_pantallaPrincipal.resx">
       <DependentUpon>FRBAhotel_pantallaPrincipal.cs</DependentUpon>
     </EmbeddedResource>
@@ -172,6 +196,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GenerarModificacionReserva\Confirmacion_de_reserva.resx">
       <DependentUpon>Confirmacion_de_reserva.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerarModificacionReserva\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerarModificacionReserva\Modificar_reserva.resx">
+      <DependentUpon>Modificar_reserva.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GenerarModificacionReserva\Ver_disponibilidad.resx">
       <DependentUpon>Ver_disponibilidad.cs</DependentUpon>

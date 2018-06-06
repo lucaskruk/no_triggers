@@ -30,11 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Confirmacion_de_reserva));
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.mostrar_hotel_donde_se_hospedara = new System.Windows.Forms.TextBox();
-            this.numero_De_reserva = new System.Windows.Forms.TextBox();
             this.reservar_otra_habitacion = new System.Windows.Forms.Button();
             this.menu_principal_para_usuario = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -44,55 +40,21 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label2.Location = new System.Drawing.Point(103, 25);
+            this.label2.Location = new System.Drawing.Point(166, 25);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(437, 24);
+            this.label2.Size = new System.Drawing.Size(298, 24);
             this.label2.TabIndex = 13;
-            this.label2.Text = "¡Felicitaciones, la reserva ha sido confirmada!";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 99);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(187, 13);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Hotel donde se realizará el hospedaje:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(104, 131);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(125, 13);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "Número de confirmación:";
+            this.label2.Text = "¡Su reserva ha sido cancelada!";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 62);
+            this.label4.Location = new System.Drawing.Point(177, 67);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(484, 13);
+            this.label4.Size = new System.Drawing.Size(287, 13);
             this.label4.TabIndex = 16;
-            this.label4.Text = "Por favor, guarde los siguientes datos los cuales le serán requeridos en caso de " +
-    "realizar algún cambio";
-            // 
-            // mostrar_hotel_donde_se_hospedara
-            // 
-            this.mostrar_hotel_donde_se_hospedara.Location = new System.Drawing.Point(235, 99);
-            this.mostrar_hotel_donde_se_hospedara.Name = "mostrar_hotel_donde_se_hospedara";
-            this.mostrar_hotel_donde_se_hospedara.ReadOnly = true;
-            this.mostrar_hotel_donde_se_hospedara.Size = new System.Drawing.Size(100, 20);
-            this.mostrar_hotel_donde_se_hospedara.TabIndex = 17;
-            // 
-            // numero_De_reserva
-            // 
-            this.numero_De_reserva.Location = new System.Drawing.Point(235, 128);
-            this.numero_De_reserva.Name = "numero_De_reserva";
-            this.numero_De_reserva.ReadOnly = true;
-            this.numero_De_reserva.Size = new System.Drawing.Size(100, 20);
-            this.numero_De_reserva.TabIndex = 18;
+            this.label4.Text = "Esperamos tenerlo entre nuestros huéspedes próximamente";
             // 
             // reservar_otra_habitacion
             // 
@@ -128,15 +90,11 @@
             this.ClientSize = new System.Drawing.Size(653, 261);
             this.Controls.Add(this.menu_principal_para_usuario);
             this.Controls.Add(this.reservar_otra_habitacion);
-            this.Controls.Add(this.numero_De_reserva);
-            this.Controls.Add(this.mostrar_hotel_donde_se_hospedara);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Confirmacion_de_reserva";
-            this.Text = "Reserva confirmada - FRBA hotel";
+            this.Text = "Reserva cancelada- FRBA hotel";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -145,11 +103,7 @@
         #endregion
 
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox mostrar_hotel_donde_se_hospedara;
-        private System.Windows.Forms.TextBox numero_De_reserva;
         private System.Windows.Forms.Button reservar_otra_habitacion;
         private System.Windows.Forms.Button menu_principal_para_usuario;
     }

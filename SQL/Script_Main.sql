@@ -1,6 +1,8 @@
 use GD1C2018
 go
-
+--------------------------------------------------------------------------------------------------------------------------
+/*Creación de tablas */---------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------
 --Tabla Pais
 IF OBJECT_ID('[no_triggers].pais', 'U') IS NOT NULL 
   DROP TABLE [no_triggers].pais;
@@ -129,7 +131,7 @@ cliente_telefono nvarchar (50),
 Id_direccion int,
 Id_pais int,
 constraint pk_id_cliente primary key clustered (id_cliente)
---constraint uk_email_cliente unique (cliente_email)
+
 )
 
 --Tabla Tipo De Habitacion
@@ -232,7 +234,7 @@ create table [no_triggers].consumible_por_estadia
 id_consumible_por_estadia int identity (1,1) not null,
 id_consumible int,
 id_estadia int,
-id_cantidad int,
+cantidad int,
 constraint pk_id_cosumible_por_estadia primary key clustered (id_consumible_por_estadia),
 )
 
@@ -299,47 +301,8 @@ baja_hotel_fecha_fin datetime,
 id_hotel int,
 constraint pk_baja_de_hotel primary key clustered (id_baja_de_hotel)
 )
-
--------------------------------- Migracion --------------------------------------------------------------------------
-
---PAIS
-INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
-	('Argentina','ARGENTINO'),('Brasil','BRASILERO'),('Uruguay','URUGUAYO'),('Indefinido','Indefinido');
---select * from [no_triggers].pais
-
---CIUDAD
-insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
-select distinct 
-(select id_pais from [NO_TRIGGERS].pais where pais_nombre='Argentina'),
-Hotel_Ciudad from gd_esquema.Maestra
-insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
-select id_pais, 'Indefinida' as ciudad_nombre from [NO_TRIGGERS].pais where pais_nombre='Indefinido'
---select * from [no_triggers].ciudad
-
---Direccion
-insert into [NO_TRIGGERS].direccion (direccion_calle,direccion_altura,direccion_piso,direccion_departamento, id_ciudad)
-select distinct hotel_calle, hotel_nro_calle, null, null, cd.id_ciudad from gd_esquema.Maestra mr 
-join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
-union
-select distinct 
-cliente_dom_calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto,  (select id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida')
-from gd_esquema.Maestra
---select * from [no_triggers].direccion
-
--- Hotel 
-insert into [NO_TRIGGERS].hotel(id_direccion,hotel_cantidad_estrellas,hotel_recarga_estrella,hotel_fecha_creacion,hotel_estado)
-select distinct dr.id_direccion, mr.Hotel_CantEstrella,mr.Hotel_Recarga_Estrella, NULL,1 
-from gd_esquema.Maestra mr
-join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
-join [NO_TRIGGERS].direccion dr on mr.Hotel_Calle=dr.direccion_calle and cd.id_ciudad=dr.id_ciudad and mr.Hotel_Nro_Calle=dr.direccion_altura
---select * from [no_triggers].hotel
-
--- Tipo de documento
-insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values 
-('D.N.I.'),('L.E.'),('C.I.'),('Pasaporte')
-
---select * from [no_triggers].tipo_documento
-
+--------------------------------------------------------------------------------------------------------------------------
+-------------------------------- Migracion De datos-----------------------------------------------------------------------
 -- Funcuionalidad
 insert into [NO_TRIGGERS].funcionalidad
 values
@@ -409,8 +372,63 @@ values
 	('EFECTIVO','EN ARS'),
 	('EFECTIVO', 'EN USD')
 go
+-- Tipo de documento
+insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values 
+('D.N.I.'),('Pasaporte')
 
--- clientes 
+--PAIS
+INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
+	('Argentina','ARGENTINO'),('Brasil','BRASILERO'),('Uruguay','URUGUAYO'),('Indefinido','Indefinido');
+--select * from [no_triggers].pais
+insert into [NO_TRIGGERS].usuario
+values
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,1),--agregar para todos los hoteles
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,2),
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,3),
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,4),
+('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,5),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,6),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,7),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,8),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,9),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,10),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,11),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,12),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,13),
+('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,14)
+
+--select * from [no_triggers].usuario
+
+
+
+--CIUDAD
+insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
+select distinct 
+(select id_pais from [NO_TRIGGERS].pais where pais_nombre='Argentina'),
+Hotel_Ciudad from gd_esquema.Maestra
+insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
+select id_pais, 'Indefinida' as ciudad_nombre from [NO_TRIGGERS].pais where pais_nombre='Indefinido'
+--select * from [no_triggers].ciudad
+
+--Direccion
+insert into [NO_TRIGGERS].direccion (direccion_calle,direccion_altura,direccion_piso,direccion_departamento, id_ciudad)
+select distinct hotel_calle, hotel_nro_calle, null, null, cd.id_ciudad from gd_esquema.Maestra mr 
+join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
+union
+select distinct 
+cliente_dom_calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto,  (select id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida')
+from gd_esquema.Maestra
+--select * from [no_triggers].direccion
+
+-- Hotel 
+insert into [NO_TRIGGERS].hotel(id_direccion,hotel_cantidad_estrellas,hotel_recarga_estrella,hotel_fecha_creacion,hotel_estado)
+select distinct dr.id_direccion, mr.Hotel_CantEstrella,mr.Hotel_Recarga_Estrella, NULL,1 
+from gd_esquema.Maestra mr
+join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
+join [NO_TRIGGERS].direccion dr on mr.Hotel_Calle=dr.direccion_calle and cd.id_ciudad=dr.id_ciudad and mr.Hotel_Nro_Calle=dr.direccion_altura
+--select * from [no_triggers].hotel
+
+-- Clientes
 declare @ciudad_indef int 
 select @ciudad_indef=id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida'
 insert into [NO_TRIGGERS].cliente
@@ -445,10 +463,9 @@ set cliente_email_invalido=1
 from [NO_TRIGGERS].cliente cl 
 join #bad_emails be on cl.cliente_email=be.cliente_email
 drop table #bad_emails
-
 --select * from [NO_TRIGGERS].cliente
 
---Tipo Habitacion
+--Tipo de Habitacion
 insert into [NO_TRIGGERS].tipoDeHabitacion (tipo_habitacion_descripcion,tipo_habitacion_porcentual,tipo_habitacion_codigo)
 select distinct 
 	Habitacion_Tipo_Descripcion,
@@ -472,35 +489,6 @@ from gd_esquema.Maestra m
 	join [NO_TRIGGERS].direccion dr on m.Hotel_Calle=dr.direccion_calle and m.Hotel_Nro_Calle=dr.direccion_altura and cd.id_ciudad=dr.id_ciudad
 	JOIN [NO_TRIGGERS].hotel hl on hl.id_direccion=dr.id_direccion
 
---select top 10 * from [no_triggers].habitacion
-
--- Usuarios //REVISAR PORQUE NO TOMA BIEN LA FECHA
-
-/**  
-
--->lk comment:
-GETDATE() insertó en  la tabla la hora local de mi equipo al milisegundo. lo veo funcionar OK
-
-**/
-insert into [NO_TRIGGERS].usuario
-values
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,1),--agregar para todos los hoteles
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,2),
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,3),
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,4),
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),null,null,null,1,2,5),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,6),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,7),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,8),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,9),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,10),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,11),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,12),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,13),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),null,null,null,1,2,14)
-
---select * from [no_triggers].usuario
-
 --Regimen
 insert into [NO_TRIGGERS].regimen (regimen_descripcion,regimen_precio,regimen_estado)
 select distinct 
@@ -511,13 +499,6 @@ select distinct
 
 --Reserva 
 
-/*
-Corregido join con hotel
-ID Regimen esta ok... pero... 
-las tablas de mapeos entonces quedaron de adorno? 
-Es decir, estamos usando los mismos regimenes en todos los hoteles...
-
-*/
 declare @reservaCorrecta int 
 select @reservaCorrecta=id_estado_reserva from [NO_TRIGGERS].estado_reserva where estado_reserva_descripcion = 'RESERVA CORRECTA'
  
@@ -537,32 +518,6 @@ join [NO_TRIGGERS].direccion d on d.direccion_calle = m.Hotel_Calle and d.direcc
 join [NO_TRIGGERS].hotel h on h.id_direccion = d.id_direccion
 join [NO_TRIGGERS].habitacion hab on m.Habitacion_Frente = hab.habitacion_frente and m.Habitacion_Piso = hab.habitacion_piso and m.Habitacion_Numero = hab.habitacion_numero and h.id_hotel = hab.Id_hotel
 join [NO_TRIGGERS].regimen r on r.regimen_descripcion = m.Regimen_Descripcion and r.regimen_precio = m.Regimen_Precio
-
-/*
-select * from [NO_TRIGGERS].reserva r
-join gd_esquema.Maestra mr on mr.Reserva_Codigo=r.reserva_numero_codigo
-select * from [NO_TRIGGERS].regimen
-*/
-
---Baja hotel
-/*insert into [NO_TRIGGERS].baja_de_hotel (baja_hotel_fecha_inicio,baja_hotel_fecha_fin,id_hotel)
-values
-	(null,null,1),
-	(null,null,2),
-	(null,null,3),
-	(null,null,4),
-	(null,null,5),
-	(null,null,6),
-	(null,null,7),
-	(null,null,8),
-	(null,null,9),
-	(null,null,10),
-	(null,null,11),
-	(null,null,12),
-	(null,null,13),
-	(null,null,14),
-	(null,null,15)  
-*/
 
 --Estadia
 insert into [NO_TRIGGERS].estadia (estadia_cantidad_noches,estadia_fecha_inicio,id_cliente,id_habitacion,id_reserva)
@@ -591,12 +546,12 @@ from gd_esquema.Maestra m
 
 --Consumible_por_estadia
 insert into [NO_TRIGGERS].consumible_por_estadia
-		SELECT cons.id_consumible,est.id_estadia
+		SELECT cons.id_consumible,est.id_estadia, count(cons.id_consumible)
 		FROM [NO_TRIGGERS].consumible cons,[NO_TRIGGERS].estadia est, gd_esquema.Maestra m, [NO_TRIGGERS].Reserva res
 		WHERE (m.Consumible_Codigo=cons.consumible_codigo) and (est.id_reserva = res.id_reserva) and (m.Factura_Nro IS NOT NULL) and (m.Reserva_Codigo = res.reserva_numero_codigo)
-
+		GROUP BY cons.id_consumible, est.id_estadia
+		ORDER BY 1
 GO
-
 
 --Factura
 insert into [NO_TRIGGERS].factura (factura_fecha,factura_numero,factura_tipo,factura_total,id_cliente,id_estadia,id_hotel)
@@ -614,7 +569,6 @@ join [NO_TRIGGERS].estadia e on e.id_cliente = c.id_cliente and m.Estadia_Cant_N
 join [NO_TRIGGERS].direccion d on d.direccion_altura = m.Hotel_Nro_Calle and d.direccion_calle = m.Hotel_Calle and d.direccion_piso is null
 join [NO_TRIGGERS].hotel h on h.id_direccion = d.id_direccion
 
-
 --Item factura 
 insert into [NO_TRIGGERS].item_factura (item_factura_cantidad,item_factura_monto,id_consumible,id_factura)
 select distinct
@@ -627,7 +581,8 @@ join [NO_TRIGGERS].factura f on m.Factura_Fecha = f.factura_fecha and m.Factura_
 join [NO_TRIGGERS].estadia e on e.id_estadia = f.id_estadia and m.Estadia_Cant_Noches = e.estadia_cantidad_noches and m.Estadia_Fecha_Inicio = e.estadia_fecha_inicio
 join [NO_TRIGGERS].consumible c on m.Consumible_Codigo = c.consumible_codigo and m.Consumible_Descripcion = c.consumible_descripcion and m.Consumible_Precio = c.consumible_precio 
 
---Relacion------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+--Relaciones------------------------------------------------------------------------------------------------------------
 Alter table [no_triggers].ciudad add
 constraint fk_id_ciudad_pais foreign key (id_pais) references [no_triggers].pais(id_pais)
 Alter table [no_triggers].direccion 
