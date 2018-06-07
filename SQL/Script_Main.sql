@@ -765,3 +765,20 @@ go
 
 /***********************PARA USUARIO*************************************/
 
+create procedure [NO_TRIGGERS].sp_crear_usuario --se decide que el usuario quede habiliado al crearse--
+@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @password nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50), @rolasignado int, @hotel int
+AS
+BEGIN
+DECLARE @responseMessage nvarchar(250) 
+	SET NOCOUNT ON 
+	BEGIN TRY 
+		INSERT INTO [NO_TRIGGERS].Usuario VALUES (@nombreusuario, @nombre, @apellido, HASHBYTES('SHA2_256', @password), @email, @fechanacimiento, 0, @tipodocumento, @numero_documento, @numerotelefono,1, @rolasignado, @hotel) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
+		SET @responseMessage= 'Usuario creado con exito'
+	END TRY
+	BEGIN CATCH 
+		SET @responseMessage= ERROR_MESSAGE()
+	END CATCH
+END
+
+GO
+
