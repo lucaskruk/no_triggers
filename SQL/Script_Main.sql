@@ -755,7 +755,7 @@ else
 set @habilitado=0
 GO
 
-create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(255))
+create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(100))
 returns nvarchar(255)
 as begin
     return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @contrasenia)), 3, 255))
@@ -772,7 +772,7 @@ BEGIN
 DECLARE @responseMessage nvarchar(250) 
 	SET NOCOUNT ON 
 	BEGIN TRY 
-		INSERT INTO [NO_TRIGGERS].Usuario VALUES (@nombreusuario, @nombre, @apellido, HASHBYTES('SHA2_256', @password), @email, @fechanacimiento, 0, @tipodocumento, @numero_documento, @numerotelefono,1, @rolasignado, @hotel) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
+		INSERT INTO [NO_TRIGGERS].Usuario VALUES (@nombreusuario, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@password), @email, @fechanacimiento, 0, @tipodocumento, @numero_documento, @numerotelefono,1, @rolasignado, @hotel) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
 		SET @responseMessage= 'Usuario creado con exito'
 	END TRY
 	BEGIN CATCH 
@@ -781,4 +781,10 @@ DECLARE @responseMessage nvarchar(250)
 END
 
 GO
+
+create procedure [NO_TRIGGERS].sp_obtener_conexiones_usuarios
+AS
+DECLARE @
+	SELECT 
+
 
