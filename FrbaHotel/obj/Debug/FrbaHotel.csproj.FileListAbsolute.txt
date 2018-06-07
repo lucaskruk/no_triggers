@@ -45,3 +45,6 @@ C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Prope
 C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csproj.GenerateResource.cache
 C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csproj.CoreCompileInputs.cache
 C:\Users\Mathy\Documents\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csproj.CopyComplete
+C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\bin\Debug\FrbaHotel.exe.config
+C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.exe
+C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.pdb
