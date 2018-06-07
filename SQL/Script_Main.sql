@@ -1,5 +1,188 @@
 use GD1C2018
 go
+
+------------------------------------------------------------------------------------------------------------------------
+------------------------------STORED PROCEDURES-------------------------------------------------------------------------
+/*******************PARA ROL*******************************************/
+/*Se decide que se creen los roles en estado ACTIVO*/
+
+GO
+create procedure [NO_TRIGGERS].sp_rol_crear 
+@Nombre_rol varchar (100)
+AS
+insert into 
+	[NO_TRIGGERS].rol values (@Nombre_rol, 1)
+
+GO
+--exec [NO_TRIGGERS].sp_rol_crear 'Rey de los minisupers'
+GO
+create procedure [no_triggers].sp_rol_dar_de_baja
+@Nombre_rol varchar (100)
+AS
+update [NO_TRIGGERS].rol set rol_estado=0
+WHERE @Nombre_rol=rol_nombre
+GO
+create procedure [no_triggers].sp_rol_modificar_estado
+@Nombre_rol varchar (100), @estado_modificado int
+AS
+update [NO_TRIGGERS].rol set rol_estado=@estado_modificado
+WHERE @Nombre_rol=rol_nombre
+GO
+-- exec [NO_TRIGGERS].sp_rol_dar_de_baja 'Rey de los minisupers'
+GO
+create procedure [NO_TRIGGERS].sp_asignar_funcionalidad
+@Rol_nombre varchar (100), @Funcionalidad int
+AS
+	insert into [NO_TRIGGERS].rol_por_funcionalidad values ((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre),@Funcionalidad)
+GO
+create procedure [NO_TRIGGERS].sp_desasignar_funcionalidad
+@Rol_nombre varchar (100), @Funcionalidad int
+AS
+	delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=(select id_rol from [NO_TRIGGERS].rol where rol_nombre=@Rol_nombre)
+GO
+
+create function [NO_TRIGGERS].fn_chequear_asignacion_rol --probarlo!!!!!!!!!!!!!!!!!!!!!!!!
+(@Rol_nombre varchar(100), @Funcionalidad int) returns bit
+AS
+begin
+	declare @Resultado bit
+		if( (select id_rol_por_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rf, [NO_TRIGGERS].rol r, [NO_TRIGGERS].funcionalidad f
+			where r.rol_nombre=@Rol_nombre and f.id_funcionalidad=@Funcionalidad and rf.id_rol=r.id_rol and rf.id_funcionalidad=f.id_funcionalidad)is NOT NULL)
+			set @Resultado=1
+		else
+			set @Resultado=0
+	return @resultado
+end
+GO
+-- select [NO_TRIGGERS].sp_chequear_asignacion_rol ('ADMINISTRADOR' ,1)
+
+create function [NO_TRIGGERS].fn_chequear_existencia_rol
+(@Rol_nombre varchar(100)) returns bit
+AS 
+begin
+	declare @Resultado bit
+	if((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre)IS NOT NULL)
+		set @Resultado=1
+	else
+		set @Resultado=0
+	return @Resultado
+end
+GO
+
+create procedure [NO_TRIGGERS].sp_modificar_rol /*Se decide que todos los campos pueden ser modificados a la vez, por lo cual se verifica cuales campos quiere modificar el usuario*/
+@Nombre_rol_a_modificar varchar (100), @Nuevo_nombre varchar (100), @estado_nuevo int, @funcionalidad_nueva int
+AS
+if ( @Nuevo_nombre !='')
+update [NO_TRIGGERS].rol set rol_nombre=@Nuevo_nombre where @Nombre_rol_a_modificar=rol_nombre
+if (@estado_nuevo is not null)
+update [NO_TRIGGERS].rol set rol_estado=@estado_nuevo where @Nombre_rol_a_modificar=rol_nombre
+
+if(@funcionalidad_nueva is not null)---------agrega la funcionalidad
+ begin
+ if not exists (select 1 from [NO_TRIGGERS].Rol_por_funcionalidad rf join [NO_TRIGGERS].Rol r on rf.id_rol=r.id_rol where r.rol_nombre=@Nombre_rol_a_modificar)
+	begin
+		declare @rolid int 
+		select @rolid=id_rol from [NO_TRIGGERS].Rol where rol_nombre=@Nombre_rol_a_modificar
+		insert into [NO_TRIGGERS].Rol_por_funcionalidad (id_rol,id_funcionalidad) values (@rolid,@funcionalidad_nueva)
+	end
+ end
+
+
+
+GO
+create procedure [NO_TRIGGERS].sp_mostrar_roles
+AS
+select * from [NO_TRIGGERS].rol
+GO
+
+/*******************PARA LOGIN*******************************************/
+create procedure [NO_TRIGGERS].sp_chequear_intentos_fallidos
+@Nombre_usuario nvarchar (100)
+AS
+declare @cantidad_intentos int, @habilitado bit
+set @cantidad_intentos= (select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].usuario us where us.usuario_nombre=@Nombre_usuario)
+if (@cantidad_intentos<3)
+set @habilitado=1
+else
+set @habilitado=0
+GO
+
+create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(256))
+returns nvarchar(255)
+as begin
+    return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @contrasenia)), 3, 255))
+end
+GO
+
+create procedure [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos (@usuario nvarchar(100))
+as
+update [NO_TRIGGERS].Usuario
+set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1
+where usuario_username = @usuario
+go
+
+create procedure [NO_TRIGGERS].sp_a_Cero_Intentos_fallidos (@usuario nvarchar(100))
+as
+update [NO_TRIGGERS].Usuario
+set usuario_cantidad_intentos_fallidos =  0
+where usuario_username = @usuario
+go
+
+alter function [NO_TRIGGERS].fn_validar_password (@usuario nvarchar(100), @password nvarchar(256))
+returns bit
+as begin
+declare @resultado bit, @password2 nvarchar(256)
+set @password2 = [NO_TRIGGERS].fn_encriptar(@password)
+if (((SELECT usuario_password FROM [NO_TRIGGERS].Usuario WHERE usuario_username=@usuario) = @password2) and ((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where usuario_username = @usuario)>=3))
+	begin	
+		exec [NO_TRIGGERS].sp_a_Cero_Intentos_fallidos @usuario
+		set @resultado = 1
+	end
+ELSE
+	begin
+		exec [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos @usuario 
+		set @resultado=0
+	end
+return @resultado
+END
+GO
+
+select [NO_TRIGGERS].fn_validar_password ('USER_GUEST2', 'user_gues')
+
+
+/***********************PARA USUARIO*************************************/
+GO
+create procedure [NO_TRIGGERS].sp_crear_usuario --se decide que el usuario quede habiliado al crearse--
+@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @password nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50), @rolasignado int, @hotel int
+AS
+BEGIN
+DECLARE @responseMessage nvarchar(250) 
+	SET NOCOUNT ON 
+	BEGIN TRY 
+		INSERT INTO [NO_TRIGGERS].Usuario VALUES (@nombreusuario, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@password), @email, @fechanacimiento, 0, @tipodocumento, @numero_documento, @numerotelefono,1, @rolasignado, @hotel) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
+		SET @responseMessage= 'Usuario creado con exito'
+	END TRY
+	BEGIN CATCH 
+		SET @responseMessage= ERROR_MESSAGE()
+	END CATCH
+END
+
+
+GO
+/*
+insert into [NO_TRIGGERS].usuario 
+(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
+,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
+values
+('USER_GUEST3', 'User','Generico', [no_triggers].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,1)
+*/
+/*create procedure [NO_TRIGGERS].sp_obtener_conexiones_usuarios
+AS
+DECLARE @
+	SELECT */
+
+
+
 --------------------------------------------------------------------------------------------------------------------------
 /*Creación de tablas */---------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------
@@ -386,7 +569,7 @@ insert into [NO_TRIGGERS].usuario
 (usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
 ,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
 values
-('USER_GUEST2', 'User','Generico', HASHBYTES('SHA2_256', 'user_guest'),null,getdate(),0,null,null,null,1,2,1),--agregar para todos los hoteles
+('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,1),--agregar para todos los hoteles
 ('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,2),
 ('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,3),
 ('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,4),
@@ -665,176 +848,3 @@ constraint fk_id_hotel_de_Baja foreign key (id_hotel) references [no_triggers].h
 Alter table [no_triggers].consumible_por_estadia add
 constraint fk_estadia_por_consumible foreign key (id_estadia) references [no_triggers].estadia(id_estadia),
 constraint fk_consumiblePor_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
-
-------------------------------------------------------------------------------------------------------------------------
-------------------------------STORED PROCEDURES-------------------------------------------------------------------------
-/*******************PARA ROL*******************************************/
-/*Se decide que se creen los roles en estado ACTIVO*/
-
-GO
-create procedure [NO_TRIGGERS].sp_rol_crear 
-@Nombre_rol varchar (100)
-AS
-insert into 
-	[NO_TRIGGERS].rol values (@Nombre_rol, 1)
-
-GO
---exec [NO_TRIGGERS].sp_rol_crear 'Rey de los minisupers'
-GO
-create procedure [no_triggers].sp_rol_dar_de_baja
-@Nombre_rol varchar (100)
-AS
-update [NO_TRIGGERS].rol set rol_estado=0
-WHERE @Nombre_rol=rol_nombre
-GO
-create procedure [no_triggers].sp_rol_modificar_estado
-@Nombre_rol varchar (100), @estado_modificado int
-AS
-update [NO_TRIGGERS].rol set rol_estado=@estado_modificado
-WHERE @Nombre_rol=rol_nombre
-GO
--- exec [NO_TRIGGERS].sp_rol_dar_de_baja 'Rey de los minisupers'
-GO
-create procedure [NO_TRIGGERS].sp_asignar_funcionalidad
-@Rol_nombre varchar (100), @Funcionalidad int
-AS
-	insert into [NO_TRIGGERS].rol_por_funcionalidad values ((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre),@Funcionalidad)
-GO
-create procedure [NO_TRIGGERS].sp_desasignar_funcionalidad
-@Rol_nombre varchar (100), @Funcionalidad int
-AS
-	delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=(select id_rol from [NO_TRIGGERS].rol where rol_nombre=@Rol_nombre)
-GO
-
-create function [NO_TRIGGERS].sp_chequear_asignacion_rol --probarlo!!!!!!!!!!!!!!!!!!!!!!!!
-(@Rol_nombre varchar(100), @Funcionalidad int) returns bit
-AS
-begin
-	declare @Resultado bit
-		if( (select id_rol_por_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rf, [NO_TRIGGERS].rol r, [NO_TRIGGERS].funcionalidad f
-			where r.rol_nombre=@Rol_nombre and f.id_funcionalidad=@Funcionalidad and rf.id_rol=r.id_rol and rf.id_funcionalidad=f.id_funcionalidad)is NOT NULL)
-			set @Resultado=1
-		else
-			set @Resultado=0
-	return @resultado
-end
-GO
--- select [NO_TRIGGERS].sp_chequear_asignacion_rol ('ADMINISTRADOR' ,1)
-
-create function [NO_TRIGGERS].sp_chequear_existencia_rol
-(@Rol_nombre varchar(100)) returns bit
-AS 
-begin
-	declare @Resultado bit
-	if((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre)IS NOT NULL)
-		set @Resultado=1
-	else
-		set @Resultado=0
-	return @Resultado
-end
-GO
-
-create procedure [NO_TRIGGERS].sp_modificar_rol /*Se decide que todos los campos pueden ser modificados a la vez, por lo cual se verifica cuales campos quiere modificar el usuario*/
-@Nombre_rol_a_modificar varchar (100), @Nuevo_nombre varchar (100), @estado_nuevo int, @funcionalidad_nueva int
-AS
-if ( @Nuevo_nombre !='')
-update [NO_TRIGGERS].rol set rol_nombre=@Nuevo_nombre where @Nombre_rol_a_modificar=rol_nombre
-if (@estado_nuevo is not null)
-update [NO_TRIGGERS].rol set rol_estado=@estado_nuevo where @Nombre_rol_a_modificar=rol_nombre
-
-if(@funcionalidad_nueva is not null)---------agrega la funcionalidad
- begin
- if not exists (select 1 from [NO_TRIGGERS].Rol_por_funcionalidad rf join [NO_TRIGGERS].Rol r on rf.id_rol=r.id_rol where r.rol_nombre=@Nombre_rol_a_modificar)
-	begin
-		declare @rolid int 
-		select @rolid=id_rol from [NO_TRIGGERS].Rol where rol_nombre=@Nombre_rol_a_modificar
-		insert into [NO_TRIGGERS].Rol_por_funcionalidad (id_rol,id_funcionalidad) values (@rolid,@funcionalidad_nueva)
-	end
- end
-
-
-
-GO
-create procedure [NO_TRIGGERS].sp_mostrar_roles
-AS
-select * from [NO_TRIGGERS].rol
-GO
-
-/*******************PARA LOGIN*******************************************/
-create procedure [NO_TRIGGERS].sp_chequear_intentos_fallidos
-@Nombre_usuario nvarchar (100)
-AS
-declare @cantidad_intentos int, @habilitado bit
-set @cantidad_intentos= (select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].usuario us where us.usuario_nombre=@Nombre_usuario)
-if (@cantidad_intentos<3)
-set @habilitado=1
-else
-set @habilitado=0
-GO
-
-create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(256))
-returns nvarchar(255)
-as begin
-    return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @contrasenia)), 3, 255))
-end
-GO
-/*****************************REVISAR ESTO!!!**************************************************************/
-create function [no_triggers].auxiliar (@usuario nvarchar(100), @password nvarchar(256))
-returns nvarchar(256)
-as begin
-declare @auxiliarm nvarchar(256)
-	return ( SELECT usuario_password FROM [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuario and ([NO_TRIGGERS].fn_encriptar(@password)=us.usuario_password)) 
-end
-go
-
-create function [NO_TRIGGERS].fn_validar_password (@usuario nvarchar(100), @password nvarchar(256))
-returns bit
-as begin
-declare @resultado bit, @password2 nvarchar(255), @pass3 nvarchar(256)
-
-set @password2 =[NO_TRIGGERS].fn_encriptar(@password)
---set @pass3=[NO_TRIGGERS].auxiliar(@usuario)
-if (( SELECT usuario_password FROM [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuario) = @password2 )
-	
-		set @resultado = 1
-	
-ELSE
-		set @resultado=0
-return @resultado
-END
-GO
-
-select [NO_TRIGGERS].fn_validar_password ('USERGUEST3', 'user_guest')
-
-
-/***********************PARA USUARIO*************************************/
-GO
-create procedure [NO_TRIGGERS].sp_crear_usuario --se decide que el usuario quede habiliado al crearse--
-@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @password nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50), @rolasignado int, @hotel int
-AS
-BEGIN
-DECLARE @responseMessage nvarchar(250) 
-	SET NOCOUNT ON 
-	BEGIN TRY 
-		INSERT INTO [NO_TRIGGERS].Usuario VALUES (@nombreusuario, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@password), @email, @fechanacimiento, 0, @tipodocumento, @numero_documento, @numerotelefono,1, @rolasignado, @hotel) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
-		SET @responseMessage= 'Usuario creado con exito'
-	END TRY
-	BEGIN CATCH 
-		SET @responseMessage= ERROR_MESSAGE()
-	END CATCH
-END
-
-
-GO
-insert into [NO_TRIGGERS].usuario 
-(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
-,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
-values
-('USER_GUEST3', 'User','Generico', [no_triggers].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,1)
-
-/*create procedure [NO_TRIGGERS].sp_obtener_conexiones_usuarios
-AS
-DECLARE @
-	SELECT */
-
-
