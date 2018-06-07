@@ -306,7 +306,7 @@ CONSTRAINT pk_baja_de_hotel PRIMARY KEY CLUSTERED (id_baja_de_hotel)
 --------------------------------------------------------------------------------------------------------------------------
 -------------------------------- Migracion De datos-----------------------------------------------------------------------
 -- Funcuionalidad
-insert into [NO_TRIGGERS].funcionalidad
+insert into [NO_TRIGGERS].funcionalidad (funcionalidad_descripcion)
 values
 	('ABM ROL'),--1
 	('ABM USUARIO'),--2
@@ -324,7 +324,7 @@ values
 go
 
 --Rol
-insert into [NO_TRIGGERS].rol
+insert into [NO_TRIGGERS].rol (rol_nombre,rol_estado)
 values 
     ('RECEPCIONISTA', 1),--1
     ('GUEST', 1),--2
@@ -333,7 +333,7 @@ values
 go
 
 --Rol x Funcionalidad
-insert into [NO_TRIGGERS].rol_por_funcionalidad
+insert into [NO_TRIGGERS].rol_por_funcionalidad (id_rol,id_funcionalidad)
 values
 	(3,1),
 	(3,2),
@@ -354,7 +354,7 @@ values
 go
 
 --estado reserva
-insert into [NO_TRIGGERS].estado_reserva
+insert into [NO_TRIGGERS].estado_reserva (estado_reserva_descripcion)
 values
 	('RESERVA CORRECTA'),
 	('RESERVA MODIFICADA'),
@@ -365,7 +365,7 @@ values
 go
 
 --metodo de pago
-insert into [NO_TRIGGERS].metodo_de_pago
+insert into [NO_TRIGGERS].metodo_de_pago (metodo_de_pago_nombre,metodo_de_pago_detalles)
 values 
 	('TARJETA DE CREDITO','PAGO EN CUOTAS'),
 	('TARJETA DE DEBITO','EN ARS'),
@@ -382,7 +382,9 @@ insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values
 INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
 	('Argentina','ARGENTINO'),('Brasil','BRASILERO'),('Uruguay','URUGUAYO'),('Indefinido','Indefinido');
 --select * from [no_triggers].pais
-insert into [NO_TRIGGERS].usuario
+insert into [NO_TRIGGERS].usuario 
+(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
+,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
 values
 ('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,1),--agregar para todos los hoteles
 ('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,2),
@@ -493,7 +495,7 @@ from gd_esquema.Maestra m
 	join [NO_TRIGGERS].direccion dr on m.Hotel_Calle=dr.direccion_calle and m.Hotel_Nro_Calle=dr.direccion_altura and cd.id_ciudad=dr.id_ciudad
 	JOIN [NO_TRIGGERS].hotel hl on hl.id_direccion=dr.id_direccion
 
---Regimen
+--Regimen--------------4
 insert into [NO_TRIGGERS].regimen (regimen_descripcion,regimen_precio,regimen_estado)
 select distinct 
 	Regimen_Descripcion, 
@@ -613,8 +615,8 @@ add constraint fk_id_ciudad_direccion foreign key (id_ciudad) references [no_tri
 
 Alter table [no_triggers].rol_por_funcionalidad add
 constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol)
+,constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad) ----------revisar puede que falten
 
---,constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad) ----------revisar puede que falten
 Alter table [no_triggers].hotel add
 constraint fk_id_hotel_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion)
 
@@ -703,39 +705,54 @@ create procedure [NO_TRIGGERS].sp_desasignar_funcionalidad
 AS
 	delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=(select id_rol from [NO_TRIGGERS].rol where rol_nombre=@Rol_nombre)
 GO
-create procedure [NO_TRIGGERS].sp_chequear_asignacion_rol --probarlo!!!!!!!!!!!!!!!!!!!!!!!!
-@Rol_nombre varchar(100), @Funcionalidad int
+
+create function [NO_TRIGGERS].sp_chequear_asignacion_rol --probarlo!!!!!!!!!!!!!!!!!!!!!!!!
+(@Rol_nombre varchar(100), @Funcionalidad int) returns bit
 AS
-declare @Resultado bit
-	if( (select id_rol_por_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rf, [NO_TRIGGERS].rol r, [NO_TRIGGERS].funcionalidad f
-	    where r.rol_nombre=@Rol_nombre and f.id_funcionalidad=@Funcionalidad and rf.id_rol=r.id_rol and rf.id_funcionalidad=f.id_funcionalidad)is NOT NULL)
+begin
+	declare @Resultado bit
+		if( (select id_rol_por_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rf, [NO_TRIGGERS].rol r, [NO_TRIGGERS].funcionalidad f
+			where r.rol_nombre=@Rol_nombre and f.id_funcionalidad=@Funcionalidad and rf.id_rol=r.id_rol and rf.id_funcionalidad=f.id_funcionalidad)is NOT NULL)
+			set @Resultado=1
+		else
+			set @Resultado=0
+	return @resultado
+end
+GO
+-- select [NO_TRIGGERS].sp_chequear_asignacion_rol ('ADMINISTRADOR' ,1)
+
+create function [NO_TRIGGERS].sp_chequear_existencia_rol
+(@Rol_nombre varchar(100)) returns bit
+AS 
+begin
+	declare @Resultado bit
+	if((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre)IS NOT NULL)
 		set @Resultado=1
 	else
 		set @Resultado=0
-return @resultado
+	return @Resultado
+end
 GO
--- exec [NO_TRIGGERS].sp_chequear_asignacion_rol 'ADMINISTRADOR' ,1
-create procedure [NO_TRIGGERS].sp_chequear_existencia_rol
-@Rol_nombre varchar(100)
-AS 
-declare @Resultado bit
-if((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre)IS NOT NULL)
-	set @Resultado=1
-else
-	set @Resultado=0
-return @Resultado
 
-GO
 create procedure [NO_TRIGGERS].sp_modificar_rol /*Se decide que todos los campos pueden ser modificados a la vez, por lo cual se verifica cuales campos quiere modificar el usuario*/
 @Nombre_rol_a_modificar varchar (100), @Nuevo_nombre varchar (100), @estado_nuevo int, @funcionalidad_nueva int
 AS
-if ( @Nuevo_nombre ='')
+if ( @Nuevo_nombre !='')
 update [NO_TRIGGERS].rol set rol_nombre=@Nuevo_nombre where @Nombre_rol_a_modificar=rol_nombre
-if (@estado_nuevo ='')
+if (@estado_nuevo is not null)
 update [NO_TRIGGERS].rol set rol_estado=@estado_nuevo where @Nombre_rol_a_modificar=rol_nombre
-if(@funcionalidad_nueva ='')
 
-exec [NO_TRIGGERS].sp_rol_modificar_estado @Nombre_rol_a_modificar, @estado_nuevo
+if(@funcionalidad_nueva is not null)---------agrega la funcionalidad
+ begin
+ if not exists (select 1 from [NO_TRIGGERS].Rol_por_funcionalidad rf join [NO_TRIGGERS].Rol r on rf.id_rol=r.id_rol where r.rol_nombre=@Nombre_rol_a_modificar)
+	begin
+		declare @rolid int 
+		select @rolid=id_rol from [NO_TRIGGERS].Rol where rol_nombre=@Nombre_rol_a_modificar
+		insert into [NO_TRIGGERS].Rol_por_funcionalidad (id_rol,id_funcionalidad) values (@rolid,@funcionalidad_nueva)
+	end
+ end
+
+
 
 GO
 create procedure [NO_TRIGGERS].sp_mostrar_roles
