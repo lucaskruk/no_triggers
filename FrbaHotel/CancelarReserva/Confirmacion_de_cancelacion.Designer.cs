@@ -95,6 +95,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Confirmacion_de_reserva";
             this.Text = "Reserva cancelada- FRBA hotel";
+            this.Load += new System.EventHandler(this.Confirmacion_de_reserva_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

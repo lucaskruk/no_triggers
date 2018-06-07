@@ -21,5 +21,10 @@ namespace FrbaHotel.GenerarModificacionReserva
         {
 
         }
+
+        private void Confirmacion_de_reserva_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

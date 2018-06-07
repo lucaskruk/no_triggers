@@ -47,6 +47,7 @@
             this.Ingresar_para_huespedes.TabIndex = 6;
             this.Ingresar_para_huespedes.Text = "Ingreso huespedes";
             this.Ingresar_para_huespedes.UseVisualStyleBackColor = false;
+            this.Ingresar_para_huespedes.Click += new System.EventHandler(this.Ingresar_para_huespedes_Click);
             // 
             // label2
             // 

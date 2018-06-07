@@ -16,5 +16,24 @@ namespace FrbaHotel.Login
         {
             InitializeComponent();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            new GenerarModificacionReserva.CrearReserva().Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            new GenerarModificacionReserva.Modificar_reserva().Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //falta cancelar
+        }
+
+       
     }
 }
