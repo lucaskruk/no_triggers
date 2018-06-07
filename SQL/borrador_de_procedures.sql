@@ -20,3 +20,10 @@ GO
 
 DROP PROCEDURE [NO_TRIGGERS].sp_rol_modificar_estado
 GO
+
+DROP PROCEDURE [NO_TRIGGERS].sp_crear_usuario
+GO
+
+DROP FUNCTION [NO_TRIGGERS].fn_encriptar
+GO
+

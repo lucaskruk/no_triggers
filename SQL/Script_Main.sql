@@ -102,7 +102,7 @@ id_usuario int identity (1,1) NOT NULL,
 usuario_username nvarchar (100),
 usuario_nombre nvarchar(200),
 usuario_apellido nvarchar(200),
-usuario_password nvarchar (100),
+usuario_password nvarchar (256),
 usuario_email nvarchar(200),
 usuario_fecha_nacimiento datetime,
 usuario_cantidad_intentos_fallidos int, /*Se decide guardarlo en la BD para que el usuario no pueda cerrar el programa y volver a intentar ingresar*/
@@ -386,7 +386,7 @@ insert into [NO_TRIGGERS].usuario
 (usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
 ,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
 values
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,1),--agregar para todos los hoteles
+('USER_GUEST2', 'User','Generico', HASHBYTES('SHA2_256', 'user_guest'),null,getdate(),0,null,null,null,1,2,1),--agregar para todos los hoteles
 ('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,2),
 ('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,3),
 ('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,4),
@@ -772,16 +772,43 @@ else
 set @habilitado=0
 GO
 
-create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(100))
+create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(256))
 returns nvarchar(255)
 as begin
     return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @contrasenia)), 3, 255))
 end
+GO
+/*****************************REVISAR ESTO!!!**************************************************************/
+create function [no_triggers].auxiliar (@usuario nvarchar(100), @password nvarchar(256))
+returns nvarchar(256)
+as begin
+declare @auxiliarm nvarchar(256)
+	return ( SELECT usuario_password FROM [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuario and ([NO_TRIGGERS].fn_encriptar(@password)=us.usuario_password)) 
+end
 go
+
+create function [NO_TRIGGERS].fn_validar_password (@usuario nvarchar(100), @password nvarchar(256))
+returns bit
+as begin
+declare @resultado bit, @password2 nvarchar(255), @pass3 nvarchar(256)
+
+set @password2 =[NO_TRIGGERS].fn_encriptar(@password)
+--set @pass3=[NO_TRIGGERS].auxiliar(@usuario)
+if (( SELECT usuario_password FROM [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuario) = @password2 )
+	
+		set @resultado = 1
+	
+ELSE
+		set @resultado=0
+return @resultado
+END
+GO
+
+select [NO_TRIGGERS].fn_validar_password ('USERGUEST3', 'user_guest')
 
 
 /***********************PARA USUARIO*************************************/
-
+GO
 create procedure [NO_TRIGGERS].sp_crear_usuario --se decide que el usuario quede habiliado al crearse--
 @nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @password nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50), @rolasignado int, @hotel int
 AS
@@ -797,11 +824,17 @@ DECLARE @responseMessage nvarchar(250)
 	END CATCH
 END
 
-GO
 
-create procedure [NO_TRIGGERS].sp_obtener_conexiones_usuarios
+GO
+insert into [NO_TRIGGERS].usuario 
+(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
+,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
+values
+('USER_GUEST3', 'User','Generico', [no_triggers].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,1)
+
+/*create procedure [NO_TRIGGERS].sp_obtener_conexiones_usuarios
 AS
 DECLARE @
-	SELECT 
+	SELECT */
 
 

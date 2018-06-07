@@ -25,12 +25,3 @@ DROP TABLE [NO_TRIGGERS].estado_reserva --ok
 DROP TABLE [NO_TRIGGERS].Tipo_documento
 
 --TRUNCATE TABLE [NO_TRIGGERS].usuario
-
-
-
-
-
-
-
-
-DROP TABLE [NO_TRIGGERS].tipo_documento --OK
