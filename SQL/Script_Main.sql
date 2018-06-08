@@ -114,7 +114,7 @@ as begin
 end
 GO
 
-alter procedure [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos (@usuario nvarchar(100))
+create procedure [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos (@usuario nvarchar(100))
 as
 
 if((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where @usuario= usuario_username ) <3)
@@ -137,7 +137,7 @@ set usuario_cantidad_intentos_fallidos =  0
 where usuario_username = @usuario
 go
 
-alter function [NO_TRIGGERS].fn_validar_password (@usuario nvarchar(100), @password nvarchar(256))
+create function [NO_TRIGGERS].fn_validar_password (@usuario nvarchar(100), @password nvarchar(256))
 returns bit
 as begin
 declare @resultado bit, @password2 nvarchar(256)
@@ -156,8 +156,8 @@ return @resultado
 END
 GO
 
-select [NO_TRIGGERS].fn_validar_password ('USER_GUEST2', 'user_guest')
-exec [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos'USER_GUEST2'
+--select [NO_TRIGGERS].fn_validar_password ('USER_GUEST2', 'user_guest')
+--exec [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos'USER_GUEST2'
 
 
 /***********************PARA USUARIO*************************************/
@@ -169,14 +169,14 @@ BEGIN
 DECLARE @responseMessage nvarchar(250) 
 	SET NOCOUNT ON 
 	BEGIN TRY 
-		INSERT INTO [NO_TRIGGERS].Usuario VALUES (@nombreusuario, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@password), @email, @fechanacimiento, 0, @tipodocumento, @numero_documento, @numerotelefono,1, @rolasignado, @hotel) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
+		INSERT INTO [NO_TRIGGERS].Usuario VALUES (@nombreusuario, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@password), @email, @fechanacimiento, 0, @tipodocumento, @numero_documento, @numerotelefono,1, @rolasignado, NULL) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
+		INSERT INTO [NO_TRIGGERS].usuario_por_hotel VALUES ((select id_usuario from [NO_TRIGGERS].usuario us where us.usuario_username=@nombreusuario),@hotel)
 		SET @responseMessage= 'Usuario creado con exito'
 	END TRY
 	BEGIN CATCH 
 		SET @responseMessage= ERROR_MESSAGE()
 	END CATCH
 END
-
 
 GO
 /*
@@ -186,11 +186,25 @@ insert into [NO_TRIGGERS].usuario
 values
 ('USER_GUEST3', 'User','Generico', [no_triggers].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,1)
 */
-/*create procedure [NO_TRIGGERS].sp_obtener_conexiones_usuarios
-AS
-DECLARE @
-	SELECT */
 
+create function [NO_TRIGGERS].fn_permitir_cambios_administrador(@usuarioAdministrador nvarchar(100), @usuarioAModificar nvarchar (100)) --verifica que el usuario que quiera modificar el administrador trabaje en el mismo hotel
+RETURNS bit
+AS
+BEGIN
+DECLARE @aprobador bit
+	IF((select usxh.id_hotel from [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuarioAdministrador and usxh.id_usuario=us.id_usuario)=(SELECT id_hotel FROM [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuarioAModificar and usxh.id_usuario=us.id_usuario))
+		BEGIN
+			set @aprobador=1
+		END
+	ELSE
+		BEGIN
+		set @aprobador=0
+		END
+return @aprobador
+END
+GO
+
+SELECT [NO_TRIGGERS].fn_permitir_cambios_administrador('REYDELOSMINISUPERS','USER_GUEST')
 
 
 --------------------------------------------------------------------------------------------------------------------------
@@ -199,6 +213,7 @@ DECLARE @
 --Tabla Pais
 IF OBJECT_ID('[NO_TRIGGERS].Pais', 'U') IS NOT NULL 
   DROP TABLE [NO_TRIGGERS].Pais;
+
 CREATE TABLE [NO_TRIGGERS].Pais
 (id_pais int identity(1,1) NOT NULL,
 pais_nombre nvarchar(40),
@@ -303,11 +318,17 @@ id_tipo_documento int,
 usuario_numero_documento nvarchar(50),
 usuario_telefono nvarchar(50),
 usuario_habilitado bit,
-id_rol int,
-id_hotel int,
+id_rol int
 CONSTRAINT pk_id_usuario PRIMARY KEY CLUSTERED (id_usuario)
 )
 
+CREATE TABLE [NO_TRIGGERS].usuario_por_hotel
+(
+id_usuario_por_hotel int identity (1,1) NOT NULL,
+id_usuario int,
+id_hotel int
+CONSTRAINT pk_id_usuario_por_hotel PRIMARY KEY CLUSTERED (id_usuario_por_hotel)
+)
 --Tabla Cliente
 IF OBJECT_ID ('[NO_TRIGGERS].Cliente' , 'U' ) IS NOT NULL
 	DROP TABLE [NO_TRIGGERS].Cliente;
@@ -575,29 +596,48 @@ insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values
 INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
 	('Argentina','ARGENTINO'),('Brasil','BRASILERO'),('Uruguay','URUGUAYO'),('Indefinido','Indefinido');
 --select * from [no_triggers].pais
-insert into [NO_TRIGGERS].usuario 
-(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
-,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
+insert into [NO_TRIGGERS].usuario
 values
-('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,1),--agregar para todos los hoteles
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,3),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,4),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,5),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,6),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,7),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,8),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,9),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,10),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,11),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,12),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,13),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,14),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,15)
+('REYDELOSMINISUPERS','User','Generico',[NO_TRIGGERS].fn_encriptar('doh'),null,getdate(),0,null,null,null,1,3)
+('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),--agregar para todos los hoteles
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2)
 
 --select * from [no_triggers].usuario
 
+INSERT INTO [NO_TRIGGERS].usuario_por_hotel
+VALUES 
+(1,1),
+(2,2),
+(3,3),
+(4,4),
+(5,5),
+(6,6),
+(7,7),
+(8,8),
+(9,9),
+(10,10),
+(11,11),
+(12,12),
+(13,13),
+(14,14),
+(15,15)
 
+INSERT INTO [NO_TRIGGERS].usuario_por_hotel
+VALUES
+(16,3)
 
 --CIUDAD------------------------11
 insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
@@ -756,7 +796,6 @@ insert into [NO_TRIGGERS].consumible_por_estadia
 		WHERE (m.Consumible_Codigo=cons.consumible_codigo) and (est.id_reserva = res.id_reserva) and (m.Factura_Nro IS NOT NULL) and (m.Reserva_Codigo = res.reserva_numero_codigo)
 GO
 
-
 --Factura ------------------86300
 insert into [NO_TRIGGERS].factura (factura_fecha,factura_numero,factura_tipo,factura_total,id_cliente,id_estadia,id_hotel)
 select distinct
@@ -815,8 +854,12 @@ constraint fk_id_hotel_direccion foreign key (id_direccion) references [no_trigg
 
 Alter table [no_triggers].usuario add
 constraint fk_id_usuario_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
-constraint fk_id_usuario_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
 constraint fk_id_usuario_tipo_documento foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento)
+
+
+ALTER TABLE [NO_TRIGGERS].usuario_por_hotel add
+constraint fk_id_usuarioPorHotel foreign key (id_usuario) references [no_triggers].usuario (id_usuario),
+constraint fk_id_hotelPor_usuario foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
 
 Alter table [no_triggers].cliente add
 constraint fk_id_cliente_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion),
@@ -841,7 +884,7 @@ constraint fk_id_estadia_cliente foreign key (id_cliente) references [no_trigger
 
 Alter table [no_triggers].regimen_por_hotel add
 constraint fk_id_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
-constraint fk_id_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
+constraint fk_id_hotelporRegimen foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
 
 Alter table [no_triggers].factura add 
 constraint fk_id_factura_estadia foreign key (id_estadia) references [no_triggers].estadia(id_estadia),

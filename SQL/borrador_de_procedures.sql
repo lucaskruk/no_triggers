@@ -1,9 +1,13 @@
 /************************BORRRADOR DE PROCEDURES*******************************************************************************/
 
-DROP PROCEDURE [NO_TRIGGERS].fn_validar_password
+DROP FUNCTION [NO_TRIGGERS].fn_validar_password
 GO
 
 DROP function [NO_TRIGGERS].fn_chequear_asignacion_rol
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_a_Cero_Intentos_fallidos
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos
 GO
 
 DROP function [NO_TRIGGERS].fn_chequear_existencia_rol
