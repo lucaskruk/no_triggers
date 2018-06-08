@@ -96,7 +96,7 @@ select * from [NO_TRIGGERS].rol
 GO
 
 /*******************PARA LOGIN*******************************************/
-create procedure [NO_TRIGGERS].sp_chequear_intentos_fallidos
+/*create procedure [NO_TRIGGERS].sp_chequear_intentos_fallidos
 @Nombre_usuario nvarchar (100)
 AS
 declare @cantidad_intentos int, @habilitado bit
@@ -105,7 +105,7 @@ if (@cantidad_intentos<3)
 set @habilitado=1
 else
 set @habilitado=0
-GO
+GO*/
 
 create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(256))
 returns nvarchar(255)
@@ -114,11 +114,20 @@ as begin
 end
 GO
 
-create procedure [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos (@usuario nvarchar(100))
+alter procedure [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos (@usuario nvarchar(100))
 as
-update [NO_TRIGGERS].Usuario
-set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1
-where usuario_username = @usuario
+
+if((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where @usuario= usuario_username ) <3)
+	begin
+	update [NO_TRIGGERS].Usuario
+set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1 where  @usuario=usuario_username
+	end
+else
+	begin	
+	update [NO_TRIGGERS].Usuario
+	set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1,  usuario_habilitado = 0 where  @usuario=usuario_username
+end
+
 go
 
 create procedure [NO_TRIGGERS].sp_a_Cero_Intentos_fallidos (@usuario nvarchar(100))
@@ -133,21 +142,22 @@ returns bit
 as begin
 declare @resultado bit, @password2 nvarchar(256)
 set @password2 = [NO_TRIGGERS].fn_encriptar(@password)
-if (((SELECT usuario_password FROM [NO_TRIGGERS].Usuario WHERE usuario_username=@usuario) = @password2) and ((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where usuario_username = @usuario)>=3))
+if (((SELECT usuario_password FROM [NO_TRIGGERS].Usuario WHERE usuario_username=@usuario) = @password2) and ((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where usuario_username = @usuario)<=3)) and ((select usuario_habilitado from [NO_TRIGGERS].Usuario where usuario_username=@usuario)=1)
 	begin	
-		exec [NO_TRIGGERS].sp_a_Cero_Intentos_fallidos @usuario
+		--Ejecutar desde C# el borrar intentos fallidos
 		set @resultado = 1
 	end
 ELSE
 	begin
-		exec [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos @usuario 
+		--Ejecutar desde C# el sumar intentos fallidos
 		set @resultado=0
 	end
 return @resultado
 END
 GO
 
-select [NO_TRIGGERS].fn_validar_password ('USER_GUEST2', 'user_gues')
+select [NO_TRIGGERS].fn_validar_password ('USER_GUEST2', 'user_guest')
+exec [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos'USER_GUEST2'
 
 
 /***********************PARA USUARIO*************************************/
@@ -570,20 +580,20 @@ insert into [NO_TRIGGERS].usuario
 ,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
 values
 ('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,1),--agregar para todos los hoteles
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,2),
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,3),
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,4),
-('USER_GUEST', 'User','Generico', 'user_guest',null,getdate(),0,null,null,null,1,2,5),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,6),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,7),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,8),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,9),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,10),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,11),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,12),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,13),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,14),
-('USER_GUEST', 'User','Generico', 'user_guest', null,getdate(),0,null,null,null,1,2,15)
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,2),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,3),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,4),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,5),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,6),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,7),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,8),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,9),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,10),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,11),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,12),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,13),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,14),
+('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2,15)
 
 --select * from [no_triggers].usuario
 
