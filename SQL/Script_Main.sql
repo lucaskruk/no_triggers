@@ -177,8 +177,7 @@ DECLARE @responseMessage nvarchar(250)
 		SET @responseMessage= ERROR_MESSAGE()
 	END CATCH
 END
-
-GO
+go
 /*
 insert into [NO_TRIGGERS].usuario 
 (usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
@@ -192,7 +191,8 @@ RETURNS bit
 AS
 BEGIN
 DECLARE @aprobador bit
-	IF((select usxh.id_hotel from [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuarioAdministrador and usxh.id_usuario=us.id_usuario)=(SELECT id_hotel FROM [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuarioAModificar and usxh.id_usuario=us.id_usuario))
+	IF(((select usxh.id_hotel from [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuarioAdministrador and usxh.id_usuario=us.id_usuario)=
+	(SELECT usxh.id_hotel FROM [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE usxh.id_usuario=us.id_usuario and us.usuario_username=@usuarioAModificar))and((select r.rol_nombre from [NO_TRIGGERS].Usuario u, [NO_TRIGGERS].Rol r where r.id_rol = u.id_rol and u.usuario_username=@usuarioAdministrador)='Administrador'))
 		BEGIN
 			set @aprobador=1
 		END
@@ -204,7 +204,78 @@ return @aprobador
 END
 GO
 
-SELECT [NO_TRIGGERS].fn_permitir_cambios_administrador('REYDELOSMINISUPERS','USER_GUEST')
+--SELECT [NO_TRIGGERS].fn_permitir_cambios_administrador('REYDELOSMINISUPERS','USER_GUEST3')
+
+create proc [NO_TRIGGERS].sp_Cambiar_Contraseña
+@Usuario nvarchar(100), @NuevaContraseña nvarchar(256)
+as
+begin
+	update [NO_TRIGGERS].Usuario 
+	set usuario_password = [NO_TRIGGERS].fn_encriptar(@NuevaContraseña) where usuario_username = @Usuario
+end
+go
+
+--exec [NO_TRIGGERS].sp_Cambiar_Contraseña 'USER_GUEST2', 'pepita'
+
+create function [NO_TRIGGERS].fn_trow_Exeption(@Mensaje nvarchar(100))
+returns nvarchar(100)
+as begin
+	return @mensaje
+end
+go
+
+create function [NO_TRIGGERS].fn_trow_respuesta(@resultado bit)
+returns nvarchar(100)
+as begin
+	return @resultado
+end
+go
+
+create proc [NO_TRIGGERS].sp_Dar_Baja_Usuario
+@UsuarioAdministrador nvarchar(100), @UsuarioADarBAja nvarchar(100)
+as
+begin
+DECLARE @responseMessage nvarchar(250)  
+	if(([NO_TRIGGERS].fn_permitir_cambios_administrador(@UsuarioAdministrador,@UsuarioADarBAja)=1) and ((select r.rol_nombre from [NO_TRIGGERS].Usuario u, [NO_TRIGGERS].Rol r where r.id_rol = u.id_rol and u.usuario_username=@usuarioAdministrador)='Administrador'))
+	begin
+			begin try
+				update [NO_TRIGGERS].Usuario
+				set usuario_habilitado = 0 where @UsuarioADarBAja = usuario_username
+				select [NO_TRIGGERS].fn_trow_Exeption('Dado de Baja Exitosamente')
+			end try 
+			begin catch
+				select [NO_TRIGGERS].fn_trow_Exeption('Usuario Inexistente')
+			end catch
+	end
+	else
+		begin
+			select [NO_TRIGGERS].fn_trow_Exeption('No tenes permisos')
+		end 
+	end
+go
+
+--exec [NO_TRIGGERS].sp_Dar_Baja_Usuario 'REYDELOSMINISUPERS', 'USER_GUEST3'
+
+create function [NO_TRIGGERS].fn_Devolve_Usuarios (@Usuario nvarchar(100))
+returns table
+as
+	RETURN (select * from [NO_TRIGGERS].Usuario where usuario_username = @Usuario)
+go
+
+--select * from [NO_TRIGGERS].fn_Devolve_Usuarios('REYDELOSMINISUPERS')
+
+create proc [NO_TRIGGERS].sp_modificarUsuarios 
+@UsuarioAMofificar nvarchar(100),@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50),@rol int, @hotel int
+as
+declare @id int
+	set @id = (SElect id_usuario from [NO_TRIGGERS].Usuario where usuario_username = @UsuarioAMofificar)
+	update [NO_TRIGGERS].Usuario
+	set usuario_nombre = @nombre, usuario_apellido = @apellido, usuario_username = @nombreusuario, usuario_email = @email, usuario_fecha_nacimiento = @fechanacimiento, id_tipo_documento=(select t.id_tipo_documento from [NO_TRIGGERS].Tipo_documento t where t.tipo_de_documento_nombre = @tipodocumento), usuario_numero_documento = @numero_documento, usuario_telefono = @numerotelefono, id_rol = @rol
+	where usuario_username = @UsuarioAMofificar
+	update [NO_TRIGGERS].usuario_por_hotel
+	set id_hotel=@hotel
+	where id_usuario = @id
+go
 
 
 --------------------------------------------------------------------------------------------------------------------------
@@ -598,22 +669,22 @@ INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
 --select * from [no_triggers].pais
 insert into [NO_TRIGGERS].usuario
 values
+('USER_GUEST1', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),--agregar para todos los hoteles
+('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
+('USER_GUEST3', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
+('USER_GUEST4', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
+('USER_GUEST5', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
+('USER_GUEST6', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST7', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST8', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST9', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST10', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST11', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST12', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST13', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST14', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
+('USER_GUEST15', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
 ('REYDELOSMINISUPERS','User','Generico',[NO_TRIGGERS].fn_encriptar('doh'),null,getdate(),0,null,null,null,1,3)
-('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),--agregar para todos los hoteles
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2)
 
 --select * from [no_triggers].usuario
 
