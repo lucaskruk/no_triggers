@@ -9,45 +9,47 @@ go
 GO
 create procedure [NO_TRIGGERS].sp_rol_crear 
 @Nombre_rol varchar (100)
-AS
-insert into 
-	[NO_TRIGGERS].rol values (@Nombre_rol, 1)
+	AS
+		insert into 
+		[NO_TRIGGERS].rol values (@Nombre_rol, 1)
 
-GO
+	GO
 --exec [NO_TRIGGERS].sp_rol_crear 'Rey de los minisupers'
 GO
 create procedure [no_triggers].sp_rol_dar_de_baja
 @Nombre_rol varchar (100)
-AS
-update [NO_TRIGGERS].rol set rol_estado=0
-WHERE @Nombre_rol=rol_nombre
-GO
+	AS
+		update [NO_TRIGGERS].rol set rol_estado=0
+		WHERE @Nombre_rol=rol_nombre
+	GO
 create procedure [no_triggers].sp_rol_modificar_estado
 @Nombre_rol varchar (100), @estado_modificado int
-AS
-update [NO_TRIGGERS].rol set rol_estado=@estado_modificado
-WHERE @Nombre_rol=rol_nombre
-GO
+	AS
+	update [NO_TRIGGERS].rol set rol_estado=@estado_modificado
+	WHERE @Nombre_rol=rol_nombre
+	GO
 -- exec [NO_TRIGGERS].sp_rol_dar_de_baja 'Rey de los minisupers'
+
 GO
 create procedure [NO_TRIGGERS].sp_asignar_funcionalidad
-@Rol_nombre varchar (100), @Funcionalidad int
-AS
+	@Rol_nombre varchar (100), @Funcionalidad int
+	AS
 	insert into [NO_TRIGGERS].rol_por_funcionalidad values ((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre),@Funcionalidad)
-GO
+	GO
+
 create procedure [NO_TRIGGERS].sp_desasignar_funcionalidad
 @Rol_nombre varchar (100), @Funcionalidad int
-AS
-	delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=(select id_rol from [NO_TRIGGERS].rol where rol_nombre=@Rol_nombre)
-GO
+	AS
+		delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=(select id_rol from [NO_TRIGGERS].rol where rol_nombre=@Rol_nombre)
+	GO
 
-create function [NO_TRIGGERS].fn_chequear_asignacion_rol --probarlo!!!!!!!!!!!!!!!!!!!!!!!!
+create function [NO_TRIGGERS].fn_chequear_asignacion_rol 
 (@Rol_nombre varchar(100), @Funcionalidad int) returns bit
-AS
-begin
-	declare @Resultado bit
+	AS
+		begin
+			declare @Resultado bit
 		if( (select id_rol_por_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rf, [NO_TRIGGERS].rol r, [NO_TRIGGERS].funcionalidad f
-			where r.rol_nombre=@Rol_nombre and f.id_funcionalidad=@Funcionalidad and rf.id_rol=r.id_rol and rf.id_funcionalidad=f.id_funcionalidad)is NOT NULL)
+				where r.rol_nombre=@Rol_nombre and f.id_funcionalidad=@Funcionalidad and rf.id_rol=r.id_rol and rf.id_funcionalidad=f.id_funcionalidad)is NOT NULL)
 			set @Resultado=1
 		else
 			set @Resultado=0
@@ -58,8 +60,8 @@ GO
 
 create function [NO_TRIGGERS].fn_chequear_existencia_rol
 (@Rol_nombre varchar(100)) returns bit
-AS 
-begin
+	AS 
+		begin
 	declare @Resultado bit
 	if((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre)IS NOT NULL)
 		set @Resultado=1
@@ -71,29 +73,27 @@ GO
 
 create procedure [NO_TRIGGERS].sp_modificar_rol /*Se decide que todos los campos pueden ser modificados a la vez, por lo cual se verifica cuales campos quiere modificar el usuario*/
 @Nombre_rol_a_modificar varchar (100), @Nuevo_nombre varchar (100), @estado_nuevo int, @funcionalidad_nueva int
-AS
-if ( @Nuevo_nombre !='')
-update [NO_TRIGGERS].rol set rol_nombre=@Nuevo_nombre where @Nombre_rol_a_modificar=rol_nombre
-if (@estado_nuevo is not null)
-update [NO_TRIGGERS].rol set rol_estado=@estado_nuevo where @Nombre_rol_a_modificar=rol_nombre
+	AS
+		if ( @Nuevo_nombre !='')
+		update [NO_TRIGGERS].rol set rol_nombre=@Nuevo_nombre where @Nombre_rol_a_modificar=rol_nombre
+		if (@estado_nuevo is not null)
+		update [NO_TRIGGERS].rol set rol_estado=@estado_nuevo where @Nombre_rol_a_modificar=rol_nombre
 
-if(@funcionalidad_nueva is not null)---------agrega la funcionalidad
- begin
- if not exists (select 1 from [NO_TRIGGERS].Rol_por_funcionalidad rf join [NO_TRIGGERS].Rol r on rf.id_rol=r.id_rol where r.rol_nombre=@Nombre_rol_a_modificar)
-	begin
-		declare @rolid int 
-		select @rolid=id_rol from [NO_TRIGGERS].Rol where rol_nombre=@Nombre_rol_a_modificar
-		insert into [NO_TRIGGERS].Rol_por_funcionalidad (id_rol,id_funcionalidad) values (@rolid,@funcionalidad_nueva)
-	end
- end
-
-
-
+		if(@funcionalidad_nueva is not null)---------agrega la funcionalidad
+			begin
+				if not exists (select 1 from [NO_TRIGGERS].Rol_por_funcionalidad rf join [NO_TRIGGERS].Rol r on rf.id_rol=r.id_rol where r.rol_nombre=@Nombre_rol_a_modificar)
+					begin
+						declare @rolid int 
+						select @rolid=id_rol from [NO_TRIGGERS].Rol where rol_nombre=@Nombre_rol_a_modificar
+						insert into [NO_TRIGGERS].Rol_por_funcionalidad (id_rol,id_funcionalidad) values (@rolid,@funcionalidad_nueva)
+					end
+			end
 GO
+
 create procedure [NO_TRIGGERS].sp_mostrar_roles
-AS
-select * from [NO_TRIGGERS].rol
-GO
+	AS
+		select * from [NO_TRIGGERS].rol
+	GO
 
 /*******************PARA LOGIN*******************************************/
 /*create procedure [NO_TRIGGERS].sp_chequear_intentos_fallidos
@@ -163,7 +163,7 @@ GO
 /***********************PARA USUARIO*************************************/
 GO
 create procedure [NO_TRIGGERS].sp_crear_usuario --se decide que el usuario quede habiliado al crearse--
-@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @password nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50), @rolasignado int, @hotel int
+@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @password nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50), @rolasignado int, @hotel int --RECIBE EL HOTEL DEL ADMINISTRADOR
 AS
 BEGIN
 DECLARE @responseMessage nvarchar(250) 
@@ -206,7 +206,7 @@ GO
 
 --SELECT [NO_TRIGGERS].fn_permitir_cambios_administrador('REYDELOSMINISUPERS','USER_GUEST3')
 
-create proc [NO_TRIGGERS].sp_Cambiar_Contraseña
+create proc [NO_TRIGGERS].sp_Cambiar_Contrasenia
 @Usuario nvarchar(100), @NuevaContraseña nvarchar(256)
 as
 begin
@@ -217,14 +217,14 @@ go
 
 --exec [NO_TRIGGERS].sp_Cambiar_Contraseña 'USER_GUEST2', 'pepita'
 
-create function [NO_TRIGGERS].fn_trow_Exeption(@Mensaje nvarchar(100))
+create function [NO_TRIGGERS].fn_trow_Exception(@Mensaje nvarchar(100))
 returns nvarchar(100)
 as begin
 	return @mensaje
 end
 go
 
-create function [NO_TRIGGERS].fn_trow_respuesta(@resultado bit)
+create function [NO_TRIGGERS].fn_throw_respuesta(@resultado bit)
 returns nvarchar(100)
 as begin
 	return @resultado
@@ -277,7 +277,103 @@ declare @id int
 	where id_usuario = @id
 go
 
+create function [NO_TRIGGERS].fn_hoteles_de_usuario (@Usuario nvarchar(100))
+returns int
+as	
+begin
+	declare @auxiliar int
+	 set @auxiliar =(SELECT count(id_hotel) FROM [NO_TRIGGERS].Usuario us, [NO_TRIGGERS].usuario_por_hotel uxh WHERE us.usuario_username=@Usuario and us.id_usuario=uxh.id_usuario)
+	 return @auxiliar
+end
+go
 
+
+/********************CLIENTES***************************************************/
+
+
+create function [NO_TRIGGERS].fn_cliente_habilitado (@ClienteNombre nvarchar(100), @ClienteApellido nvarchar(100), @ClienteEmail nvarchar(200))
+returns bit
+
+as
+	begin
+		DECLARE @auxiliar bit
+		set @auxiliar = (SELECT cl.cliente_estado FROM [NO_TRIGGERS].Cliente cl WHERE cl.cliente_nombre=@ClienteNombre and cl.cliente_apellido=@ClienteApellido and cl.cliente_email=@ClienteEmail)
+		return @auxiliar
+go
+
+create procedure [NO_TRIGGERS].sp_modificar_estado @Cliente nvarchar(100),@ClienteApellido nvarchar(100), @ClienteEmail nvarchar(200), @Estado bit
+as
+	update [NO_TRIGGERS].Cliente 
+	set cliente_estado=@Estado 
+	where cliente_nombre=@Cliente and cliente_apellido=@ClienteApellido and cliente_email=@ClienteEmail
+go
+
+--exec [NO_TRIGGERS].sp_modificar_estado 'AARON','Acuña' ,'aaron_Acuña@gmail.com', 0
+
+Alter procedure [NO_TRIGGERS].sp_crear_cliente @Nombre nvarchar(100), @Apellido nvarchar(100), @cliente_email nvarchar(200),@Nacimiento datetime, @TipoDocumento int, @numeroDocumento nvarchar(50), @Telefono nvarchar(50), @Calle nvarchar(100), @Altura int, @Piso int, @Departamento nvarchar(10), @Ciudad nvarchar(100), @PaisResidencia nvarchar(100), @PaisNacionalidad nvarchar(100),@nombreNacionalidad nvarchar(100)
+as
+declare @idpaisresidencia int, @iddireccion int
+if(((select count(cliente_email) from [NO_TRIGGERS].Cliente cl where @cliente_email=cl.cliente_email and @Nombre=cl.cliente_nombre and @Apellido=cl.cliente_apellido)>=1) OR ((SELECT  top 1 cliente_email_invalido  FROM [NO_TRIGGERS].Cliente cl WHERE cl.cliente_email=@cliente_email and cl.cliente_email_invalido=1)=1))
+	begin 
+	return select [NO_TRIGGERS].fn_throw_exception('YA SE ENCUENTRA CREADO')
+	end
+else
+	begin
+		exec [NO_TRIGGERS].sp_agregar_pais @PaisNacionalidad, @nombreNacionalidad --para la Nacionalidad
+		exec [NO_TRIGGERS].sp_agregar_direccion @calle, @altura, @piso,@Departamento, @ciudad, @paisresidencia
+		set @iddireccion = (select id_direccion from [NO_TRIGGERS].Direccion d where d.direccion_calle=@Calle and d.direccion_altura=@altura and d.direccion_piso=@piso and d.direccion_departamento=@Departamento and ((select id_ciudad from [NO_TRIGGERS].Ciudad c where @Ciudad=c.ciudad_nombre)=id_ciudad))
+		set @idpaisresidencia = (select id_pais from [NO_TRIGGERS].Pais p where p.pais_nacionalidad=@nombreNacionalidad and p.pais_nombre=@PaisNacionalidad)
+		insert into [NO_TRIGGERS].Cliente values (1,@Nombre,@Apellido,@cliente_email,null,@Nacimiento,@TipoDocumento,@numeroDocumento,@Telefono,@iddireccion,@idpaisresidencia)
+	end
+go
+
+
+create function [NO_TRIGGERS].fn_castear_DataTime(@fecha nvarchar(50))
+returns datetime
+as
+begin
+	return (select CONVERT(datetime,@fecha,121))
+end
+go
+
+declare @a datetime
+set @a = (select [NO_TRIGGERS].fn_castear_DataTime('1996/10/31 00:00:00'))
+exec [NO_TRIGGERS].sp_crear_cliente 'Homero', 'Rabahia', 'asdasd',@a, 2, '123123', '45645464', 'calle falsa', 123 ,NULL , NULL, 'Springfield', 'USA', 'USA' ,'Yankee'
+/*************************PAIS*************************************************/
+go
+
+create procedure [NO_TRIGGERS].sp_agregar_pais 
+@PaisNombre nvarchar(100), @nombreNacionalidad nvarchar (100)
+as
+	begin
+		if (((select count (id_pais) from [NO_TRIGGERS].pais p where @PaisNombre=p.pais_nacionalidad)=0) OR ((select count (id_pais) from [NO_TRIGGERS].pais p where @nombreNacionalidad = p.pais_nacionalidad)=0))
+			begin
+				insert into [NO_TRIGGERS].Pais values (@PaisNombre, @nombreNacionalidad)
+			end
+	end 
+go
+
+create procedure [NO_TRIGGERS].sp_agregar_ciudad  
+@CiudadNombre nvarchar(100), @Pais nvarchar(100)
+as 
+declare @idpais int
+	if ((select count (id_ciudad) from [NO_TRIGGERS].Ciudad c, [NO_TRIGGERS].pais p  WHERE @CiudadNombre=c.ciudad_nombre and @Pais=p.pais_nombre and c.id_pais=p.id_pais)=0)
+	begin
+		set @idpais = (select id_pais from [NO_TRIGGERS].pais p where p.pais_nombre=@Pais)
+		insert into [NO_TRIGGERS].Ciudad values (@CiudadNombre, @idpais)
+	end
+go
+
+create procedure [NO_TRIGGERS].sp_agregar_direccion @calle nvarchar(200), @altura int , @piso int, @departamento nvarchar(10), @ciudad nvarchar(200), @paisresidencia nvarchar(100)
+as
+declare @idciudad int
+	if ((select count(id_direccion) from [NO_TRIGGERS].Direccion d, [NO_TRIGGERS].Pais p, [NO_TRIGGERS].Ciudad c WHERE @calle=d.direccion_calle and @altura=d.direccion_altura and @piso=d.direccion_piso and @departamento=d.direccion_departamento and c.ciudad_nombre=@ciudad and p.pais_nombre=@paisResidencia and c.id_pais=p.id_pais and c.id_ciudad=d.id_ciudad)=0)
+	begin
+		exec [NO_TRIGGERS].sp_agregar_ciudad @ciudad, @paisresidencia
+		set @idciudad = (select id_ciudad from [NO_TRIGGERS].Ciudad c WHERE c.ciudad_nombre=@ciudad)
+		insert into [NO_TRIGGERS].Direccion values (@calle, @altura, @piso,@departamento,@idciudad)
+	end
+go
 --------------------------------------------------------------------------------------------------------------------------
 /*Creación de tablas */---------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------
@@ -669,6 +765,7 @@ INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
 --select * from [no_triggers].pais
 insert into [NO_TRIGGERS].usuario
 values
+('REYDELOSMINISUPERS','User','Generico',[NO_TRIGGERS].fn_encriptar('doh'),null,getdate(),0,null,null,null,1,3)
 ('USER_GUEST1', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),--agregar para todos los hoteles
 ('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
 ('USER_GUEST3', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
@@ -684,12 +781,13 @@ values
 ('USER_GUEST13', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
 ('USER_GUEST14', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
 ('USER_GUEST15', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('REYDELOSMINISUPERS','User','Generico',[NO_TRIGGERS].fn_encriptar('doh'),null,getdate(),0,null,null,null,1,3)
+
 
 --select * from [no_triggers].usuario
 
 INSERT INTO [NO_TRIGGERS].usuario_por_hotel
 VALUES 
+(16,4)
 (1,1),
 (2,2),
 (3,3),
@@ -925,8 +1023,8 @@ constraint fk_id_hotel_direccion foreign key (id_direccion) references [no_trigg
 
 Alter table [no_triggers].usuario add
 constraint fk_id_usuario_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
-constraint fk_id_usuario_tipo_documento foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento)
-
+constraint fk_id_usuario_tipo_documento foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento),
+constraint uk_usuario_username unique (usuario_username)
 
 ALTER TABLE [NO_TRIGGERS].usuario_por_hotel add
 constraint fk_id_usuarioPorHotel foreign key (id_usuario) references [no_triggers].usuario (id_usuario),

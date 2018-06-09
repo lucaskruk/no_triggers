@@ -12,7 +12,8 @@ GO
 
 DROP function [NO_TRIGGERS].fn_chequear_existencia_rol
 GO
-
+drop function [NO_TRIGGERS].fn_permitir_cambios_administrador
+go
 drop function [NO_TRIGGERS].fn_encriptar
 go
 
