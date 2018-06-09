@@ -310,7 +310,7 @@ go
 
 --exec [NO_TRIGGERS].sp_modificar_estado 'AARON','Acuña' ,'aaron_Acuña@gmail.com', 0
 
-Alter procedure [NO_TRIGGERS].sp_crear_cliente @Nombre nvarchar(100), @Apellido nvarchar(100), @cliente_email nvarchar(200),@Nacimiento datetime, @TipoDocumento int, @numeroDocumento nvarchar(50), @Telefono nvarchar(50), @Calle nvarchar(100), @Altura int, @Piso int, @Departamento nvarchar(10), @Ciudad nvarchar(100), @PaisResidencia nvarchar(100), @PaisNacionalidad nvarchar(100),@nombreNacionalidad nvarchar(100)
+Alter procedure [NO_TRIGGERS].sp_crear_cliente @Nombre nvarchar(100), @Apellido nvarchar(100), @cliente_email nvarchar(200),@Nacimiento datetime, @TipoDocumento int, @numeroDocumento nvarchar(50), @Telefono nvarchar(50), @Calle nvarchar(100), @Altura int, @Piso int, @Departamento nvarchar(10), @Ciudad nvarchar(100), @PaisResidencia nvarchar(100),@nacionalidadResidencia nvarchar(100), @PaisNacionalidad nvarchar(100),@nombreNacionalidad nvarchar(100)
 as
 declare @idpaisresidencia int, @iddireccion int
 if(((select count(cliente_email) from [NO_TRIGGERS].Cliente cl where @cliente_email=cl.cliente_email and @Nombre=cl.cliente_nombre and @Apellido=cl.cliente_apellido)>=1) OR ((SELECT  top 1 cliente_email_invalido  FROM [NO_TRIGGERS].Cliente cl WHERE cl.cliente_email=@cliente_email and cl.cliente_email_invalido=1)=1))
@@ -320,8 +320,8 @@ if(((select count(cliente_email) from [NO_TRIGGERS].Cliente cl where @cliente_em
 else
 	begin
 		exec [NO_TRIGGERS].sp_agregar_pais @PaisNacionalidad, @nombreNacionalidad --para la Nacionalidad
-		exec [NO_TRIGGERS].sp_agregar_direccion @calle, @altura, @piso,@Departamento, @ciudad, @paisresidencia
-		set @iddireccion = (select id_direccion from [NO_TRIGGERS].Direccion d where d.direccion_calle=@Calle and d.direccion_altura=@altura and d.direccion_piso=@piso and d.direccion_departamento=@Departamento and ((select id_ciudad from [NO_TRIGGERS].Ciudad c where @Ciudad=c.ciudad_nombre)=id_ciudad))
+		exec [NO_TRIGGERS].sp_agregar_direccion @calle, @altura, @piso,@Departamento, @ciudad, @paisresidencia,@nombreNacionalidad
+		set @iddireccion = (select id_direccion from [NO_TRIGGERS].Direccion d where d.direccion_calle=@Calle and d.direccion_altura=@altura and ((d.direccion_piso=@piso) OR (d.direccion_piso is null)) and ((d.direccion_departamento=@Departamento) or (d.direccion_departamento is null)) and ((select id_ciudad from [NO_TRIGGERS].Ciudad c where @Ciudad=c.ciudad_nombre)=id_ciudad))
 		set @idpaisresidencia = (select id_pais from [NO_TRIGGERS].Pais p where p.pais_nacionalidad=@nombreNacionalidad and p.pais_nombre=@PaisNacionalidad)
 		insert into [NO_TRIGGERS].Cliente values (1,@Nombre,@Apellido,@cliente_email,null,@Nacimiento,@TipoDocumento,@numeroDocumento,@Telefono,@iddireccion,@idpaisresidencia)
 	end
@@ -338,42 +338,64 @@ go
 
 declare @a datetime
 set @a = (select [NO_TRIGGERS].fn_castear_DataTime('1996/10/31 00:00:00'))
-exec [NO_TRIGGERS].sp_crear_cliente 'Homero', 'Rabahia', 'asdasd',@a, 2, '123123', '45645464', 'calle falsa', 123 ,NULL , NULL, 'Springfield', 'USA', 'USA' ,'Yankee'
+exec [NO_TRIGGERS].sp_crear_cliente 'Samantha', 'Billino', 'samanthaalexiab@hotmail.com',@a, 2, '39284882', '45699963', 'Avenida siempre viva', 3203 ,NULL , NULL, 'Springfield', 'Estados Unidos', 'EstadoUnidense','Argentina' ,'Argentino'
 /*************************PAIS*************************************************/
 go
 
-create procedure [NO_TRIGGERS].sp_agregar_pais 
+alter procedure [NO_TRIGGERS].sp_agregar_pais 
 @PaisNombre nvarchar(100), @nombreNacionalidad nvarchar (100)
 as
 	begin
-		if (((select count (id_pais) from [NO_TRIGGERS].pais p where @PaisNombre=p.pais_nacionalidad)=0) OR ((select count (id_pais) from [NO_TRIGGERS].pais p where @nombreNacionalidad = p.pais_nacionalidad)=0))
+		if ((select count (id_pais) from [NO_TRIGGERS].pais p where @PaisNombre=p.pais_nacionalidad or  @nombreNacionalidad = p.pais_nacionalidad )<1) 
 			begin
 				insert into [NO_TRIGGERS].Pais values (@PaisNombre, @nombreNacionalidad)
 			end
 	end 
 go
+--exec [NO_TRIGGERS].sp_agregar_pais 'Canada','Canadiense'
+--go
 
-create procedure [NO_TRIGGERS].sp_agregar_ciudad  
-@CiudadNombre nvarchar(100), @Pais nvarchar(100)
+alter procedure [NO_TRIGGERS].sp_agregar_ciudad  
+@CiudadNombre nvarchar(100), @Pais nvarchar(100), @NacionalidadDeResidencia nvarchar(100)
 as 
 declare @idpais int
-	if ((select count (id_ciudad) from [NO_TRIGGERS].Ciudad c, [NO_TRIGGERS].pais p  WHERE @CiudadNombre=c.ciudad_nombre and @Pais=p.pais_nombre and c.id_pais=p.id_pais)=0)
+	if ((select count (id_ciudad) from [NO_TRIGGERS].Ciudad c, [NO_TRIGGERS].pais p  WHERE @CiudadNombre=c.ciudad_nombre and @Pais=p.pais_nombre and c.id_pais=p.id_pais)<1)
 	begin
+		exec [NO_TRIGGERS].sp_agregar_pais @Pais, @NacionalidadDeResidencia
 		set @idpais = (select id_pais from [NO_TRIGGERS].pais p where p.pais_nombre=@Pais)
-		insert into [NO_TRIGGERS].Ciudad values (@CiudadNombre, @idpais)
+		insert into [NO_TRIGGERS].Ciudad values (@idpais, @CiudadNombre)
 	end
 go
 
-create procedure [NO_TRIGGERS].sp_agregar_direccion @calle nvarchar(200), @altura int , @piso int, @departamento nvarchar(10), @ciudad nvarchar(200), @paisresidencia nvarchar(100)
+exec [NO_TRIGGERS].sp_agregar_ciudad 'NAGJADJNASKFN', 'Rusia', 'Ruso' 
+GO
+
+ALTER procedure [NO_TRIGGERS].sp_agregar_direccion @calle nvarchar(200), @altura int , @piso int, @departamento nvarchar(10), @ciudad nvarchar(200), @paisresidencia nvarchar(100), @NombreNacionalidadResidencia nvarchar(100)
 as
 declare @idciudad int
-	if ((select count(id_direccion) from [NO_TRIGGERS].Direccion d, [NO_TRIGGERS].Pais p, [NO_TRIGGERS].Ciudad c WHERE @calle=d.direccion_calle and @altura=d.direccion_altura and @piso=d.direccion_piso and @departamento=d.direccion_departamento and c.ciudad_nombre=@ciudad and p.pais_nombre=@paisResidencia and c.id_pais=p.id_pais and c.id_ciudad=d.id_ciudad)=0)
+	if ((select count(id_direccion) from [NO_TRIGGERS].Direccion d
+	join [NO_TRIGGERS].Ciudad c on d.id_ciudad = c.id_ciudad
+	join [NO_TRIGGERS].Pais p on p.id_pais = c.id_pais
+	WHERE @calle=d.direccion_calle and @altura=d.direccion_altura and @piso=d.direccion_piso and @departamento=d.direccion_departamento and c.ciudad_nombre=@ciudad and p.pais_nombre=@paisResidencia)<1)
 	begin
-		exec [NO_TRIGGERS].sp_agregar_ciudad @ciudad, @paisresidencia
+		if((select count(id_direccion) from [NO_TRIGGERS].Direccion d
+		join [NO_TRIGGERS].Ciudad c on d.id_ciudad = c.id_ciudad
+		join [NO_TRIGGERS].Pais p on p.id_pais = c.id_pais
+		WHERE @calle=d.direccion_calle and @altura=d.direccion_altura and d.direccion_piso is null and d.direccion_departamento is null and c.ciudad_nombre=@ciudad and p.pais_nombre=@paisResidencia)<1)
+		begin
+			exec [NO_TRIGGERS].sp_agregar_ciudad @ciudad, @paisresidencia, @NombreNacionalidadResidencia
+			set @idciudad = (select id_ciudad from [NO_TRIGGERS].Ciudad c WHERE c.ciudad_nombre=@ciudad)
+			insert into [NO_TRIGGERS].Direccion values (@calle, @altura, @piso,@departamento,@idciudad)
+		end
+		exec [NO_TRIGGERS].sp_agregar_ciudad @ciudad, @paisresidencia, @NombreNacionalidadResidencia
 		set @idciudad = (select id_ciudad from [NO_TRIGGERS].Ciudad c WHERE c.ciudad_nombre=@ciudad)
 		insert into [NO_TRIGGERS].Direccion values (@calle, @altura, @piso,@departamento,@idciudad)
 	end
 go
+
+--select * from [NO_TRIGGERS].Direccion d where =d.direccion_calle and =d.direccion_altura
+
+exec [NO_TRIGGERS].sp_agregar_direccion 'International drive12',7600 ,NULL,NULL,'Orlando','Estados Unidos','Estadounidense'
 --------------------------------------------------------------------------------------------------------------------------
 /*Creación de tablas */---------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------
