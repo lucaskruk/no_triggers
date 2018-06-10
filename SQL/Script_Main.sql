@@ -419,8 +419,54 @@ update [NO_TRIGGERS].Cliente set cliente_estado = 0 where id_cliente=@id_cliente
 go
 
 /*******************************************HOTEL********************************************************/
+Create PROCEDURE [NO_TRIGGERS].sp_crear_hotel @nombreAdministrador nvarchar(100), @email nvarchar(100), @telefono nvarchar(50), @calle nvarchar(100), @altura int, @ciudad nvarchar(100), @pais nvarchar(100), @nacionalidadpais nvarchar(100), @cantidadestrellas int
+as
+declare @id_direccion_agregar int
+	if((select id_rol from [NO_TRIGGERS].Usuario us where us.usuario_username=@nombreAdministrador and us.usuario_email=@email and us.usuario_telefono=@telefono)=3)
+	begin
+	exec [NO_TRIGGERS].sp_add_direccion @calle,@altura, NULL,NULL,@ciudad,@pais,@nacionalidadpais
+	set @id_direccion_agregar=(select id_direccion from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@calle and d.direccion_altura=@altura and( d.direccion_departamento is null ) and (d.direccion_piso is null) and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)
+	insert into [NO_TRIGGERS].Hotel values (@id_direccion_agregar,@cantidadestrellas,NULL,getdate(),1)
+	end
 
+go
 
+--EXEC [NO_TRIGGERS].sp_crear_hotel 'UsuarioAdministrador2','samathaa@frbahotel.com','46220530','CALLEFALSA','123','CORDOBA', 'ESPANA', 'GALLEGO', 5
+
+create procedure [NO_TRIGGERS].sp_asignar_regimen @id_hotel int, @id_regimen int
+as
+if((select count(id_regimen_por_hotel) from [NO_TRIGGERS].Regimen_por_hotel rxh where rxh.id_hotel=@id_hotel and rxh.id_regimen=@id_regimen)<=0)
+insert into [NO_TRIGGERS].Regimen_por_hotel values (@id_regimen,@id_hotel)
+go
+
+create procedure [NO_TRIGGERS].sp_modifcar_hotel @id_hotel_a_modificar int,@calle nvarchar(100), @altura int, @ciudad nvarchar (100),@pais nvarchar(100), @nacionalidad nvarchar(100),@cantidadestrellas int, @recargaestrella int
+as
+declare @id_direccion_hotel int
+exec [NO_TRIGGERS].sp_add_direccion @calle,@altura, NULL,NULL,@ciudad,@pais,@nacionalidad
+set @id_direccion_hotel=(select id_direccion from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@calle and d.direccion_altura=@altura and( d.direccion_departamento is null ) and (d.direccion_piso is null) and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)
+update [NO_TRIGGERS].Hotel set hotel_cantidad_estrellas=@cantidadestrellas, hotel_recarga_estrella=@recargaestrella,id_direccion=@id_direccion_hotel where id_hotel=@id_hotel_a_modificar
+go
+
+Create FUNCTION [NO_TRIGGERS].fn_buscar_hotel_para_modificar ( @cantidadestrellas int, @ciudad nvarchar(100), @pais nvarchar(100))
+returns table 
+as 
+	return (select h.id_hotel, h.hotel_fecha_creacion, h.hotel_cantidad_estrellas, h.hotel_recarga_estrella, h.hotel_estado, d.direccion_calle, d.direccion_altura, c.ciudad_nombre, p.pais_nombre from [NO_TRIGGERS].Hotel h, [NO_TRIGGERS].Direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE (@cantidadestrellas is null or h.hotel_cantidad_estrellas=@cantidadestrellas) AND h.id_direccion=d.id_direccion AND d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais and (p.pais_nombre=@pais or @pais is null) and (c.ciudad_nombre=@ciudad or @ciudad is null))
+go
+
+create function [no_triggers].fn_existencia_de_reservas_futuras (@idhotel int, @fechafin datetime) --probar!
+returns bit
+as
+begin
+declare @resultado bit
+	if((select count(id_reserva) from [NO_TRIGGERS].Reserva r where (r.reserva_fecha_inicio between cast(cast(getdate() as date) as datetime) AND @fechafin ))=1 or (SELECT count(id_estadia) FROM[NO_TRIGGERS].Estadia est WHERE (DATEADD(day,est.estadia_cantidad_noches,est.estadia_fecha_inicio)) BETWEEN cast(cast(getdate() as date) as datetime) AND @fechafin)=1)
+	set @resultado =0 --no se podria realizar
+	else
+	set @resultado =1
+return @resultado
+end
+go
+
+--exec [NO_TRIGGERS].sp_modifcar_hotel 1, 'bolivia', 100, 'miami', 'EEUU', 'asd', 8, 20
 --select top 1000 * from [NO_TRIGGERS].fn_buscar_cliente_para_modificar('AARON','Castillo',null,97645361,null)
 --------------------------------------------------------------------------------------------------------------------------
 /*Creación de tablas */---------------------------------------------------------------------------------------------------
@@ -813,6 +859,7 @@ INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
 --select * from [no_triggers].pais
 insert into [NO_TRIGGERS].usuario
 values
+('UsuarioAdministrador2','samantha','Billino',[NO_TRIGGERS].fn_encriptar('lala'),'samathaa@frbahotel.com',getdate(),0,1,'455','46220530',1,3),
 ('USER_GUEST1', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),--agregar para todos los hoteles
 ('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
 ('USER_GUEST3', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
