@@ -47,4 +47,35 @@ go
 DROP FUNCTION [NO_TRIGGERS].fn_encriptar
 GO
 
-DROP FUNCTION [NO_TRIGGERS]
+DROP PROCEDURE [NO_TRIGGERS].sp_add_ciudad
+GO
+
+DROP PROCEDURE [NO_TRIGGERS].sp_add_cliente
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_add_direccion
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_add_pais
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_agregar_ciudad
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_Cambiar_Contrasenia
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_Cambiar_Contraseña
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_Dar_Baja_Usuario
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_crear_cliente
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_modificar_estado
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_modificarUsuarios
+GO
+DROP FUNCTION [NO_TRIGGERS].fn_castear_DataTime
+GO
+DROP FUNCTION [NO_TRIGGERS].fn_hoteles_de_usuario
+GO
+DROP FUNCTION [NO_TRIGGERS].fn_throw_respuesta
+GO
+DROP FUNCTION [NO_TRIGGERS].fn_trow_respuesta
+GO
+
