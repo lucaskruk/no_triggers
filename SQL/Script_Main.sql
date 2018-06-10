@@ -458,13 +458,73 @@ returns bit
 as
 begin
 declare @resultado bit
-	if((select count(id_reserva) from [NO_TRIGGERS].Reserva r where (r.reserva_fecha_inicio between cast(cast(getdate() as date) as datetime) AND @fechafin ))=1 or (SELECT count(id_estadia) FROM[NO_TRIGGERS].Estadia est WHERE (DATEADD(day,est.estadia_cantidad_noches,est.estadia_fecha_inicio)) BETWEEN cast(cast(getdate() as date) as datetime) AND @fechafin)=1)
-	set @resultado =0 --no se podria realizar
-	else
-	set @resultado =1
+	if(@fechafin>= cast(cast(getdate() as date) as datetime))
+		begin
+			if((select count(id_reserva) from [NO_TRIGGERS].Reserva r where r.reserva_fecha_inicio between cast(cast(getdate() as date) as datetime) AND @fechafin and r.id_hotel=@idhotel)=1 or (SELECT count(id_estadia) FROM[NO_TRIGGERS].Estadia est,[NO_TRIGGERS].Reserva r WHERE (DATEADD(day,est.estadia_cantidad_noches,est.estadia_fecha_inicio)) BETWEEN cast(cast(getdate() as date) as datetime) AND @fechafin and r.id_hotel=@idhotel and est.id_reserva=r.id_reserva and r.id_hotel=@idhotel)=1)
+				set @resultado =0 --no se podria realizar
+			else
+				set @resultado =1
+		end
+		else
+			begin
+				set @resultado = 0 -- para el caso que sea una fecha pasada
+			end
 return @resultado
 end
 go
+--select [NO_TRIGGERS].fn_existencia_de_reservas_futuras(1,'20180610')
+ 
+create procedure [NO_TRIGGERS].sp_dardebajahotel @idhotel int , @fechafin datetime
+as 
+begin
+	if (((select [NO_TRIGGERS].fn_existencia_de_reservas_futuras(@idhotel,@fechafin))!=0) and (select h.hotel_estado from [NO_TRIGGERS].hotel h where h.id_hotel=@idhotel)=1)
+	begin
+		update [NO_TRIGGERS].Hotel set hotel_estado=0 where id_hotel=@idhotel
+		insert into [NO_TRIGGERS].Baja_de_hotel values (getdate(),@fechafin,@idhotel)
+	end
+
+end
+go
+
+
+
+Create procedure [NO_TRIGGERS].sp_dardealtahotel @idhotel int
+as
+begin
+declare @idauxiliar int
+	if((select hotel_estado from [NO_TRIGGERS].Hotel where id_hotel=@idhotel)=0)
+	begin
+		update [NO_TRIGGERS].Hotel set hotel_estado=1 where id_hotel=@idhotel
+		set @idauxiliar = (select top 1 id_baja_de_hotel from [NO_TRIGGERS].Baja_de_hotel where id_hotel=@idhotel order by baja_hotel_fecha_inicio desc )
+		update [NO_TRIGGERS].Baja_de_hotel set baja_hotel_fecha_fin=getdate() where @idauxiliar=id_baja_de_hotel
+	end
+end
+go
+
+/*********************************HABITACION******************************************************/
+Create procedure [NO_TRIGGERS].sp_create_habitacion 
+@idhotel int, @numeroHabitacion int, @piso int, @habitacionfrente nvarchar(10), @tipoHabitacion int, @descripcionhabitacion nvarchar(200) 
+as
+begin
+	if ((select count (habitacion_numero) from [NO_TRIGGERS].Habitacion h where h.id_hotel=@idhotel and h.habitacion_numero=@numeroHabitacion) <=0) --Me fijo que solo se pueda crear si no hay ninguna habitacion con el mismo numero
+	insert into [NO_TRIGGERS].Habitacion values (@numerohabitacion,@piso,@habitacionfrente,1,0,@descripcionhabitacion,@tipoHabitacion,@idhotel)
+
+end
+go
+
+create procedure [NO_TRIGGERS].sp_modify_habitacion
+@idhotel int , @idhabitacion int , @numeronuevo int, @pisonuevo int, @ubicacionnueva nvarchar(10),@nuevadescripcion nvarchar(200)
+as 
+begin
+declare @bitauxiliar int
+set @bitauxiliar = (select (count(id_habitacion) from [NO_TRIGGERS].Habitacion WHERE id_hotel=@idhotel and id_habitacion=@idhabitacion))
+	if( @bitauxiliar<=1)
+		begin
+			update [NO_TRIGGERS].Habitacion set habitacion_numero=@numeronuevo , habitacion_piso=@pisonuevo, habitacion_frente=@ubicacionnueva, habitacion_descripcion=@nuevadescripcion
+		end
+end
+go
+
 
 --exec [NO_TRIGGERS].sp_modifcar_hotel 1, 'bolivia', 100, 'miami', 'EEUU', 'asd', 8, 20
 --select top 1000 * from [NO_TRIGGERS].fn_buscar_cliente_para_modificar('AARON','Castillo',null,97645361,null)
@@ -617,7 +677,6 @@ IF OBJECT_ID ('[NO_TRIGGERS].TipoDeHabitacion' , 'U' ) IS NOT NULL
 CREATE TABLE [NO_TRIGGERS].TipoDeHabitacion
 (
 id_tipo_habitacion int identity (1,1) NOT NULL,
-tipo_habitacion_descripcion nvarchar(200),
 tipo_habitacion_porcentual float,
 tipo_habitacion_codigo int
 CONSTRAINT pk_id_tipo_habitacion PRIMARY KEY CLUSTERED (id_tipo_habitacion)
@@ -634,6 +693,7 @@ habitacion_piso int,
 habitacion_frente nvarchar(10),
 habitacion_habilitada bit, --va a indicar con 0 que esta dada de baja y con 1 que esta habilitada
 habitacion_ocupada bit, --va a indicar con 0 que esta ocupada y con 1 que esta desocupada
+habitacion_detalle nvarchar(200),
 id_tipo_habitacion int,
 id_hotel int,
 CONSTRAINT pk_id_habitacion PRIMARY KEY CLUSTERED (id_habitacion)
@@ -774,6 +834,7 @@ CREATE TABLE [NO_TRIGGERS].Baja_de_hotel
 id_baja_de_hotel int identity (1,1) NOT NULL,
 baja_hotel_fecha_inicio datetime,
 baja_hotel_fecha_fin datetime,
+baja_de_hotel_motivo nvarchar(300),
 id_hotel int,
 CONSTRAINT pk_baja_de_hotel PRIMARY KEY CLUSTERED (id_baja_de_hotel)
 )
@@ -968,9 +1029,8 @@ drop table #bad_emails
 --select * from [NO_TRIGGERS].cliente
 
 --Tipo de Habitacion ------- 5
-insert into [NO_TRIGGERS].tipoDeHabitacion (tipo_habitacion_descripcion,tipo_habitacion_porcentual,tipo_habitacion_codigo)
+insert into [NO_TRIGGERS].tipoDeHabitacion (tipo_habitacion_porcentual,tipo_habitacion_codigo)
 select distinct 
-	Habitacion_Tipo_Descripcion,
 	Habitacion_Tipo_Porcentual,
 	Habitacion_Tipo_Codigo
 from gd_esquema.Maestra
@@ -978,12 +1038,13 @@ from gd_esquema.Maestra
 go
 
 --Habitacion -----------------------------  332
-insert into [NO_TRIGGERS].habitacion (habitacion_numero,habitacion_piso,habitacion_frente,Id_tipo_habitacion,Id_hotel)
+insert into [NO_TRIGGERS].habitacion (habitacion_numero,habitacion_piso,habitacion_frente,Id_tipo_habitacion,habitacion_detalle,id_hotel)
 select distinct 
 	Habitacion_Numero,
 	Habitacion_Piso,
 	Habitacion_Frente,
 	th.id_tipo_habitacion,
+	Habitacion_Tipo_Descripcion,
 	hl.id_hotel
 from gd_esquema.Maestra m
 	join [NO_TRIGGERS].tipoDeHabitacion th on m.Habitacion_Tipo_Codigo=th.tipo_habitacion_codigo
