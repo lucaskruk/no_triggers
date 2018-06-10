@@ -78,4 +78,25 @@ DROP FUNCTION [NO_TRIGGERS].fn_throw_respuesta
 GO
 DROP FUNCTION [NO_TRIGGERS].fn_trow_respuesta
 GO
+DROP PROCEDURE [NO_TRIGGERS].sp_asignar_regimen
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_crear_hotel
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_create_habitacion
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_Dar_Alta_Cliente
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_Dar_Baja_Cliente
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_dardealtahotel
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_modifcar_hotel
+GO
+DROP PROCEDURE [NO_TRIGGERS].sp_modify_cliente
+GO
+DROP FUNCTION [NO_TRIGGERS].fn_cliente_habilitado
+GO
+DROP FUNCTION [NO_TRIGGERS].fn_trow_Exception
+GO
+
 

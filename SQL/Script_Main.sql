@@ -259,7 +259,7 @@ go
 create function [NO_TRIGGERS].fn_Devolve_Usuarios (@Usuario nvarchar(100))
 returns table
 as
-	RETURN (select * from [NO_TRIGGERS].Usuario where usuario_username = @Usuario)
+	RETURN (select * from [NO_TRIGGERS].Usuario us where us.usuario_username = @Usuario)
 go
 
 --select * from [NO_TRIGGERS].fn_Devolve_Usuarios('REYDELOSMINISUPERS')
@@ -450,7 +450,7 @@ go
 Create FUNCTION [NO_TRIGGERS].fn_buscar_hotel_para_modificar ( @cantidadestrellas int, @ciudad nvarchar(100), @pais nvarchar(100))
 returns table 
 as 
-	return (select h.id_hotel, h.hotel_fecha_creacion, h.hotel_cantidad_estrellas, h.hotel_recarga_estrella, h.hotel_estado, d.direccion_calle, d.direccion_altura, c.ciudad_nombre, p.pais_nombre from [NO_TRIGGERS].Hotel h, [NO_TRIGGERS].Direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE (@cantidadestrellas is null or h.hotel_cantidad_estrellas=@cantidadestrellas) AND h.id_direccion=d.id_direccion AND d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais and (p.pais_nombre=@pais or @pais is null) and (c.ciudad_nombre=@ciudad or @ciudad is null))
+	return (select h.id_hotel, h.hotel_fecha_creacion, h.hotel_cantidad_estrellas, h.hotel_recarga_estrella, h.hotel_estado, d.direccion_calle, d.direccion_altura, c.ciudad_nombre, p.pais_nombre from [NO_TRIGGERS].Hotel h, [NO_TRIGGERS].Direccion d, [NO_TRIGGERS].Ciudad c, [NO_TRIGGERS].Pais p WHERE (@cantidadestrellas is null or h.hotel_cantidad_estrellas=@cantidadestrellas) AND h.id_direccion=d.id_direccion AND d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais and (p.pais_nombre=@pais or @pais is null) and (c.ciudad_nombre=@ciudad or @ciudad is null))
 go
 
 create function [no_triggers].fn_existencia_de_reservas_futuras (@idhotel int, @fechafin datetime) --probar!
@@ -517,7 +517,7 @@ create procedure [NO_TRIGGERS].sp_modify_habitacion
 as 
 begin
 declare @bitauxiliar int
-set @bitauxiliar = (select (count(id_habitacion) from [NO_TRIGGERS].Habitacion WHERE id_hotel=@idhotel and id_habitacion=@idhabitacion))
+set @bitauxiliar = (select count(id_habitacion) from [NO_TRIGGERS].Habitacion WHERE id_hotel=@idhotel and id_habitacion=@idhabitacion)
 	if( @bitauxiliar<=1)
 		begin
 			update [NO_TRIGGERS].Habitacion set habitacion_numero=@numeronuevo , habitacion_piso=@pisonuevo, habitacion_frente=@ubicacionnueva, habitacion_descripcion=@nuevadescripcion
