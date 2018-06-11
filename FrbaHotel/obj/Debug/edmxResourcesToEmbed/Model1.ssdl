@@ -1,0 +1,597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GD1C2018Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="GD1C2018ModelStoreContainer">
+    <EntitySet Name="Baja_de_hotel" EntityType="GD1C2018Model.Store.Baja_de_hotel" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Ciudad" EntityType="GD1C2018Model.Store.Ciudad" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Cliente" EntityType="GD1C2018Model.Store.Cliente" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Consumible" EntityType="GD1C2018Model.Store.Consumible" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Consumible_por_estadia" EntityType="GD1C2018Model.Store.Consumible_por_estadia" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Direccion" EntityType="GD1C2018Model.Store.Direccion" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Estadia" EntityType="GD1C2018Model.Store.Estadia" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Estado_reserva" EntityType="GD1C2018Model.Store.Estado_reserva" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Factura" EntityType="GD1C2018Model.Store.Factura" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Funcionalidad" EntityType="GD1C2018Model.Store.Funcionalidad" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Habitacion" EntityType="GD1C2018Model.Store.Habitacion" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Hotel" EntityType="GD1C2018Model.Store.Hotel" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Item_factura" EntityType="GD1C2018Model.Store.Item_factura" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Metodo_de_pago" EntityType="GD1C2018Model.Store.Metodo_de_pago" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Pais" EntityType="GD1C2018Model.Store.Pais" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Regimen" EntityType="GD1C2018Model.Store.Regimen" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Regimen_por_hotel" EntityType="GD1C2018Model.Store.Regimen_por_hotel" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Reserva" EntityType="GD1C2018Model.Store.Reserva" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Rol" EntityType="GD1C2018Model.Store.Rol" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Rol_por_funcionalidad" EntityType="GD1C2018Model.Store.Rol_por_funcionalidad" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Tipo_documento" EntityType="GD1C2018Model.Store.Tipo_documento" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="TipoDeHabitacion" EntityType="GD1C2018Model.Store.TipoDeHabitacion" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="Usuario" EntityType="GD1C2018Model.Store.Usuario" store:Type="Tables" Schema="NO_TRIGGERS" />
+    <EntitySet Name="usuario_por_hotel" EntityType="GD1C2018Model.Store.usuario_por_hotel" store:Type="Tables" Schema="NO_TRIGGERS" />
+  </EntityContainer>
+  <EntityType Name="Baja_de_hotel">
+    <Key>
+      <PropertyRef Name="id_baja_de_hotel" />
+    </Key>
+    <Property Name="id_baja_de_hotel" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="baja_hotel_fecha_inicio" Type="datetime" />
+    <Property Name="baja_hotel_fecha_fin" Type="datetime" />
+    <Property Name="baja_de_hotel_motivo" Type="nvarchar" MaxLength="300" />
+    <Property Name="id_hotel" Type="int" />
+  </EntityType>
+  <EntityType Name="Ciudad">
+    <Key>
+      <PropertyRef Name="id_ciudad" />
+    </Key>
+    <Property Name="id_ciudad" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id_pais" Type="int" />
+    <Property Name="ciudad_nombre" Type="nvarchar" MaxLength="80" />
+  </EntityType>
+  <EntityType Name="Cliente">
+    <Key>
+      <PropertyRef Name="id_cliente" />
+    </Key>
+    <Property Name="id_cliente" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="cliente_estado" Type="bit" />
+    <Property Name="cliente_nombre" Type="nvarchar" MaxLength="100" />
+    <Property Name="cliente_apellido" Type="nvarchar" MaxLength="200" />
+    <Property Name="cliente_email" Type="nvarchar" MaxLength="200" />
+    <Property Name="cliente_email_invalido" Type="bit" />
+    <Property Name="cliente_fecha_nacimiento" Type="datetime" />
+    <Property Name="id_tipo_documento" Type="int" />
+    <Property Name="cliente_numero_documento" Type="nvarchar" MaxLength="50" />
+    <Property Name="cliente_telefono" Type="nvarchar" MaxLength="50" />
+    <Property Name="id_direccion" Type="int" />
+    <Property Name="id_pais" Type="int" />
+  </EntityType>
+  <EntityType Name="Consumible">
+    <Key>
+      <PropertyRef Name="id_consumible" />
+    </Key>
+    <Property Name="id_consumible" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="consumible_descripcion" Type="nvarchar" MaxLength="100" />
+    <Property Name="consumible_precio" Type="float" />
+    <Property Name="consumible_codigo" Type="int" />
+  </EntityType>
+  <EntityType Name="Consumible_por_estadia">
+    <Key>
+      <PropertyRef Name="id_consumible_por_estadia" />
+    </Key>
+    <Property Name="id_consumible_por_estadia" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id_consumible" Type="int" />
+    <Property Name="id_estadia" Type="int" />
+  </EntityType>
+  <EntityType Name="Direccion">
+    <Key>
+      <PropertyRef Name="id_direccion" />
+    </Key>
+    <Property Name="id_direccion" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="direccion_calle" Type="nvarchar" MaxLength="200" />
+    <Property Name="direccion_altura" Type="int" />
+    <Property Name="direccion_piso" Type="int" />
+    <Property Name="direccion_departamento" Type="nvarchar" MaxLength="4" />
+    <Property Name="id_ciudad" Type="int" />
+  </EntityType>
+  <EntityType Name="Estadia">
+    <Key>
+      <PropertyRef Name="id_estadia" />
+    </Key>
+    <Property Name="id_estadia" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="estadia_fecha_inicio" Type="datetime" />
+    <Property Name="estadia_cantidad_noches" Type="int" />
+    <Property Name="id_habitacion" Type="int" />
+    <Property Name="id_reserva" Type="int" />
+    <Property Name="id_cliente" Type="int" />
+  </EntityType>
+  <EntityType Name="Estado_reserva">
+    <Key>
+      <PropertyRef Name="id_estado_reserva" />
+    </Key>
+    <Property Name="id_estado_reserva" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="estado_reserva_descripcion" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="Factura">
+    <Key>
+      <PropertyRef Name="id_factura" />
+    </Key>
+    <Property Name="id_factura" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="factura_numero" Type="int" />
+    <Property Name="factura_tipo" Type="char" MaxLength="1" />
+    <Property Name="factura_fecha" Type="datetime" />
+    <Property Name="factura_total" Type="float" />
+    <Property Name="id_cliente" Type="int" />
+    <Property Name="id_estadia" Type="int" />
+    <Property Name="id_hotel" Type="int" />
+  </EntityType>
+  <EntityType Name="Funcionalidad">
+    <Key>
+      <PropertyRef Name="id_funcionalidad" />
+    </Key>
+    <Property Name="id_funcionalidad" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="funcionalidad_descripcion" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Habitacion">
+    <Key>
+      <PropertyRef Name="id_habitacion" />
+    </Key>
+    <Property Name="id_habitacion" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="habitacion_numero" Type="int" />
+    <Property Name="habitacion_piso" Type="int" />
+    <Property Name="habitacion_frente" Type="nvarchar" MaxLength="10" />
+    <Property Name="habitacion_habilitada" Type="bit" />
+    <Property Name="habitacion_ocupada" Type="bit" />
+    <Property Name="habitacion_detalle" Type="nvarchar" MaxLength="200" />
+    <Property Name="id_tipo_habitacion" Type="int" />
+    <Property Name="id_hotel" Type="int" />
+  </EntityType>
+  <EntityType Name="Hotel">
+    <Key>
+      <PropertyRef Name="id_hotel" />
+    </Key>
+    <Property Name="id_hotel" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id_direccion" Type="int" />
+    <Property Name="hotel_nombre" Type="nvarchar" MaxLength="100" />
+    <Property Name="hotel_mail" Type="nvarchar" MaxLength="200" />
+    <Property Name="hotel_telefono" Type="nvarchar" MaxLength="50" />
+    <Property Name="hotel_cantidad_estrellas" Type="float" />
+    <Property Name="hotel_recarga_estrella" Type="float" />
+    <Property Name="hotel_fecha_creacion" Type="datetime" />
+    <Property Name="hotel_estado" Type="bit" />
+  </EntityType>
+  <EntityType Name="Item_factura">
+    <Key>
+      <PropertyRef Name="id_item_factura" />
+    </Key>
+    <Property Name="id_item_factura" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="item_factura_cantidad" Type="int" />
+    <Property Name="item_factura_monto" Type="float" />
+    <Property Name="id_factura" Type="int" />
+    <Property Name="id_consumible" Type="int" />
+  </EntityType>
+  <EntityType Name="Metodo_de_pago">
+    <Key>
+      <PropertyRef Name="id_metodo_de_pago" />
+    </Key>
+    <Property Name="id_metodo_de_pago" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="metodo_de_pago_nombre" Type="nvarchar" MaxLength="20" />
+    <Property Name="metodo_de_pago_detalles" Type="nvarchar" MaxLength="300" />
+  </EntityType>
+  <EntityType Name="Pais">
+    <Key>
+      <PropertyRef Name="id_pais" />
+    </Key>
+    <Property Name="id_pais" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="pais_nombre" Type="nvarchar" MaxLength="40" />
+    <Property Name="pais_nacionalidad" Type="nvarchar" MaxLength="80" />
+  </EntityType>
+  <EntityType Name="Regimen">
+    <Key>
+      <PropertyRef Name="id_regimen" />
+    </Key>
+    <Property Name="id_regimen" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="regimen_descripcion" Type="nvarchar" MaxLength="200" />
+    <Property Name="regimen_precio" Type="float" />
+    <Property Name="regimen_estado" Type="bit" />
+  </EntityType>
+  <EntityType Name="Regimen_por_hotel">
+    <Key>
+      <PropertyRef Name="id_regimen_por_hotel" />
+    </Key>
+    <Property Name="id_regimen_por_hotel" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id_regimen" Type="int" />
+    <Property Name="id_hotel" Type="int" />
+  </EntityType>
+  <EntityType Name="Reserva">
+    <Key>
+      <PropertyRef Name="id_reserva" />
+    </Key>
+    <Property Name="id_reserva" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="reserva_fecha_inicio" Type="datetime" />
+    <Property Name="reserva_cantidad_noches" Type="int" />
+    <Property Name="reserva_numero_codigo" Type="int" />
+    <Property Name="id_reserva_cambiada_por_user" Type="int" />
+    <Property Name="id_hotel" Type="int" />
+    <Property Name="id_habitacion" Type="int" />
+    <Property Name="id_reserva_estado" Type="int" />
+    <Property Name="id_regimen" Type="int" />
+  </EntityType>
+  <EntityType Name="Rol">
+    <Key>
+      <PropertyRef Name="id_rol" />
+    </Key>
+    <Property Name="id_rol" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="rol_nombre" Type="nvarchar" MaxLength="100" />
+    <Property Name="rol_estado" Type="bit" />
+  </EntityType>
+  <EntityType Name="Rol_por_funcionalidad">
+    <Key>
+      <PropertyRef Name="id_rol_por_funcionalidad" />
+    </Key>
+    <Property Name="id_rol_por_funcionalidad" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id_rol" Type="int" />
+    <Property Name="id_funcionalidad" Type="int" />
+  </EntityType>
+  <EntityType Name="Tipo_documento">
+    <Key>
+      <PropertyRef Name="id_tipo_documento" />
+    </Key>
+    <Property Name="id_tipo_documento" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="tipo_de_documento_nombre" Type="nvarchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="TipoDeHabitacion">
+    <Key>
+      <PropertyRef Name="id_tipo_habitacion" />
+    </Key>
+    <Property Name="id_tipo_habitacion" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="tipo_habitacion_porcentual" Type="float" />
+    <Property Name="tipo_habitacion_codigo" Type="int" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="id_usuario" />
+    </Key>
+    <Property Name="id_usuario" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="usuario_username" Type="nvarchar" MaxLength="100" />
+    <Property Name="usuario_nombre" Type="nvarchar" MaxLength="200" />
+    <Property Name="usuario_apellido" Type="nvarchar" MaxLength="200" />
+    <Property Name="usuario_password" Type="nvarchar" MaxLength="256" />
+    <Property Name="usuario_email" Type="nvarchar" MaxLength="200" />
+    <Property Name="usuario_fecha_nacimiento" Type="datetime" />
+    <Property Name="usuario_cantidad_intentos_fallidos" Type="int" />
+    <Property Name="id_tipo_documento" Type="int" />
+    <Property Name="usuario_numero_documento" Type="nvarchar" MaxLength="50" />
+    <Property Name="usuario_telefono" Type="nvarchar" MaxLength="50" />
+    <Property Name="usuario_habilitado" Type="bit" />
+    <Property Name="id_rol" Type="int" />
+  </EntityType>
+  <EntityType Name="usuario_por_hotel">
+    <Key>
+      <PropertyRef Name="id_usuario_por_hotel" />
+    </Key>
+    <Property Name="id_usuario_por_hotel" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id_usuario" Type="int" />
+    <Property Name="id_hotel" Type="int" />
+  </EntityType>
+  <Function Name="fn_buscar_cliente_para_modificar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="Apellido" Type="nvarchar" Mode="In" />
+    <Parameter Name="TipoDocumento" Type="int" Mode="In" />
+    <Parameter Name="DocumentoNumero" Type="nvarchar" Mode="In" />
+    <Parameter Name="email" Type="nvarchar" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="cliente_nombre" Type="nvarchar" MaxLength="100" />
+          <Property Name="cliente_apellido" Type="nvarchar" MaxLength="200" />
+          <Property Name="cliente_email" Type="nvarchar" MaxLength="200" />
+          <Property Name="cliente_email_invalido" Type="bit" />
+          <Property Name="tipo_de_documento_nombre" Type="nvarchar" MaxLength="30" />
+          <Property Name="cliente_numero_documento" Type="nvarchar" MaxLength="50" />
+          <Property Name="cliente_telefono" Type="nvarchar" MaxLength="50" />
+          <Property Name="direccion_calle" Type="nvarchar" MaxLength="200" />
+          <Property Name="direccion_altura" Type="int" />
+          <Property Name="direccion_piso" Type="int" />
+          <Property Name="direccion_departamento" Type="nvarchar" MaxLength="4" />
+          <Property Name="ciudad_nombre" Type="nvarchar" MaxLength="80" />
+          <Property Name="pais_nombre" Type="nvarchar" MaxLength="40" />
+          <Property Name="pais_nacionalidad" Type="nvarchar" MaxLength="80" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="fn_buscar_hotel_para_modificar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="cantidadestrellas" Type="int" Mode="In" />
+    <Parameter Name="ciudad" Type="nvarchar" Mode="In" />
+    <Parameter Name="pais" Type="nvarchar" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="id_hotel" Type="int" Nullable="false" />
+          <Property Name="hotel_fecha_creacion" Type="datetime" />
+          <Property Name="hotel_cantidad_estrellas" Type="float" />
+          <Property Name="hotel_recarga_estrella" Type="float" />
+          <Property Name="hotel_estado" Type="bit" />
+          <Property Name="direccion_calle" Type="nvarchar" MaxLength="200" />
+          <Property Name="direccion_altura" Type="int" />
+          <Property Name="ciudad_nombre" Type="nvarchar" MaxLength="80" />
+          <Property Name="pais_nombre" Type="nvarchar" MaxLength="40" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="fn_castear_DataTime" ReturnType="datetime" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="fecha" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="fn_chequear_existencia_rol" ReturnType="bit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Rol_nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="fn_cliente_habilitado" ReturnType="bit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="ClienteNombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="ClienteApellido" Type="nvarchar" Mode="In" />
+    <Parameter Name="ClienteEmail" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="fn_Devolve_Usuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Usuario" Type="nvarchar" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="usuario_username" Type="nvarchar" MaxLength="100" />
+          <Property Name="usuario_nombre" Type="nvarchar" MaxLength="200" />
+          <Property Name="usuario_apellido" Type="nvarchar" MaxLength="200" />
+          <Property Name="usuario_password" Type="nvarchar" MaxLength="256" />
+          <Property Name="usuario_email" Type="nvarchar" MaxLength="200" />
+          <Property Name="usuario_fecha_nacimiento" Type="datetime" />
+          <Property Name="usuario_cantidad_intentos_fallidos" Type="int" />
+          <Property Name="id_tipo_documento" Type="int" />
+          <Property Name="usuario_numero_documento" Type="nvarchar" MaxLength="50" />
+          <Property Name="usuario_telefono" Type="nvarchar" MaxLength="50" />
+          <Property Name="usuario_habilitado" Type="bit" />
+          <Property Name="id_rol" Type="int" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="fn_encriptar" ReturnType="nvarchar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="contrasenia" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="fn_existencia_de_reservas_futuras" ReturnType="bit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="idhotel" Type="int" Mode="In" />
+    <Parameter Name="fechafin" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="fn_hay_habitaciones_disponibles" ReturnType="bit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="idhotel" Type="int" Mode="In" />
+    <Parameter Name="idtipodehabitacion" Type="int" Mode="In" />
+    <Parameter Name="fechainicio" Type="datetime" Mode="In" />
+    <Parameter Name="fechafin" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="fn_hoteles_de_usuario" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Usuario" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="fn_permitir_cambios_administrador" ReturnType="bit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="usuarioAdministrador" Type="nvarchar" Mode="In" />
+    <Parameter Name="usuarioAModificar" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="fn_throw_respuesta" ReturnType="nvarchar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="resultado" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="fn_trow_Exception" ReturnType="nvarchar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Mensaje" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="fn_validar_password" ReturnType="bit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="usuario" Type="nvarchar" Mode="In" />
+    <Parameter Name="password" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_a_Cero_Intentos_fallidos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="usuario" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_add_ciudad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="ciudad" Type="nvarchar" Mode="In" />
+    <Parameter Name="pais" Type="nvarchar" Mode="In" />
+    <Parameter Name="nacionalidad" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_add_cliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="apellido" Type="nvarchar" Mode="In" />
+    <Parameter Name="email" Type="nvarchar" Mode="In" />
+    <Parameter Name="fechanacimiento" Type="datetime" Mode="In" />
+    <Parameter Name="tipodocumento" Type="int" Mode="In" />
+    <Parameter Name="numerodocumento" Type="nvarchar" Mode="In" />
+    <Parameter Name="telefono" Type="nvarchar" Mode="In" />
+    <Parameter Name="calle" Type="nvarchar" Mode="In" />
+    <Parameter Name="altura" Type="int" Mode="In" />
+    <Parameter Name="piso" Type="int" Mode="In" />
+    <Parameter Name="departamento" Type="nvarchar" Mode="In" />
+    <Parameter Name="ciudadNombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="paisResidencia" Type="nvarchar" Mode="In" />
+    <Parameter Name="nacionalidadresidencia" Type="nvarchar" Mode="In" />
+    <Parameter Name="paisnacimiento" Type="nvarchar" Mode="In" />
+    <Parameter Name="nacionalidadnacimiento" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_add_direccion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="calle" Type="nvarchar" Mode="In" />
+    <Parameter Name="altura" Type="int" Mode="In" />
+    <Parameter Name="piso" Type="int" Mode="In" />
+    <Parameter Name="departamento" Type="nvarchar" Mode="In" />
+    <Parameter Name="ciudad" Type="nvarchar" Mode="In" />
+    <Parameter Name="paisresidencia" Type="nvarchar" Mode="In" />
+    <Parameter Name="NombreNacionalidadResidencia" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_add_pais" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="pais" Type="nvarchar" Mode="In" />
+    <Parameter Name="nacionalidad" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_asignar_funcionalidad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Rol_nombre" Type="varchar" Mode="In" />
+    <Parameter Name="Funcionalidad" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_asignar_regimen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="id_hotel" Type="int" Mode="In" />
+    <Parameter Name="id_regimen" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Cambiar_Contrasenia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Usuario" Type="nvarchar" Mode="In" />
+    <Parameter Name="NuevaContraseña" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_chequear_existencia_rol" ReturnType="bit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Rol_nombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_chequear_intentos_fallidos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Nombre_usuario" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_crear_usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="nombreusuario" Type="nvarchar" Mode="In" />
+    <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="apellido" Type="nvarchar" Mode="In" />
+    <Parameter Name="password" Type="nvarchar" Mode="In" />
+    <Parameter Name="email" Type="nvarchar" Mode="In" />
+    <Parameter Name="fechanacimiento" Type="datetime" Mode="In" />
+    <Parameter Name="tipodocumento" Type="int" Mode="In" />
+    <Parameter Name="numero_documento" Type="nvarchar" Mode="In" />
+    <Parameter Name="numerotelefono" Type="nvarchar" Mode="In" />
+    <Parameter Name="rolasignado" Type="int" Mode="In" />
+    <Parameter Name="hotel" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_create_habitacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="idhotel" Type="int" Mode="In" />
+    <Parameter Name="numeroHabitacion" Type="int" Mode="In" />
+    <Parameter Name="piso" Type="int" Mode="In" />
+    <Parameter Name="habitacionfrente" Type="nvarchar" Mode="In" />
+    <Parameter Name="tipoHabitacion" Type="int" Mode="In" />
+    <Parameter Name="descripcionhabitacion" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Dar_Alta_Cliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="Apellido" Type="nvarchar" Mode="In" />
+    <Parameter Name="TipoDocumento" Type="int" Mode="In" />
+    <Parameter Name="DocumentoNumero" Type="nvarchar" Mode="In" />
+    <Parameter Name="email" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Dar_Baja_Cliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="Apellido" Type="nvarchar" Mode="In" />
+    <Parameter Name="TipoDocumento" Type="int" Mode="In" />
+    <Parameter Name="DocumentoNumero" Type="nvarchar" Mode="In" />
+    <Parameter Name="email" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Dar_Baja_Usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="UsuarioAdministrador" Type="nvarchar" Mode="In" />
+    <Parameter Name="UsuarioADarBAja" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_dardealtahotel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="idhotel" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_desasignar_funcionalidad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Rol_nombre" Type="varchar" Mode="In" />
+    <Parameter Name="Funcionalidad" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Incrementar_Intentos_fallidos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="usuario" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_listar_funcionalidades" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS" />
+  <Function Name="sp_modifcar_hotel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="id_hotel_a_modificar" Type="int" Mode="In" />
+    <Parameter Name="calle" Type="nvarchar" Mode="In" />
+    <Parameter Name="altura" Type="int" Mode="In" />
+    <Parameter Name="ciudad" Type="nvarchar" Mode="In" />
+    <Parameter Name="pais" Type="nvarchar" Mode="In" />
+    <Parameter Name="nacionalidad" Type="nvarchar" Mode="In" />
+    <Parameter Name="cantidadestrellas" Type="int" Mode="In" />
+    <Parameter Name="recargaestrella" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_modificar_estado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Cliente" Type="nvarchar" Mode="In" />
+    <Parameter Name="ClienteApellido" Type="nvarchar" Mode="In" />
+    <Parameter Name="ClienteEmail" Type="nvarchar" Mode="In" />
+    <Parameter Name="Estado" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="sp_modificar_rol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Nombre_rol_a_modificar" Type="varchar" Mode="In" />
+    <Parameter Name="Nuevo_nombre" Type="varchar" Mode="In" />
+    <Parameter Name="estado_nuevo" Type="int" Mode="In" />
+    <Parameter Name="funcionalidad_nueva" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_modificarUsuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="UsuarioAMofificar" Type="nvarchar" Mode="In" />
+    <Parameter Name="nombreusuario" Type="nvarchar" Mode="In" />
+    <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="apellido" Type="nvarchar" Mode="In" />
+    <Parameter Name="email" Type="nvarchar" Mode="In" />
+    <Parameter Name="fechanacimiento" Type="datetime" Mode="In" />
+    <Parameter Name="tipodocumento" Type="int" Mode="In" />
+    <Parameter Name="numero_documento" Type="nvarchar" Mode="In" />
+    <Parameter Name="numerotelefono" Type="nvarchar" Mode="In" />
+    <Parameter Name="rol" Type="int" Mode="In" />
+    <Parameter Name="hotel" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_modify_cliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="apellido" Type="nvarchar" Mode="In" />
+    <Parameter Name="tipoDocumento" Type="int" Mode="In" />
+    <Parameter Name="numerodocumento" Type="nvarchar" Mode="In" />
+    <Parameter Name="email" Type="nvarchar" Mode="In" />
+    <Parameter Name="nombrenuevo" Type="nvarchar" Mode="In" />
+    <Parameter Name="apellidonuevo" Type="nvarchar" Mode="In" />
+    <Parameter Name="emailnuevo" Type="nvarchar" Mode="In" />
+    <Parameter Name="fechanacimientonuevo" Type="nvarchar" Mode="In" />
+    <Parameter Name="tipodocumentonuevo" Type="int" Mode="In" />
+    <Parameter Name="documentonuevo" Type="nvarchar" Mode="In" />
+    <Parameter Name="telefononuevo" Type="nvarchar" Mode="In" />
+    <Parameter Name="callenueva" Type="nvarchar" Mode="In" />
+    <Parameter Name="alturanueva" Type="int" Mode="In" />
+    <Parameter Name="pisonuevo" Type="int" Mode="In" />
+    <Parameter Name="departamentonuevo" Type="int" Mode="In" />
+    <Parameter Name="ciudadnueva" Type="nvarchar" Mode="In" />
+    <Parameter Name="paisnuevo" Type="nvarchar" Mode="In" />
+    <Parameter Name="nacionalidadnueva" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_mostrar_roles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS" />
+  <Function Name="sp_rol_crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Nombre_rol" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_rol_dar_de_baja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Nombre_rol" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_rol_modificar_estado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="NO_TRIGGERS">
+    <Parameter Name="Nombre_rol" Type="varchar" Mode="In" />
+    <Parameter Name="estado_modificado" Type="int" Mode="In" />
+  </Function>
+  <!--Se encontraron errores durante la generación:
+      advertencia 6013: La tabla o vista 'GD1C2018.gd_esquema.Maestra' no tiene una clave principal definida y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+      
+      <EntityType Name="Maestra">
+        <Property Name="Hotel_Ciudad" Type="nvarchar" MaxLength="255" />
+        <Property Name="Hotel_Calle" Type="nvarchar" MaxLength="255" />
+        <Property Name="Hotel_Nro_Calle" Type="numeric" />
+        <Property Name="Hotel_CantEstrella" Type="numeric" />
+        <Property Name="Hotel_Recarga_Estrella" Type="numeric" />
+        <Property Name="Habitacion_Numero" Type="numeric" />
+        <Property Name="Habitacion_Piso" Type="numeric" />
+        <Property Name="Habitacion_Frente" Type="nvarchar" MaxLength="50" />
+        <Property Name="Habitacion_Tipo_Codigo" Type="numeric" />
+        <Property Name="Habitacion_Tipo_Descripcion" Type="nvarchar" MaxLength="255" />
+        <Property Name="Habitacion_Tipo_Porcentual" Type="numeric" Scale="2" />
+        <Property Name="Regimen_Descripcion" Type="nvarchar" MaxLength="255" />
+        <Property Name="Regimen_Precio" Type="numeric" Scale="2" />
+        <Property Name="Reserva_Fecha_Inicio" Type="datetime" />
+        <Property Name="Reserva_Codigo" Type="numeric" />
+        <Property Name="Reserva_Cant_Noches" Type="numeric" />
+        <Property Name="Estadia_Fecha_Inicio" Type="datetime" />
+        <Property Name="Estadia_Cant_Noches" Type="numeric" />
+        <Property Name="Consumible_Codigo" Type="numeric" />
+        <Property Name="Consumible_Descripcion" Type="nvarchar" MaxLength="255" />
+        <Property Name="Consumible_Precio" Type="numeric" Scale="2" />
+        <Property Name="Item_Factura_Cantidad" Type="numeric" />
+        <Property Name="Item_Factura_Monto" Type="numeric" Scale="2" />
+        <Property Name="Factura_Nro" Type="numeric" />
+        <Property Name="Factura_Fecha" Type="datetime" />
+        <Property Name="Factura_Total" Type="numeric" Scale="2" />
+        <Property Name="Cliente_Pasaporte_Nro" Type="numeric" />
+        <Property Name="Cliente_Apellido" Type="nvarchar" MaxLength="255" />
+        <Property Name="Cliente_Nombre" Type="nvarchar" MaxLength="255" />
+        <Property Name="Cliente_Fecha_Nac" Type="datetime" />
+        <Property Name="Cliente_Mail" Type="nvarchar" MaxLength="255" />
+        <Property Name="Cliente_Dom_Calle" Type="nvarchar" MaxLength="255" />
+        <Property Name="Cliente_Nro_Calle" Type="numeric" />
+        <Property Name="Cliente_Piso" Type="numeric" />
+        <Property Name="Cliente_Depto" Type="nvarchar" MaxLength="50" />
+        <Property Name="Cliente_Nacionalidad" Type="nvarchar" MaxLength="255" />
+      </EntityType>-->
+</Schema>

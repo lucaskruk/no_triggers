@@ -58,6 +58,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -106,93 +107,6 @@
     </Compile>
     <Compile Include="CancelarReserva\Confirmacion_de_cancelacion.Designer.cs">
       <DependentUpon>Confirmacion_de_cancelacion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\baja_de_hotel.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\ciudad.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\cliente.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\consumible.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\consumible_por_estadia.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\Datos.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Datos.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\Datos.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\Datos.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Datos.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\direccion.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\estadia.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\estado_reserva.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\factura.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\funcionalidad.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\habitacion.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\hotel.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\item_factura.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\metodo_de_pago.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\pais.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\regimen.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\regimen_por_hotel.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\reserva.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\rol.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\rol_por_funcionalidad.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\sp_mostrar_roles_Result.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\tipoDeHabitacion.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\tipo_documento.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\usuario.cs">
-      <DependentUpon>Datos.tt</DependentUpon>
     </Compile>
     <Compile Include="FRBAhotel_pantallaPrincipal.cs">
       <SubType>Form</SubType>
@@ -274,6 +188,7 @@
     <Compile Include="RegistrarEstadia\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\Utils.cs" />
     <EmbeddedResource Include="AbmRol\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -322,13 +237,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EntityDeploy Include="Entity\Datos.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Datos.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="Entity\Datos.edmx.diagram">
-      <DependentUpon>Datos.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -341,9 +249,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
@@ -352,18 +257,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Entity\Datos.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Datos.edmx</DependentUpon>
-      <LastGenOutput>Datos.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Entity\Datos.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Datos.edmx</DependentUpon>
-      <LastGenOutput>Datos.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

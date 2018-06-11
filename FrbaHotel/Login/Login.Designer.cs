@@ -31,8 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.usuario = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtUsuario = new System.Windows.Forms.TextBox();
+            this.txtPasswd = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.Iniciar_Sesion = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -62,33 +62,33 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "Por favor, inicie sesión";
             // 
-            // usuario
+            // txtUsuario
             // 
-            this.usuario.BackColor = System.Drawing.Color.Gainsboro;
-            this.usuario.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.usuario.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.usuario.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.usuario.Location = new System.Drawing.Point(224, 124);
-            this.usuario.Name = "usuario";
-            this.usuario.Size = new System.Drawing.Size(211, 17);
-            this.usuario.TabIndex = 2;
-            this.usuario.Text = "Usuario";
-            this.usuario.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtUsuario.BackColor = System.Drawing.Color.Gainsboro;
+            this.txtUsuario.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtUsuario.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUsuario.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.txtUsuario.Location = new System.Drawing.Point(224, 124);
+            this.txtUsuario.Name = "txtUsuario";
+            this.txtUsuario.Size = new System.Drawing.Size(211, 17);
+            this.txtUsuario.TabIndex = 2;
+            this.txtUsuario.Text = "Usuario";
+            this.txtUsuario.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox1
+            // txtPasswd
             // 
-            this.textBox1.BackColor = System.Drawing.Color.Gainsboro;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.textBox1.Location = new System.Drawing.Point(224, 177);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.PasswordChar = '*';
-            this.textBox1.Size = new System.Drawing.Size(211, 17);
-            this.textBox1.TabIndex = 3;
-            this.textBox1.Text = "Contraseña";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox1.UseSystemPasswordChar = true;
+            this.txtPasswd.BackColor = System.Drawing.Color.Gainsboro;
+            this.txtPasswd.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtPasswd.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPasswd.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.txtPasswd.Location = new System.Drawing.Point(224, 177);
+            this.txtPasswd.Name = "txtPasswd";
+            this.txtPasswd.PasswordChar = '*';
+            this.txtPasswd.Size = new System.Drawing.Size(211, 17);
+            this.txtPasswd.TabIndex = 3;
+            this.txtPasswd.Text = "Contraseña";
+            this.txtPasswd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtPasswd.UseSystemPasswordChar = true;
             // 
             // pictureBox1
             // 
@@ -151,8 +151,8 @@
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.Iniciar_Sesion);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.usuario);
+            this.Controls.Add(this.txtPasswd);
+            this.Controls.Add(this.txtUsuario);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -169,8 +169,8 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox usuario;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtUsuario;
+        private System.Windows.Forms.TextBox txtPasswd;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button Iniciar_Sesion;
         private System.Windows.Forms.PictureBox pictureBox2;

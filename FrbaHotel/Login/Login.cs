@@ -1,4 +1,5 @@
-﻿using FrbaHotel.Entity;
+﻿
+using FrbaHotel.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,11 +28,15 @@ namespace FrbaHotel.Login
 
         private void Iniciar_Sesion_Click(object sender, EventArgs e)
         {
-            using (GD1C2018Entities1 context = new GD1C2018Entities1())
-            {
-                var asd = context.Database.SqlQuery<Object>("sp_adasdadas", new SqlParameter("@mierda", 456)).ToList();
-                asd.ForEach(x => x.ToString());
+            string uservar=txtUsuario.Text;
+            string passvar=txtPasswd.Text;
+
+            int asd = Utils.validaUsuario(uservar, passvar);            
+                if (asd==1){
+                MessageBox.Show("Login OK");
+                }
+                else { MessageBox.Show("Login Erroneo"); }
             }
         }
     }
-}
+
