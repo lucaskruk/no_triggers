@@ -19,7 +19,8 @@ namespace FrbaHotel.Utility
 
             string query = string.Concat("select [no_triggers].fn_validar_password('", userN,"','", passwd, "');");
 
-            MessageBox.Show(query);
+            //esta para debuggear
+           // MessageBox.Show(query);
 
             SqlCommand cmdValidaUser = new SqlCommand(query, conex);
 
