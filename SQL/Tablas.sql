@@ -111,6 +111,8 @@ usuario_password nvarchar (256),
 usuario_email nvarchar(200),
 usuario_fecha_nacimiento datetime,
 usuario_cantidad_intentos_fallidos int, /*Se decide guardarlo en la BD para que el usuario no pueda cerrar el programa y volver a intentar ingresar*/
+usuario_hotel_logueado int,
+usuario_last_activity datetime,
 id_tipo_documento int,
 usuario_numero_documento nvarchar(50),
 usuario_telefono nvarchar(50),

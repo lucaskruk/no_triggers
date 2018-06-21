@@ -1,6 +1,6 @@
 ﻿namespace FrbaHotel.Login
 {
-    partial class Login
+    partial class frmLogin
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLogin));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtUsuario = new System.Windows.Forms.TextBox();
@@ -139,7 +139,7 @@
             this.Ir_a_pantalla_principal.UseVisualStyleBackColor = false;
             this.Ir_a_pantalla_principal.Click += new System.EventHandler(this.Ir_a_pantalla_principal_Click);
             // 
-            // Login
+            // frmLogin
             // 
             this.AcceptButton = this.Iniciar_Sesion;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -156,8 +156,12 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Login";
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "frmLogin";
             this.Text = "Login -FRBA Hotel";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmLogin_FormClosing);
+            this.Load += new System.EventHandler(this.frmLogin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);

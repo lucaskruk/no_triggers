@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FrbaHotel.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,9 +11,9 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.Login
 {
-    public partial class Seleccion_de_funcionalidad_obligatorio : Form
+    public partial class FrmMenu : Form
     {
-        public Seleccion_de_funcionalidad_obligatorio()
+        public FrmMenu()
         {
             InitializeComponent();
         }
@@ -21,5 +22,13 @@ namespace FrbaHotel.Login
         {
 
         }
+
+        void Form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Utils.deslogueaUsuario(CommonVars.userLogged);
+            Application.Exit();
+            // Autosave and clear up ressources
+        }
+  
     }
 }

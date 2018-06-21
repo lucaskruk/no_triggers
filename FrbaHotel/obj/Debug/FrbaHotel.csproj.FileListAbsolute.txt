@@ -72,9 +72,6 @@ C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHot
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.Form1.resources
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.Modificar_reserva.resources
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.Ver_disponibilidad.resources
-C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.Login.resources
-C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.Seleccion_de_hotel_optativo.resources
-C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.Seleccion_de_funcionalidad_obligatorio.resources
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.RESERVA_valido_huesped_y_login.resources
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Properties.Resources.resources
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.csproj.GenerateResource.Cache
@@ -84,3 +81,7 @@ C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\bin\Debug\EntityF
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\bin\Debug\EntityFramework.xml
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.frm_Sel_Hotel.resources
+C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.frmLogin.resources
+C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.FrmMenu.resources
+C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\bin\Debug\FrbaHotel.exe.config

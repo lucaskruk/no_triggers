@@ -1,4 +1,5 @@
 ﻿
+using FrbaHotel.Utility;
 using System;
 using System.Data.Entity;
 using System.Data.SqlClient;
@@ -8,6 +9,7 @@ namespace FrbaHotel
 {
     static class Program
     {
+        
         /// <summary>
         /// Punto de entrada principal para la aplicación.
         /// </summary>
@@ -18,5 +20,12 @@ namespace FrbaHotel
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FRBAhotel_pantallaPrincipal());
         }
+    }
+
+    static class CommonVars
+    {
+        public static int idHotelSeleccionado;
+        public static string userLogged;
+        
     }
 }

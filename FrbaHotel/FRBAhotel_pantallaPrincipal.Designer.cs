@@ -97,6 +97,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FRBAhotel_pantallaPrincipal";
             this.Text = "FRBA hotel";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FRBAhotel_pantallaPrincipal_FormClosing);
+            this.Load += new System.EventHandler(this.FRBAhotel_pantallaPrincipal_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -108,6 +110,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button Ingresar_hotel;
+         
+
 
     }
 }

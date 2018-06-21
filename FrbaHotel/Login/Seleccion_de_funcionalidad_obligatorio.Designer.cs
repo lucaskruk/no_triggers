@@ -1,6 +1,6 @@
 ﻿namespace FrbaHotel.Login
 {
-    partial class Seleccion_de_funcionalidad_obligatorio
+    partial class FrmMenu
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Seleccion_de_funcionalidad_obligatorio));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMenu));
             this.label1 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -36,6 +36,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.lblUsr = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -43,7 +44,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("MS Reference Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(12, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(218, 16);
             this.label1.TabIndex = 12;
@@ -127,12 +128,22 @@
             this.button6.Text = "Clientes";
             this.button6.UseVisualStyleBackColor = false;
             // 
-            // Seleccion_de_funcionalidad_obligatorio
+            // lblUsr
+            // 
+            this.lblUsr.AutoSize = true;
+            this.lblUsr.Location = new System.Drawing.Point(12, 9);
+            this.lblUsr.Name = "lblUsr";
+            this.lblUsr.Size = new System.Drawing.Size(91, 13);
+            this.lblUsr.TabIndex = 24;
+            this.lblUsr.Text = "Usuario: Hotel ID:";
+            // 
+            // FrmMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(657, 313);
+            this.Controls.Add(this.lblUsr);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button3);
@@ -141,8 +152,9 @@
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Seleccion_de_funcionalidad_obligatorio";
+            this.Name = "FrmMenu";
             this.Text = "Selección de funcionalidad - FRBA hotel";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_FormClosing);
             this.Load += new System.EventHandler(this.Form3_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -158,5 +170,6 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Label lblUsr;
     }
 }
