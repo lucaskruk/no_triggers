@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FrbaHotel.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -36,7 +37,10 @@ namespace FrbaHotel.AbmRol
         private void FrmModifRol_Load(object sender, EventArgs e)
         {
             lblRolId.Text = string.Concat("ID Rol: ", Convert.ToString(this.idRol));
-
+            txBRoleName.Text = Utils.exeFunString(string.Concat("fn_get_rol_nombre (", Convert.ToString(this.idRol),")"));
+            DataTable lisFunAC = new DataTable();
+            lisFunAC = Utils.sptoTable(string.Concat("sp_lista_fun_act ",Convert.ToString(this.idRol)));
+            dtgFunc.DataSource = lisFunAC;
         }
 
     
