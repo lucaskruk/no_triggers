@@ -102,6 +102,12 @@
     <Compile Include="AbmRegimen\FrmRegimen.Designer.cs">
       <DependentUpon>FrmRegimen.cs</DependentUpon>
     </Compile>
+    <Compile Include="AbmRol\FrmModifRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmRol\FrmModifRol.Designer.cs">
+      <DependentUpon>FrmModifRol.cs</DependentUpon>
+    </Compile>
     <Compile Include="AbmRol\FrmRol.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +215,9 @@
     <Compile Include="Utility\Utils.cs" />
     <EmbeddedResource Include="AbmHabitacion\FrmHabitacion.resx">
       <DependentUpon>FrmHabitacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmRol\FrmModifRol.resx">
+      <DependentUpon>FrmModifRol.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AbmRol\FrmRol.resx">
       <DependentUpon>FrmRol.cs</DependentUpon>

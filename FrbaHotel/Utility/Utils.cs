@@ -14,6 +14,12 @@ namespace FrbaHotel.Utility
         static string con_str = Properties.Settings.Default.ConnectionString.ToString();
 
 
+        /// <summary>
+        /// Metodos genericos para acceder a la base de datos
+        /// </summary>
+        /// <param name="query"></param>
+
+        //Si es un SP los parametros van sin parentesis y separados por comas
         internal static void execSPnoReturn(string query)
         {
             SqlConnection conex = new SqlConnection(con_str);
@@ -49,6 +55,8 @@ namespace FrbaHotel.Utility
             return result;
         
         }
+
+        // en una funcion los parametros se pasan entre parentesis y separados por comas
         internal static string exeFunString(string query)
         {
             string result = "";
@@ -97,7 +105,13 @@ namespace FrbaHotel.Utility
             return result;
         }
 
-       internal static int checkAccesoABM(string nombreABM)
+       /// <summary>
+       /// A partir de aca tenemos los metodos que aplican los genericos creados mas arriba
+       /// </summary>
+       /// <param name="nombreABM"></param>
+       /// <returns></returns>
+        
+        internal static int checkAccesoABM(string nombreABM)
        {
            int result = 0;
            string qHabil = string.Concat("fn_abm_Habilitado ('",CommonVars.userLogged,"','",nombreABM,"');");
@@ -167,6 +181,14 @@ namespace FrbaHotel.Utility
         internal static int validaUsuario()
         {
             throw new NotImplementedException();
+        }
+
+        internal static DataTable getListadoRoles()
+        {
+            DataTable result = new DataTable();
+            string sql = "sp_rol_listado";
+            result = sptoTable(sql);
+            return result;
         }
     }
 }

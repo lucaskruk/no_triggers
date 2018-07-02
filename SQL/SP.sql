@@ -228,8 +228,76 @@ end
 GO
 -- select [no_triggers].fn_abm_habilitado ('Admin','Rol')
 
+
 /*******************PARA ROL*******************************************/
 /*Se decide que se creen los roles en estado ACTIVO*/
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_rol_listado','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_rol_listado 
+go
+create procedure [NO_TRIGGERS].sp_rol_listado 
+
+	AS
+select 
+rl.id_rol, rol_nombre, rol_estado as rol_activo
+,STUFF((SELECT ',' + funcionalidad_descripcion
+              from [NO_TRIGGERS].Funcionalidad f2, [NO_TRIGGERS].Rol_por_funcionalidad rf2
+              WHERE f2.id_funcionalidad = rf2.id_funcionalidad and rf.id_rol=rf2.id_rol order by funcionalidad_descripcion
+              FOR XML PATH (''))
+             , 1, 1, '') as lista_func
+from [NO_TRIGGERS].Rol rl 
+join [NO_TRIGGERS].Rol_por_funcionalidad rf on rl.id_rol=rf.id_rol
+join [NO_TRIGGERS].Funcionalidad f on rf.id_funcionalidad=f.id_funcionalidad
+group by rl.id_rol,rf.id_rol, rol_nombre, rol_estado
+	GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lista_fun_act','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lista_fun_act 
+go
+create procedure [NO_TRIGGERS].sp_lista_fun_act (@id_rol int) 
+
+	AS
+select 
+f.id_funcionalidad,f.funcionalidad_descripcion
+from [NO_TRIGGERS].Rol_por_funcionalidad rf 
+join [NO_TRIGGERS].Funcionalidad f on rf.id_funcionalidad=f.id_funcionalidad
+where rf.id_rol=@id_rol
+	GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lista_fun_disp','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lista_fun_disp
+go
+create procedure [NO_TRIGGERS].sp_lista_fun_disp (@id_rol int) 
+
+	AS
+select 
+f.id_funcionalidad,f.funcionalidad_descripcion
+from [NO_TRIGGERS].Funcionalidad f 
+where f.id_funcionalidad not in (select id_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rff where rff.id_rol=@id_rol)
+	GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_rol_nombre') IS NOT NULL drop function [NO_TRIGGERS].fn_get_rol_nombre
+go
+
+create function [NO_TRIGGERS].fn_get_rol_nombre
+(@id int) returns nvarchar(100)
+	AS 
+		begin
+	declare @Resultado nvarchar(100)
+	select @Resultado=rol_nombre from [NO_TRIGGERS].Rol where id_rol=@id
+	return @resultado
+end
+GO
+
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_set_rol_nombre','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_rol_nombre
+go
+create procedure [NO_TRIGGERS].sp_set_rol_nombre 
+@id int, @Nombre_rol varchar (100)
+	AS
+		update [NO_TRIGGERS].Rol
+		set rol_nombre=@Nombre_rol
+		where id_rol=@id
+	GO
+--exec [NO_TRIGGERS].sp_rol_crear 'Rey de los minisupers'
+GO
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_rol_crear','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_rol_crear 
 go
@@ -281,86 +349,6 @@ create procedure [NO_TRIGGERS].sp_desasignar_funcionalidad
 	AS
 		delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=(select id_rol from [NO_TRIGGERS].rol where rol_nombre=@Rol_nombre)
 	GO
-
-IF OBJECT_ID ('[NO_TRIGGERS].fn_chequear_asignacion_rol') IS NOT NULL drop function [NO_TRIGGERS].sp_chequear_asignacion_rol
-go
-
-
-create function [NO_TRIGGERS].fn_chequear_asignacion_rol 
-(@Rol_nombre varchar(100), @Funcionalidad int) returns bit
-	AS
-		begin
-			declare @Resultado bit
-		if( (select id_rol_por_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rf, [NO_TRIGGERS].rol r, [NO_TRIGGERS].funcionalidad f
-				where r.rol_nombre=@Rol_nombre and f.id_funcionalidad=@Funcionalidad and rf.id_rol=r.id_rol and rf.id_funcionalidad=f.id_funcionalidad)is NOT NULL)
-			set @Resultado=1
-		else
-			set @Resultado=0
-	return @resultado
-end
-GO
--- select [NO_TRIGGERS].sp_chequear_asignacion_rol ('ADMINISTRADOR' ,1)
-
-
-IF OBJECT_ID ('[NO_TRIGGERS].fn_chequear_existencia_rol') IS NOT NULL drop function [NO_TRIGGERS].fn_chequear_existencia_rol
-go
-
-
-create function [NO_TRIGGERS].fn_chequear_existencia_rol
-(@Rol_nombre varchar(100)) returns bit
-	AS 
-		begin
-	declare @Resultado bit
-	if((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre)IS NOT NULL)
-		set @Resultado=1
-	else
-		set @Resultado=0
-	return @Resultado
-end
-GO
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_modificar_rol','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_modificar_rol
-go
-
-create procedure [NO_TRIGGERS].sp_modificar_rol /*Se decide que todos los campos pueden ser modificados a la vez, por lo cual se verifica cuales campos quiere modificar el usuario*/
-@Nombre_rol_a_modificar varchar (100), @Nuevo_nombre varchar (100), @estado_nuevo int, @funcionalidad_nueva int
-	AS
-		if ( @Nuevo_nombre !='')
-		update [NO_TRIGGERS].rol set rol_nombre=@Nuevo_nombre where @Nombre_rol_a_modificar=rol_nombre
-		if (@estado_nuevo is not null)
-		update [NO_TRIGGERS].rol set rol_estado=@estado_nuevo where @Nombre_rol_a_modificar=rol_nombre
-
-		if(@funcionalidad_nueva is not null)---------agrega la funcionalidad
-			begin
-				if not exists (select 1 from [NO_TRIGGERS].Rol_por_funcionalidad rf join [NO_TRIGGERS].Rol r on rf.id_rol=r.id_rol where r.rol_nombre=@Nombre_rol_a_modificar)
-					begin
-						declare @rolid int 
-						select @rolid=id_rol from [NO_TRIGGERS].Rol where rol_nombre=@Nombre_rol_a_modificar
-						insert into [NO_TRIGGERS].Rol_por_funcionalidad (id_rol,id_funcionalidad) values (@rolid,@funcionalidad_nueva)
-					end
-			end
-GO
-
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_mostrar_roles','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_mostrar_roles
-go
-
-create procedure [NO_TRIGGERS].sp_mostrar_roles
-	AS
-		select * from [NO_TRIGGERS].rol
-	GO
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_listar_funcionalidades','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_listar_funcionalidades
-go
-
-create procedure [no_triggers].sp_listar_funcionalidades
-as
-begin
-	Select * from [NO_TRIGGERS].Funcionalidad
-end
-go
-
-
 
 
 
@@ -443,24 +431,6 @@ go
 
 --exec [NO_TRIGGERS].sp_Cambiar_Contraseña 'USER_GUEST2', 'pepita'
 
-IF OBJECT_ID ('[NO_TRIGGERS].fn_trow_Exception') IS NOT NULL drop function [NO_TRIGGERS].fn_trow_Exception
-go
-
-create function [NO_TRIGGERS].fn_trow_Exception(@Mensaje nvarchar(100))
-returns nvarchar(100)
-as begin
-	return @mensaje
-end
-go
-
-IF OBJECT_ID ('[NO_TRIGGERS].fn_throw_respuesta') IS NOT NULL drop function [NO_TRIGGERS].fn_throw_respuesta
-go
-create function [NO_TRIGGERS].fn_throw_respuesta(@resultado bit)
-returns nvarchar(100)
-as begin
-	return @resultado
-end
-go
 IF OBJECT_ID ('[NO_TRIGGERS].sp_Dar_Baja_Usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_Dar_Baja_Usuario
 go
 create proc [NO_TRIGGERS].sp_Dar_Baja_Usuario
@@ -473,15 +443,15 @@ DECLARE @responseMessage nvarchar(250)
 			begin try
 				update [NO_TRIGGERS].Usuario
 				set usuario_habilitado = 0 where @UsuarioADarBAja = usuario_username
-				select [NO_TRIGGERS].fn_trow_Exeption('Dado de Baja Exitosamente')
+				select ('Dado de Baja Exitosamente')
 			end try 
 			begin catch
-				select [NO_TRIGGERS].fn_trow_Exeption('Usuario Inexistente')
+				select ('Usuario Inexistente')
 			end catch
 	end
 	else
 		begin
-			select [NO_TRIGGERS].fn_trow_Exeption('No tenes permisos')
+			select ('No tenes permisos')
 		end 
 	end
 go

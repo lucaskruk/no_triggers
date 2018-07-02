@@ -86,3 +86,4 @@ C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHot
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.frmInicio.resources
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.GenerarModificacionReserva.frmInvalid.resources
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Login.frmMenuReserva.resources
+C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.AbmRol.FrmModifRol.resources

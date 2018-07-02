@@ -29,96 +29,91 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRol));
-            this.lBxRoles = new System.Windows.Forms.ListBox();
-            this.lblSelRol = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.dtGridRoles = new System.Windows.Forms.DataGridView();
+            this.btnCrear = new System.Windows.Forms.Button();
+            this.btnMod = new System.Windows.Forms.Button();
+            this.btnDel = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dtGridRoles)).BeginInit();
             this.SuspendLayout();
             // 
-            // lBxRoles
+            // dtGridRoles
             // 
-            this.lBxRoles.FormattingEnabled = true;
-            this.lBxRoles.Location = new System.Drawing.Point(117, 20);
-            this.lBxRoles.Name = "lBxRoles";
-            this.lBxRoles.Size = new System.Drawing.Size(175, 17);
-            this.lBxRoles.TabIndex = 0;
+            this.dtGridRoles.AllowUserToAddRows = false;
+            this.dtGridRoles.AllowUserToDeleteRows = false;
+            this.dtGridRoles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtGridRoles.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dtGridRoles.Location = new System.Drawing.Point(164, 24);
+            this.dtGridRoles.Name = "dtGridRoles";
+            this.dtGridRoles.ReadOnly = true;
+            this.dtGridRoles.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.dtGridRoles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtGridRoles.Size = new System.Drawing.Size(757, 212);
+            this.dtGridRoles.TabIndex = 2;
             // 
-            // lblSelRol
+            // btnCrear
             // 
-            this.lblSelRol.AutoSize = true;
-            this.lblSelRol.Location = new System.Drawing.Point(32, 24);
-            this.lblSelRol.Name = "lblSelRol";
-            this.lblSelRol.Size = new System.Drawing.Size(79, 13);
-            this.lblSelRol.TabIndex = 1;
-            this.lblSelRol.Text = "Seleccione Rol";
+            this.btnCrear.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnCrear.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCrear.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCrear.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.btnCrear.Location = new System.Drawing.Point(21, 28);
+            this.btnCrear.Name = "btnCrear";
+            this.btnCrear.Size = new System.Drawing.Size(120, 30);
+            this.btnCrear.TabIndex = 3;
+            this.btnCrear.Text = "Crear";
+            this.btnCrear.UseVisualStyleBackColor = false;
             // 
-            // dataGridView1
+            // btnMod
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(325, 24);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(304, 212);
-            this.dataGridView1.TabIndex = 2;
+            this.btnMod.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnMod.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnMod.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMod.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.btnMod.Location = new System.Drawing.Point(21, 89);
+            this.btnMod.Name = "btnMod";
+            this.btnMod.Size = new System.Drawing.Size(120, 30);
+            this.btnMod.TabIndex = 4;
+            this.btnMod.Text = "Modificar";
+            this.btnMod.UseVisualStyleBackColor = false;
+            this.btnMod.Click += new System.EventHandler(this.btnMod_Click);
             // 
-            // button1
+            // btnDel
             // 
-            this.button1.Location = new System.Drawing.Point(87, 97);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(87, 126);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(87, 155);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnDel.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnDel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnDel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDel.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.btnDel.Location = new System.Drawing.Point(21, 150);
+            this.btnDel.Name = "btnDel";
+            this.btnDel.Size = new System.Drawing.Size(120, 30);
+            this.btnDel.TabIndex = 5;
+            this.btnDel.Text = "Eliminar";
+            this.btnDel.UseVisualStyleBackColor = false;
             // 
             // FrmRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(662, 261);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.lblSelRol);
-            this.Controls.Add(this.lBxRoles);
+            this.ClientSize = new System.Drawing.Size(933, 261);
+            this.Controls.Add(this.btnDel);
+            this.Controls.Add(this.btnMod);
+            this.Controls.Add(this.btnCrear);
+            this.Controls.Add(this.dtGridRoles);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmRol";
             this.Text = "Administracion de Roles de Usuario";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dtGridRoles)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ListBox lBxRoles;
-        private System.Windows.Forms.Label lblSelRol;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.DataGridView dtGridRoles;
+        private System.Windows.Forms.Button btnCrear;
+        private System.Windows.Forms.Button btnMod;
+        private System.Windows.Forms.Button btnDel;
     }
 }

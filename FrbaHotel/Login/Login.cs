@@ -28,7 +28,7 @@ namespace FrbaHotel.Login
 
         private void Iniciar_Sesion_Click(object sender, EventArgs e)
         {
-            if (txtPasswd.Text != "" && txtUsuario.Text != "Usuario")
+            if (txtPasswd.Text != "" && txtUsuario.Text != "")
             {
                 string uservar = txtUsuario.Text;
                 string passvar = txtPasswd.Text;
@@ -77,6 +77,11 @@ namespace FrbaHotel.Login
         {
             Application.Exit();
             // Autosave and clear up ressources
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
         }
   
         }

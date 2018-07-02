@@ -208,7 +208,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(906, 365);
+            this.ClientSize = new System.Drawing.Size(854, 365);
             this.Controls.Add(this.btnConsumibles9);
             this.Controls.Add(this.btnListado6);
             this.Controls.Add(this.btnRol1);
@@ -223,7 +223,7 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMenu";
-            this.Text = "Selección de funcionalidad - FRBA hotel";
+            this.Text = "Menu Principal - FRBA hotel";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_FormClosing);
             this.Load += new System.EventHandler(this.Form3_Load);
             this.ResumeLayout(false);

@@ -38,6 +38,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.Ir_a_pantalla_principal = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.lblUser = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -73,7 +74,6 @@
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(211, 17);
             this.txtUsuario.TabIndex = 2;
-            this.txtUsuario.Text = "Usuario";
             this.txtUsuario.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtPasswd
@@ -107,9 +107,9 @@
             this.Iniciar_Sesion.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Iniciar_Sesion.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Iniciar_Sesion.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.Iniciar_Sesion.Location = new System.Drawing.Point(224, 242);
+            this.Iniciar_Sesion.Location = new System.Drawing.Point(224, 218);
             this.Iniciar_Sesion.Name = "Iniciar_Sesion";
-            this.Iniciar_Sesion.Size = new System.Drawing.Size(211, 23);
+            this.Iniciar_Sesion.Size = new System.Drawing.Size(211, 47);
             this.Iniciar_Sesion.TabIndex = 5;
             this.Iniciar_Sesion.Text = "Iniciar sesión";
             this.Iniciar_Sesion.UseVisualStyleBackColor = false;
@@ -144,11 +144,23 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("MS Reference Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label3.Location = new System.Drawing.Point(265, 151);
+            this.label3.Location = new System.Drawing.Point(265, 158);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(135, 16);
             this.label3.TabIndex = 8;
             this.label3.Text = "Ingrese Contraseña";
+            // 
+            // lblUser
+            // 
+            this.lblUser.AutoSize = true;
+            this.lblUser.Font = new System.Drawing.Font("MS Reference Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUser.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblUser.Location = new System.Drawing.Point(278, 105);
+            this.lblUser.Name = "lblUser";
+            this.lblUser.Size = new System.Drawing.Size(109, 16);
+            this.lblUser.TabIndex = 9;
+            this.lblUser.Text = "Ingrese Usuario";
+            this.lblUser.Click += new System.EventHandler(this.label4_Click);
             // 
             // frmLogin
             // 
@@ -158,6 +170,7 @@
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(658, 320);
+            this.Controls.Add(this.lblUser);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.Ir_a_pantalla_principal);
             this.Controls.Add(this.pictureBox2);
@@ -192,5 +205,6 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button Ir_a_pantalla_principal;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblUser;
     }
 }
