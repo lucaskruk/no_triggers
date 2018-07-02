@@ -23,41 +23,51 @@ namespace FrbaHotel.Login
         private void Ir_a_pantalla_principal_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new FRBAhotel_pantallaPrincipal().Show();
+            new FrmInicio().Show();
         }
 
         private void Iniciar_Sesion_Click(object sender, EventArgs e)
         {
-            string uservar=txtUsuario.Text;
-            string passvar=txtPasswd.Text;
+            if (txtPasswd.Text != "" && txtUsuario.Text != "Usuario")
+            {
+                string uservar = txtUsuario.Text;
+                string passvar = txtPasswd.Text;
 
-            int asd = Utils.validaUsuario(uservar, passvar);            
-                if (asd==1){
-                //MessageBox.Show("Login OK");
-                Utils.reseteaContadorfallidos(uservar);
-                this.Visible = false;
-                CommonVars.userLogged = uservar;
+                int asd = Utils.validaUsuario(uservar, passvar);
+                if (asd == 1)
+                {
+                    //MessageBox.Show("Login OK");
+                    Utils.reseteaContadorfallidos(uservar);
+                    this.Visible = false;
+                    CommonVars.userLogged = uservar;
 
-                int idHotelUser = Utils.getIDHotelUser(uservar);
-                if (idHotelUser == 0)
+                    int idHotelUser = Utils.getIDHotelUser(uservar);
+                    if (idHotelUser == 0)
                     {
                         Frm_Sel_Hotel frm_SHotel = new Frm_Sel_Hotel();
                         frm_SHotel.Show();
                     }
                     else
                     {
-                        
+
                         CommonVars.idHotelSeleccionado = idHotelUser;
-                        Utils.logueaUsuario(CommonVars.userLogged,CommonVars.idHotelSeleccionado);
+                        Utils.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
                         FrmMenu frmMenu = new FrmMenu();
                         frmMenu.Show();
                     }
                 }
-                else { MessageBox.Show("Login Erroneo");
-                Utils.aumentaContadorfallidos(uservar);
-                txtPasswd.Text = "";
+                else
+                {
+                    MessageBox.Show("Login Erroneo");
+                    Utils.aumentaContadorfallidos(uservar);
+                    txtPasswd.Text = "";
                 }
             }
+            else {
+                MessageBox.Show("Verifique Usuario y/o Contraseña");
+            }
+           
+           }
 
         private void frmLogin_Load(object sender, EventArgs e)
         {

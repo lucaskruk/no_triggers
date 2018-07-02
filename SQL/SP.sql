@@ -1,6 +1,233 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------STORED PROCEDURES-------------------------------------------------------------------------
+
+
+/*******************PARA LOGIN*******************************************/
+
+-- exec [no_triggers].sp_incrementar_intentos_fallidos 'UsuarioAdministrador2';
+IF OBJECT_ID ('[NO_TRIGGERS].sp_incrementar_intentos_fallidos','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_incrementar_intentos_fallidos
+go
+
+create procedure [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos (@usuario nvarchar(100))
+as
+
+if((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where @usuario= usuario_username ) <2)
+	begin
+	update [NO_TRIGGERS].Usuario
+set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1 where  @usuario=usuario_username
+	end
+else
+	begin	
+	update [NO_TRIGGERS].Usuario
+	set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1,  usuario_habilitado = 0 where  @usuario=usuario_username
+end
+
+go
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_a_cero_intentos_fallidos','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_a_cero_intentos_fallidos
+go
+create procedure [NO_TRIGGERS].sp_a_Cero_Intentos_fallidos (@usuario nvarchar(100))
+as
+update [NO_TRIGGERS].Usuario
+set usuario_cantidad_intentos_fallidos =  0
+where usuario_username = @usuario
+go
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lista_hoteles_disponibles','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lista_hoteles_disponibles
+go
+create procedure [NO_TRIGGERS].sp_lista_hoteles_disponibles (@usuario nvarchar(100))
+as
+
+select uh.id_hotel, isnull(hotel_nombre ,'') as hotel_nombre
+from [NO_TRIGGERS].usuario_por_hotel uh
+join [NO_TRIGGERS].Hotel hh on uh.id_hotel=hh.id_hotel
+where uh.id_usuario=@usuario
+
+go
+
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_set_hotel_logueado','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_hotel_logueado
+go
+create procedure [NO_TRIGGERS].sp_set_hotel_logueado (@usuario nvarchar(100), @hotel_id int)
+as
+begin
+update us
+set us.usuario_hotel_logueado=@hotel_id,us.usuario_last_activity=GETDATE()
+from [NO_TRIGGERS].usuario us
+where us.usuario_username=@usuario
+end
+go
+
+
+-- exec [no_triggers].sp_desloguea_user 'Admin2',1
+
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_desloguea_user','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_desloguea_user
+go
+create procedure [NO_TRIGGERS].sp_desloguea_user (@usuario nvarchar(100))
+as
+begin
+update us
+set us.usuario_hotel_logueado=0
+from [NO_TRIGGERS].usuario us
+where us.usuario_username=@usuario
+end
+go
+
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_logueo') IS NOT NULL drop function [NO_TRIGGERS].fn_get_logueo
+go
+
+create function [NO_TRIGGERS].fn_get_logueo (@usuario nvarchar(256))
+returns int
+as begin
+    declare @result int
+	select @result=isnull(us.usuario_hotel_logueado,0)
+	from [NO_TRIGGERS].usuario us 
+	where us.usuario_username=@usuario
+	return @result
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_encriptar') IS NOT NULL drop function [NO_TRIGGERS].fn_encriptar
+go
+
+create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(256))
+returns nvarchar(255)
+as begin
+    return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @contrasenia)), 3, 255))
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_chequear_usuario_si_habilitado') IS NOT NULL drop function [NO_TRIGGERS].fn_chequear_usuario_si_habilitado
+go
+
+create function [no_triggers].fn_chequear_usuario_si_habilitado (@usuario nvarchar(100))
+returns int
+as
+begin
+declare @result int
+select @result=usuario_habilitado from [NO_TRIGGERS].Usuario where usuario_username=@usuario;
+return @result
+
+end
+
+go
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_chequear_usuario_si_multihotel') IS NOT NULL drop function [NO_TRIGGERS].fn_chequear_usuario_si_multihotel
+go
+
+-- select [NO_TRIGGERS].fn_chequear_usuario_si_multihotel('user_guest1')
+create function [no_triggers].fn_chequear_usuario_si_multihotel (@usuario nvarchar(100))
+returns int
+as
+begin
+declare @result int, @count int
+
+select @count=count(1) from [NO_TRIGGERS].usuario_por_hotel uh 
+join [NO_TRIGGERS].Usuario us on uh.id_usuario=us.id_usuario
+where us.usuario_username=@usuario
+
+if (@count >1)  begin select @result=1 end else begin select @result=0 end
+
+return @result
+
+end
+
+go
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_id_hotel_usuario') IS NOT NULL drop function [NO_TRIGGERS].fn_get_id_hotel_usuario
+go
+-- select [NO_TRIGGERS].fn_chequear_usuario_si_multihotel('user_guest1')
+create function [no_triggers].fn_get_id_hotel_usuario (@usuario nvarchar(100))
+returns int
+as
+begin
+		declare @result int, @multi int
+		select @multi=[NO_TRIGGERS].fn_chequear_usuario_si_multihotel(@usuario)
+		if (@multi=0)
+		begin
+		select @result=max(uh.id_hotel) from [no_triggers].usuario_por_hotel uh
+		join [no_triggers].Usuario us on uh.id_usuario=us.id_usuario
+		where us.usuario_username=@usuario
+		end
+		else select @result=0
+		return @result
+
+end
+
+go
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_hotel_nombre') IS NOT NULL drop function [NO_TRIGGERS].fn_get_hotel_nombre
+go
+-- select [NO_TRIGGERS].fn_get_hotel_nombre(1)
+create function [no_triggers].fn_get_hotel_nombre (@hotelid int)
+returns nvarchar(100)
+as
+begin
+		declare @result nvarchar(100)
+		select @result=hotel_nombre from [no_triggers].hotel h		where id_hotel=@hotelid
+		return @result
+end
+go
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lista_hotel_usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lista_hotel_usuario
+go
+create procedure [NO_TRIGGERS].sp_lista_hotel_usuario (@usuario nvarchar(100))
+as 
+begin
+select hotel_nombre, h.id_hotel from [NO_TRIGGERS].hotel h
+join [NO_TRIGGERS].usuario_por_hotel uh on h.id_hotel=uh.id_hotel
+join [NO_TRIGGERS].Usuario u on uh.id_usuario=u.id_usuario
+where usuario_username=@usuario
+end
+go
+--exec [no_triggers].sp_lista_hotel_usuario 'admin'
+IF OBJECT_ID ('[NO_TRIGGERS].fn_validar_password') IS NOT NULL drop function [NO_TRIGGERS].fn_validar_password
+go
+create function [NO_TRIGGERS].fn_validar_password (@usuario nvarchar(100), @password nvarchar(256))
+returns bit
+as begin
+declare @resultado bit, @password2 nvarchar(256)
+set @password2 = [NO_TRIGGERS].fn_encriptar(@password)
+if (((SELECT usuario_password FROM [NO_TRIGGERS].Usuario WHERE usuario_username=@usuario) = @password2) and ((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where usuario_username = @usuario)<=3)) and ((select usuario_habilitado from [NO_TRIGGERS].Usuario where usuario_username=@usuario)=1)
+	begin	
+		--Ejecutar desde C# el borrar intentos fallidos
+		set @resultado = 1
+	end
+ELSE
+	begin
+		--Ejecutar desde C# el sumar intentos fallidos
+		set @resultado=0
+	end
+return @resultado
+END
+GO
+
+/********************MENU PRINCIPAL************************************************************/
+
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_abm_Habilitado') IS NOT NULL drop function [NO_TRIGGERS].fn_abm_Habilitado
+go
+
+create function [NO_TRIGGERS].fn_abm_Habilitado 
+(@user nvarchar(100), @funcionalidad nvarchar (100)) returns bit
+	AS
+		begin
+			declare @Resultado bit
+		if exists (select fr.id_funcionalidad from [NO_TRIGGERS].Rol_por_funcionalidad fr 
+				join [NO_TRIGGERS].Usuario us on us.id_rol=fr.id_rol
+				join [NO_TRIGGERS].Funcionalidad f on fr.id_funcionalidad=f.id_funcionalidad
+				where f.funcionalidad_descripcion=@Funcionalidad and us.usuario_username=@user)
+			set @Resultado=1
+		else
+			set @Resultado=0
+	return @resultado
+end
+GO
+-- select [no_triggers].fn_abm_habilitado ('Admin','Rol')
+
 /*******************PARA ROL*******************************************/
 /*Se decide que se creen los roles en estado ACTIVO*/
 
@@ -135,196 +362,6 @@ go
 
 
 
-
-/*******************PARA LOGIN*******************************************/
-
--- exec [no_triggers].sp_incrementar_intentos_fallidos 'UsuarioAdministrador2';
-IF OBJECT_ID ('[NO_TRIGGERS].sp_incrementar_intentos_fallidos','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_incrementar_intentos_fallidos
-go
-
-create procedure [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos (@usuario nvarchar(100))
-as
-
-if((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where @usuario= usuario_username ) <2)
-	begin
-	update [NO_TRIGGERS].Usuario
-set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1 where  @usuario=usuario_username
-	end
-else
-	begin	
-	update [NO_TRIGGERS].Usuario
-	set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1,  usuario_habilitado = 0 where  @usuario=usuario_username
-end
-
-go
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_a_cero_intentos_fallidos','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_a_cero_intentos_fallidos
-go
-create procedure [NO_TRIGGERS].sp_a_Cero_Intentos_fallidos (@usuario nvarchar(100))
-as
-update [NO_TRIGGERS].Usuario
-set usuario_cantidad_intentos_fallidos =  0
-where usuario_username = @usuario
-go
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_lista_hoteles_disponibles','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lista_hoteles_disponibles
-go
-create procedure [NO_TRIGGERS].sp_lista_hoteles_disponibles (@usuario nvarchar(100))
-as
-
-select uh.id_hotel, isnull(hotel_nombre ,'') as hotel_nombre
-from [NO_TRIGGERS].usuario_por_hotel uh
-join [NO_TRIGGERS].Hotel hh on uh.id_hotel=hh.id_hotel
-where uh.id_usuario=@usuario
-
-go
-
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_set_hotel_logueado','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_hotel_logueado
-go
-create procedure [NO_TRIGGERS].sp_set_hotel_logueado (@usuario nvarchar(100), @hotel_id int)
-as
-begin
-update us
-set us.usuario_hotel_logueado=@hotel_id,us.usuario_last_activity=GETDATE()
-from [NO_TRIGGERS].usuario us
-where us.usuario_username=@usuario
-end
-go
-
-
-
--- exec [no_triggers].sp_desloguea_user 'Admin2',1
-
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_desloguea_user','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_desloguea_user
-go
-create procedure [NO_TRIGGERS].sp_desloguea_user (@usuario nvarchar(100))
-as
-begin
-update us
-set us.usuario_hotel_logueado=0
-from [NO_TRIGGERS].usuario us
-where us.usuario_username=@usuario
-end
-go
-
-
-IF OBJECT_ID ('[NO_TRIGGERS].fn_get_logueo') IS NOT NULL drop function [NO_TRIGGERS].fn_get_logueo
-go
-
-create function [NO_TRIGGERS].fn_get_logueo (@usuario nvarchar(256))
-returns int
-as begin
-    declare @result int
-	select @result=isnull(us.usuario_hotel_logueado,0)
-	from [NO_TRIGGERS].usuario us 
-	where us.usuario_username=@usuario
-	return @result
-end
-GO
-
-IF OBJECT_ID ('[NO_TRIGGERS].fn_encriptar') IS NOT NULL drop function [NO_TRIGGERS].fn_encriptar
-go
-
-create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(256))
-returns nvarchar(255)
-as begin
-    return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @contrasenia)), 3, 255))
-end
-GO
-
-IF OBJECT_ID ('[NO_TRIGGERS].fn_chequear_usuario_si_habilitado') IS NOT NULL drop function [NO_TRIGGERS].fn_chequear_usuario_si_habilitado
-go
-
-create function [no_triggers].fn_chequear_usuario_si_habilitado (@usuario nvarchar(100))
-returns int
-as
-begin
-declare @result int
-select @result=usuario_habilitado from [NO_TRIGGERS].Usuario where usuario_username=@usuario;
-return @result
-
-end
-
-go
-
-IF OBJECT_ID ('[NO_TRIGGERS].fn_chequear_usuario_si_multihotel') IS NOT NULL drop function [NO_TRIGGERS].fn_chequear_usuario_si_multihotel
-go
-
--- select [NO_TRIGGERS].fn_chequear_usuario_si_multihotel('user_guest1')
-create function [no_triggers].fn_chequear_usuario_si_multihotel (@usuario nvarchar(100))
-returns int
-as
-begin
-declare @result int, @count int
-
-select @count=count(1) from [NO_TRIGGERS].usuario_por_hotel uh 
-join [NO_TRIGGERS].Usuario us on uh.id_usuario=us.id_usuario
-where us.usuario_username=@usuario
-
-if (@count >1)  begin select @result=1 end else begin select @result=0 end
-
-return @result
-
-end
-
-go
-
-IF OBJECT_ID ('[NO_TRIGGERS].fn_get_id_hotel_usuario') IS NOT NULL drop function [NO_TRIGGERS].fn_get_id_hotel_usuario
-go
--- select [NO_TRIGGERS].fn_chequear_usuario_si_multihotel('user_guest1')
-create function [no_triggers].fn_get_id_hotel_usuario (@usuario nvarchar(100))
-returns int
-as
-begin
-declare @result int, @multi int
-select @multi=[NO_TRIGGERS].fn_chequear_usuario_si_multihotel(@usuario)
-if (@multi=0)
-begin
-select @result=max(uh.id_hotel) from [no_triggers].usuario_por_hotel uh
-join [no_triggers].Usuario us on uh.id_usuario=us.id_usuario
-where us.usuario_username=@usuario
-end
-else select @result=0
-return @result
-
-end
-
-go
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_lista_hotel_usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lista_hotel_usuario
-go
-create procedure [NO_TRIGGERS].sp_lista_hotel_usuario (@usuario nvarchar(100))
-as 
-begin
-select hotel_nombre, h.id_hotel from [NO_TRIGGERS].hotel h
-join [NO_TRIGGERS].usuario_por_hotel uh on h.id_hotel=uh.id_hotel
-join [NO_TRIGGERS].Usuario u on uh.id_usuario=u.id_usuario
-where usuario_username=@usuario
-end
-go
---exec [no_triggers].sp_lista_hotel_usuario 'admin'
-IF OBJECT_ID ('[NO_TRIGGERS].fn_validar_password') IS NOT NULL drop function [NO_TRIGGERS].fn_validar_password
-go
-create function [NO_TRIGGERS].fn_validar_password (@usuario nvarchar(100), @password nvarchar(256))
-returns bit
-as begin
-declare @resultado bit, @password2 nvarchar(256)
-set @password2 = [NO_TRIGGERS].fn_encriptar(@password)
-if (((SELECT usuario_password FROM [NO_TRIGGERS].Usuario WHERE usuario_username=@usuario) = @password2) and ((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where usuario_username = @usuario)<=3)) and ((select usuario_habilitado from [NO_TRIGGERS].Usuario where usuario_username=@usuario)=1)
-	begin	
-		--Ejecutar desde C# el borrar intentos fallidos
-		set @resultado = 1
-	end
-ELSE
-	begin
-		--Ejecutar desde C# el sumar intentos fallidos
-		set @resultado=0
-	end
-return @resultado
-END
-GO
 
 
 

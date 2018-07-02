@@ -5,18 +5,17 @@
 truncate table [NO_TRIGGERS].funcionalidad
 insert into [NO_TRIGGERS].funcionalidad (funcionalidad_descripcion)
 values
-	('ABM ROL'),--1
-	('ABM USUARIO'),--2
-	('ABM CLIENTE'),--3
-	('ABM HOTEL'),--4
-	('ABM HABITACION'),--5
-	('ABM REGIMEN DE ESTADIA'),--6
-	('GENERAR/MODIFICAR RESERVA'),--7
-	('CANCELAR RESERVA'),--8
-	('REGISTRAR ESTADIA/CHECK-IN CHECK-OUT'),--9
-	('REGISTRAR CONSUMIBLE'),--10
-	('FACTURAR ESTADIA'),--11
-	('LISTADO ESTADISTICO')--12
+	('ROL'),--1----------Exclusivo Administrador
+	('USUARIO'),--2 ----------Exclusivo Administrador
+	('HOTEL'),--3 -- Administrador
+	('HABITACION'),--4 --Administrador
+	('REGIMEN'),--5 --Administrador
+	('LISTADO'),--6 -- Administrador
+	('CLIENTE'),-----7 Recepcionista
+	('ESTADIA'),--8 --Recepcionista
+	('CONSUMIBLE'),--9 --Recepcionista
+	('FACTURAR'),--10 -- Recepcionista
+	('RESERVA')--11 --Recepcionista/Guest
 --	,('LOGIN y SEGURIDAD')--13
 go
 
@@ -24,10 +23,11 @@ go
 truncate table [NO_TRIGGERS].rol
 insert into [NO_TRIGGERS].rol (rol_nombre,rol_estado)
 values 
-    ('RECEPCIONISTA', 1),--1
-    ('GUEST', 1),--2
-    ('ADMINISTRADOR', 1)--3
-	,('Admin Gral',1)--4
+    ('ADMINISTRADOR', 1),--1
+	('RECEPCIONISTA', 1),--2
+    ('GUEST', 1)--3
+
+	
 
 go
 
@@ -35,33 +35,23 @@ go
 truncate table [NO_TRIGGERS].rol_por_funcionalidad
 insert into [NO_TRIGGERS].rol_por_funcionalidad (id_rol,id_funcionalidad)
 values
-	(3,1),--abm rol / administrador
-	(3,2),--administrador /abm usuario
-	(3,4),--administrador / abm hotel
-	(3,5),--admin /abm habitacion
-	(3,6),--admin / abm regimen estadia
-	(3,12),--administrador / listado estadistico
-	(1,3),--recepcionista / abm cliente
-	(1,7),--recepcionista / abm generar modificar reserva
-	(1,8),--recepcionista / abm cancelar reserva
-	(1,9),--recepcionista / abm check in check out (registrar estadia)
-	(1,10), --recepcionista /registrar consumible
-	(1,11),--recepcionista / facturar estadia
-	(2,7),--guest / abm generar modificar reserva
-	(2,8)--guest / abm cancelar reserva
-	,(4,1)
-	,(4,2)
-	,(4,3)
-	,(4,4)
-	,(4,5)
-	,(4,6)
-	,(4,7)
-	,(4,8)
-	,(4,9)
-	,(4,10)
-	,(4,11)
-	,(4,12)
-
+	(1,1),--administrador / Rol
+	(1,2),--administrador /abm usuario
+	(1,3),--administrador / abm hotel
+	(1,4),--admin /abm habitacion
+	(1,5),--admin / abm regimen
+	(1,6),--administrador / listado estadistico
+	(1,7),--Admin / abm cliente
+	(1,8),--Admin / abm Estadia
+	(1,9),--Admin / abm Consumibles
+	(1,10),--Admin / abm Facturar
+	(1,11),--Admin / Reserva
+	(2,7),--Recepcion / abm Cliente
+	(2,8),--Recepcion / abm Estadia
+	(2,9),--Recepcion / Consumibles
+	(2,10), --Recepcion / Facturar
+	(2,11), -- Recepcion / Reserva
+	(3,11) -- Guest / Reserva
 go
 
 --estado reserva
@@ -101,22 +91,9 @@ INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
 truncate table [NO_TRIGGERS].usuario
 insert into [NO_TRIGGERS].usuario (usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol)
 values
-('Admin','Administrador','General',[NO_TRIGGERS].fn_encriptar('w23e'),'admin@frbahotel.com',getdate(),0,1,'455','999999',1,3),
-('USER_GUEST1', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),--agregar para todos los hoteles
-('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST3', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST4', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST5', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST6', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST7', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST8', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST9', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST10', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST11', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST12', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST13', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST14', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST15', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2)
+('Admin','Administrador','General',[NO_TRIGGERS].fn_encriptar('w23e'),'admin@frbahotel.com',getdate(),0,1,'455','999999',1,1),
+('Recep','Recepcionista','Hotel1',[NO_TRIGGERS].fn_encriptar('recep1'),'recepcion@frbahotel.com',getdate(),0,1,'455','999999',1,2),
+('GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,3)
 GO
 
 
@@ -140,20 +117,21 @@ VALUES
 (1,14),
 (1,15),
 (2,1),
+(3,1),
 (3,2),
-(4,3),
-(5,4),
-(6,5),
-(7,6),
-(8,7),
-(9,8),
-(10,9),
-(11,10),
-(12,11),
-(13,12),
-(14,13),
-(15,14),
-(16,15)
+(3,3),
+(3,4),
+(3,5),
+(3,6),
+(3,7),
+(3,8),
+(3,9),
+(3,10),
+(3,11),
+(3,12),
+(3,13),
+(3,14),
+(3,15)
 
 --CIUDAD------------------------11
 truncate table [no_triggers].ciudad

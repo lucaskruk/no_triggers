@@ -49,7 +49,30 @@ namespace FrbaHotel.Utility
             return result;
         
         }
+        internal static string exeFunString(string query)
+        {
+            string result = "";
+            SqlConnection conex = new SqlConnection(con_str);
+            string runFN = string.Concat("select [no_triggers].", query, ";");
+            SqlCommand cmdRunFN = new SqlCommand(runFN, conex);
+            try
+            {
+                conex.Open();
 
+                result = Convert.ToString(cmdRunFN.ExecuteScalar());
+                conex.Close();
+
+            }
+
+            catch
+            {
+                MessageBox.Show("Error llamado a funcion");
+                MessageBox.Show(Properties.Settings.Default.ConnectionString.ToString());
+                MessageBox.Show(runFN);
+            }
+            return result;
+
+        }
        internal static int exeFunInt(string query)
         {
             int result=-1;
@@ -74,7 +97,20 @@ namespace FrbaHotel.Utility
             return result;
         }
 
-       
+       internal static int checkAccesoABM(string nombreABM)
+       {
+           int result = 0;
+           string qHabil = string.Concat("fn_abm_Habilitado ('",CommonVars.userLogged,"','",nombreABM,"');");
+           result = exeFunInt(qHabil);
+           return result;
+       }
+       internal static string getNombreHotel(int hotelid)
+       {
+           string result = "";
+           string qHotel = string.Concat("fn_get_hotel_nombre (", Convert.ToString(hotelid), ");");
+           result = exeFunString(qHotel);
+           return result;
+       }
        internal static void aumentaContadorfallidos(string userN)
        {
            string queryAumentaCont = string.Concat("sp_incrementar_intentos_fallidos '", userN, "'");
@@ -127,7 +163,7 @@ namespace FrbaHotel.Utility
             int result = exeFunInt(string.Concat("fn_get_id_hotel_usuario ('", userN, "')"));
             return result;
         }
-
+        
         internal static int validaUsuario()
         {
             throw new NotImplementedException();

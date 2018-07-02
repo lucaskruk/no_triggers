@@ -37,6 +37,7 @@
             this.Iniciar_Sesion = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.Ir_a_pantalla_principal = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -68,7 +69,7 @@
             this.txtUsuario.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtUsuario.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtUsuario.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.txtUsuario.Location = new System.Drawing.Point(224, 124);
+            this.txtUsuario.Location = new System.Drawing.Point(227, 124);
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(211, 17);
             this.txtUsuario.TabIndex = 2;
@@ -81,12 +82,11 @@
             this.txtPasswd.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtPasswd.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPasswd.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.txtPasswd.Location = new System.Drawing.Point(224, 177);
+            this.txtPasswd.Location = new System.Drawing.Point(227, 177);
             this.txtPasswd.Name = "txtPasswd";
             this.txtPasswd.PasswordChar = '*';
             this.txtPasswd.Size = new System.Drawing.Size(211, 17);
             this.txtPasswd.TabIndex = 3;
-            this.txtPasswd.Text = "Contraseña";
             this.txtPasswd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtPasswd.UseSystemPasswordChar = true;
             // 
@@ -139,6 +139,17 @@
             this.Ir_a_pantalla_principal.UseVisualStyleBackColor = false;
             this.Ir_a_pantalla_principal.Click += new System.EventHandler(this.Ir_a_pantalla_principal_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("MS Reference Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label3.Location = new System.Drawing.Point(265, 151);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(135, 16);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Ingrese Contraseña";
+            // 
             // frmLogin
             // 
             this.AcceptButton = this.Iniciar_Sesion;
@@ -147,6 +158,7 @@
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(658, 320);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.Ir_a_pantalla_principal);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.Iniciar_Sesion);
@@ -179,5 +191,6 @@
         private System.Windows.Forms.Button Iniciar_Sesion;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button Ir_a_pantalla_principal;
+        private System.Windows.Forms.Label label3;
     }
 }
