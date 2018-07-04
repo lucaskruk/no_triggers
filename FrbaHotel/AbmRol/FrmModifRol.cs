@@ -13,7 +13,12 @@ namespace FrbaHotel.AbmRol
 {
     public partial class FrmModifRol : Form
     {
-        int idRol;
+        int idRol=-1;
+        private int roleEnabled;
+        //List<int> lstfuncToAdd = new List<int>();
+        //List<int> lstfuncToRem = new List<int>();
+
+        //public event Action ReloadFrmRol;
 
         public FrmModifRol()
         {
@@ -31,16 +36,110 @@ namespace FrbaHotel.AbmRol
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (chkEstado.Checked == true) { this.roleEnabled = 1; } else { this.roleEnabled = 0; }
         }
 
         private void FrmModifRol_Load(object sender, EventArgs e)
         {
-            lblRolId.Text = string.Concat("ID Rol: ", Convert.ToString(this.idRol));
-            txBRoleName.Text = Utils.exeFunString(string.Concat("fn_get_rol_nombre (", Convert.ToString(this.idRol),")"));
-            DataTable lisFunAC = new DataTable();
-            lisFunAC = Utils.sptoTable(string.Concat("sp_lista_fun_act ",Convert.ToString(this.idRol)));
-            dtgFunc.DataSource = lisFunAC;
+            //cargamos el formulario con los valores actuales de la base de datos.
+            if (this.idRol == -1) //defino si uso el form para crear o modificar roles.
+                 {
+                     this.Text = "Creacion de Rol";
+            } 
+            else {
+                  this.Text = "Modificacion de Rol";
+
+                  lblRolId.Text = string.Concat("ID Rol: ", Convert.ToString(this.idRol));
+                
+                  txBRoleName.Text = Utils.exeFunString(string.Concat("fn_get_rol_nombre (", Convert.ToString(this.idRol),")"));
+                  
+                  DataTable lisFunAC = new DataTable();
+                  lisFunAC = Utils.sptoTable(string.Concat("sp_lista_fun_act ",Convert.ToString(this.idRol)));
+                  DataTable lisFunDisp = new DataTable();
+                  lisFunDisp = Utils.sptoTable(string.Concat("sp_lista_fun_disp ", Convert.ToString(this.idRol))); 
+
+                  this.roleEnabled = Utils.exeFunInt(string.Concat("fn_get_rol_estado (", Convert.ToString(this.idRol), ")"));
+                  if (this.roleEnabled == 1) { chkEstado.Checked = true; };
+                  dtgFunc.DataSource = lisFunAC;
+                  dtgFunc.AutoResizeColumns();
+                  cbxAddFun.DataSource = lisFunDisp;
+                  cbxAddFun.DisplayMember = "funcionalidad_descripcion";
+                  cbxAddFun.ValueMember = "id_funcionalidad";
+
+                  cbxRemFun.DataSource = lisFunAC;
+                  cbxRemFun.DisplayMember = "funcionalidad_descripcion";
+                  cbxRemFun.ValueMember = "id_funcionalidad";
+                  lbxAgrega.DisplayMember = "funcionalidad_descripcion";
+                  lbxAgrega.ValueMember = "id_funcionalidad";
+                  lbxQuita.DisplayMember = "funcionalidad_descripcion";
+                  lbxQuita.ValueMember = "id_funcionalidad";
+            }
+        }
+
+        private void btnAddFun_Click(object sender, EventArgs e)
+        {
+            if (lbxAgrega.Items.Contains(cbxAddFun.SelectedItem)){
+            MessageBox.Show("Ese valor ya ha sido seleccionado");
+            } else {
+                lbxAgrega.Items.Add(cbxAddFun.SelectedItem);
+                //lstfuncToAdd.Add(Convert.ToInt32(cbxAddFun.SelectedValue.ToString()));
+            }
+        }
+
+        private void btnClean_Click(object sender, EventArgs e)
+        {
+            lbxAgrega.Items.Clear();
+            //lstfuncToAdd.Clear();
+            lbxQuita.Items.Clear();
+            //lstfuncToRem.Clear();
+        }
+
+        private void btnQuita_Click(object sender, EventArgs e)
+        {
+            if (lbxQuita.Items.Contains(cbxRemFun.SelectedItem))
+            {
+                MessageBox.Show("Ese valor ya ha sido seleccionado");
+            }
+            else
+            {
+                lbxQuita.Items.Add(cbxRemFun.SelectedItem);
+                //lstfuncToAdd.Add(Convert.ToInt32(cbxAddFun.SelectedValue.ToString()));
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnAcept_Click(object sender, EventArgs e)
+        {
+            if (this.idRol == -1)
+            {
+                //creacion de nuevo rol
+            }
+            else
+            {
+                // Modifica datos especificos del rol
+                Utils.execSPnoReturn( string.Concat("sp_set_rol_nombre ",Convert.ToString(this.idRol),",'",txBRoleName.Text,"'"));
+                Utils.execSPnoReturn( string.Concat("sp_set_rol_estado ",Convert.ToString(this.idRol),",",Convert.ToString(this.roleEnabled)));
+                // Agrega funcionalidades
+                if (lbxAgrega.Items.Count>0){
+                    for (int i=0;i<lbxAgrega.Items.Count;i++)
+                    {
+                        DataRowView drFun = ((DataRowView)(lbxAgrega.Items[i]));
+                        int idFun = Convert.ToInt32(drFun["id_funcionalidad"]);
+                        MessageBox.Show(idFun.ToString());
+                    }
+                }
+                // Quita Funcionalidades
+                if (lbxQuita.Items.Count > 0) { 
+                
+                }
+                dtgFunc.Refresh();
+                
+            }
+            
         }
 
     

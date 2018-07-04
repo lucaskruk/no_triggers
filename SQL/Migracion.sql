@@ -28,7 +28,7 @@ values
     ('GUEST', 1)--3
 
 	
-
+	--select * from [no_triggers].rol
 go
 
 --Rol x Funcionalidad

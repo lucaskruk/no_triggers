@@ -18,17 +18,22 @@ namespace FrbaHotel.AbmRol
             InitializeComponent();
         }
 
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             DataTable tblRoles =Utils.getListadoRoles();
             dtGridRoles.DataSource = tblRoles;
+            dtGridRoles.AutoResizeColumns();
         }
 
         private void btnMod_Click(object sender, EventArgs e)
-        {
-            int idRol = dtGridRoles.CurrentRow.Index+1;
+        {   string idFromGrid= dtGridRoles.CurrentRow.Cells[0].Value.ToString();
+            int idRol = Convert.ToInt32(idFromGrid);
             //MessageBox.Show(String.Concat("fila elegida ", Convert.ToString(idRol)));
             FrmModifRol frmMrol = new FrmModifRol();
+            //frmMrol.ReloadForm1 += Reload;
             frmMrol.setidRol(idRol);
             frmMrol.Show();
         }

@@ -47,7 +47,7 @@ namespace FrbaHotel.Login
         {
             if (listBx_hotel.SelectedItem != null)
             {
-                CommonVars.idHotelSeleccionado = listBx_hotel.SelectedIndex+1;
+                CommonVars.idHotelSeleccionado = Convert.ToInt32(listBx_hotel.SelectedValue.ToString());
                 Utils.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
                 this.Visible = false;
                 FrmMenu frmMenu = new FrmMenu();

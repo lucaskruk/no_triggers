@@ -31,25 +31,36 @@
             this.dtgFunc = new System.Windows.Forms.DataGridView();
             this.cbxAddFun = new System.Windows.Forms.ComboBox();
             this.btnAddFun = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnQuita = new System.Windows.Forms.Button();
             this.cbxRemFun = new System.Windows.Forms.ComboBox();
             this.lblAdd = new System.Windows.Forms.Label();
             this.lblelim = new System.Windows.Forms.Label();
             this.lblRol = new System.Windows.Forms.Label();
             this.txBRoleName = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkEstado = new System.Windows.Forms.CheckBox();
             this.btnAcept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblRolId = new System.Windows.Forms.Label();
+            this.lbxAgrega = new System.Windows.Forms.ListBox();
+            this.lbxQuita = new System.Windows.Forms.ListBox();
+            this.btnClean = new System.Windows.Forms.Button();
+            this.lblQuita = new System.Windows.Forms.Label();
+            this.lblAgrega = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtgFunc)).BeginInit();
             this.SuspendLayout();
             // 
             // dtgFunc
             // 
+            this.dtgFunc.AllowUserToAddRows = false;
+            this.dtgFunc.AllowUserToDeleteRows = false;
             this.dtgFunc.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtgFunc.Location = new System.Drawing.Point(233, 12);
+            this.dtgFunc.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dtgFunc.Location = new System.Drawing.Point(413, 12);
+            this.dtgFunc.MultiSelect = false;
             this.dtgFunc.Name = "dtgFunc";
-            this.dtgFunc.Size = new System.Drawing.Size(301, 270);
+            this.dtgFunc.ReadOnly = true;
+            this.dtgFunc.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtgFunc.Size = new System.Drawing.Size(190, 269);
             this.dtgFunc.TabIndex = 0;
             // 
             // cbxAddFun
@@ -68,15 +79,17 @@
             this.btnAddFun.TabIndex = 2;
             this.btnAddFun.Text = "Agregar";
             this.btnAddFun.UseVisualStyleBackColor = true;
+            this.btnAddFun.Click += new System.EventHandler(this.btnAddFun_Click);
             // 
-            // button2
+            // btnQuita
             // 
-            this.button2.Location = new System.Drawing.Point(105, 176);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(121, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Quitar";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnQuita.Location = new System.Drawing.Point(105, 176);
+            this.btnQuita.Name = "btnQuita";
+            this.btnQuita.Size = new System.Drawing.Size(121, 23);
+            this.btnQuita.TabIndex = 3;
+            this.btnQuita.Text = "Quitar";
+            this.btnQuita.UseVisualStyleBackColor = true;
+            this.btnQuita.Click += new System.EventHandler(this.btnQuita_Click);
             // 
             // cbxRemFun
             // 
@@ -114,20 +127,21 @@
             // txBRoleName
             // 
             this.txBRoleName.Location = new System.Drawing.Point(105, 29);
+            this.txBRoleName.MaxLength = 30;
             this.txBRoleName.Name = "txBRoleName";
             this.txBRoleName.Size = new System.Drawing.Size(121, 20);
             this.txBRoleName.TabIndex = 8;
             // 
-            // checkBox1
+            // chkEstado
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(105, 58);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(75, 17);
-            this.checkBox1.TabIndex = 10;
-            this.checkBox1.Text = "Rol Activo";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.chkEstado.AutoSize = true;
+            this.chkEstado.Location = new System.Drawing.Point(105, 58);
+            this.chkEstado.Name = "chkEstado";
+            this.chkEstado.Size = new System.Drawing.Size(75, 17);
+            this.chkEstado.TabIndex = 10;
+            this.chkEstado.Text = "Rol Activo";
+            this.chkEstado.UseVisualStyleBackColor = true;
+            this.chkEstado.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // btnAcept
             // 
@@ -137,6 +151,7 @@
             this.btnAcept.TabIndex = 11;
             this.btnAcept.Text = "Aceptar";
             this.btnAcept.UseVisualStyleBackColor = true;
+            this.btnAcept.Click += new System.EventHandler(this.btnAcept_Click);
             // 
             // btnCancel
             // 
@@ -146,6 +161,7 @@
             this.btnCancel.TabIndex = 12;
             this.btnCancel.Text = "Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // lblRolId
             // 
@@ -156,21 +172,70 @@
             this.lblRolId.TabIndex = 13;
             this.lblRolId.Text = "ID Rol: ";
             // 
+            // lbxAgrega
+            // 
+            this.lbxAgrega.FormattingEnabled = true;
+            this.lbxAgrega.Location = new System.Drawing.Point(287, 32);
+            this.lbxAgrega.Name = "lbxAgrega";
+            this.lbxAgrega.Size = new System.Drawing.Size(120, 95);
+            this.lbxAgrega.TabIndex = 14;
+            // 
+            // lbxQuita
+            // 
+            this.lbxQuita.FormattingEnabled = true;
+            this.lbxQuita.Location = new System.Drawing.Point(286, 186);
+            this.lbxQuita.Name = "lbxQuita";
+            this.lbxQuita.Size = new System.Drawing.Size(120, 95);
+            this.lbxQuita.TabIndex = 15;
+            // 
+            // btnClean
+            // 
+            this.btnClean.Location = new System.Drawing.Point(286, 144);
+            this.btnClean.Name = "btnClean";
+            this.btnClean.Size = new System.Drawing.Size(121, 23);
+            this.btnClean.TabIndex = 16;
+            this.btnClean.Text = "Limpiar";
+            this.btnClean.UseVisualStyleBackColor = true;
+            this.btnClean.Click += new System.EventHandler(this.btnClean_Click);
+            // 
+            // lblQuita
+            // 
+            this.lblQuita.AutoSize = true;
+            this.lblQuita.Location = new System.Drawing.Point(312, 168);
+            this.lblQuita.Name = "lblQuita";
+            this.lblQuita.Size = new System.Drawing.Size(60, 13);
+            this.lblQuita.TabIndex = 17;
+            this.lblQuita.Text = "Para Quitar";
+            // 
+            // lblAgrega
+            // 
+            this.lblAgrega.AutoSize = true;
+            this.lblAgrega.Location = new System.Drawing.Point(312, 16);
+            this.lblAgrega.Name = "lblAgrega";
+            this.lblAgrega.Size = new System.Drawing.Size(69, 13);
+            this.lblAgrega.TabIndex = 18;
+            this.lblAgrega.Text = "Para Agregar";
+            // 
             // FrmModifRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(542, 293);
+            this.ClientSize = new System.Drawing.Size(615, 293);
+            this.Controls.Add(this.lblAgrega);
+            this.Controls.Add(this.lblQuita);
+            this.Controls.Add(this.btnClean);
+            this.Controls.Add(this.lbxQuita);
+            this.Controls.Add(this.lbxAgrega);
             this.Controls.Add(this.lblRolId);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAcept);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.chkEstado);
             this.Controls.Add(this.txBRoleName);
             this.Controls.Add(this.lblRol);
             this.Controls.Add(this.lblelim);
             this.Controls.Add(this.lblAdd);
             this.Controls.Add(this.cbxRemFun);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btnQuita);
             this.Controls.Add(this.btnAddFun);
             this.Controls.Add(this.cbxAddFun);
             this.Controls.Add(this.dtgFunc);
@@ -188,15 +253,20 @@
         private System.Windows.Forms.DataGridView dtgFunc;
         private System.Windows.Forms.ComboBox cbxAddFun;
         private System.Windows.Forms.Button btnAddFun;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnQuita;
         private System.Windows.Forms.ComboBox cbxRemFun;
         private System.Windows.Forms.Label lblAdd;
         private System.Windows.Forms.Label lblelim;
         private System.Windows.Forms.Label lblRol;
         private System.Windows.Forms.TextBox txBRoleName;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkEstado;
         private System.Windows.Forms.Button btnAcept;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label lblRolId;
+        private System.Windows.Forms.ListBox lbxAgrega;
+        private System.Windows.Forms.ListBox lbxQuita;
+        private System.Windows.Forms.Button btnClean;
+        private System.Windows.Forms.Label lblQuita;
+        private System.Windows.Forms.Label lblAgrega;
     }
 }

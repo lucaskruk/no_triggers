@@ -285,6 +285,18 @@ create function [NO_TRIGGERS].fn_get_rol_nombre
 	return @resultado
 end
 GO
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_rol_estado') IS NOT NULL drop function [NO_TRIGGERS].fn_get_rol_estado
+go
+
+create function [NO_TRIGGERS].fn_get_rol_estado
+(@id int) returns int
+	AS 
+		begin
+	declare @Resultado int
+	select @Resultado=rol_estado from [NO_TRIGGERS].Rol where id_rol=@id
+	return @resultado
+end
+GO
 
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_set_rol_nombre','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_rol_nombre
@@ -296,11 +308,21 @@ create procedure [NO_TRIGGERS].sp_set_rol_nombre
 		set rol_nombre=@Nombre_rol
 		where id_rol=@id
 	GO
---exec [NO_TRIGGERS].sp_rol_crear 'Rey de los minisupers'
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_set_rol_estado','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_rol_estado 
+go
+create procedure [no_triggers].sp_set_rol_estado
+@id_rol int, @estado_modificado int
+	AS
+	update [NO_TRIGGERS].rol set rol_estado=@estado_modificado
+	WHERE @id_rol=id_rol
+	GO
+--exec [NO_TRIGGERS].sp_rol_set_estado 1,1
 GO
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_rol_crear','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_rol_crear 
 go
+
 create procedure [NO_TRIGGERS].sp_rol_crear 
 @Nombre_rol varchar (100)
 	AS
@@ -308,29 +330,6 @@ create procedure [NO_TRIGGERS].sp_rol_crear
 		[NO_TRIGGERS].rol (rol_nombre,rol_estado) values (@Nombre_rol, 1)
 
 	GO
---exec [NO_TRIGGERS].sp_rol_crear 'Rey de los minisupers'
-GO
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_rol_dar_de_baja','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_rol_dar_de_baja
-go
-
-create procedure [no_triggers].sp_rol_dar_de_baja
-@Nombre_rol varchar (100)
-	AS
-		update [NO_TRIGGERS].rol set rol_estado=0
-		WHERE @Nombre_rol=rol_nombre
-	GO
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_rol_modificar_estado','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_rol_modificar_estado 
-go
-create procedure [no_triggers].sp_rol_modificar_estado
-@Nombre_rol varchar (100), @estado_modificado int
-	AS
-	update [NO_TRIGGERS].rol set rol_estado=@estado_modificado
-	WHERE @Nombre_rol=rol_nombre
-	GO
--- exec [NO_TRIGGERS].sp_rol_dar_de_baja 'Rey de los minisupers'
-GO
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_asignar_funcionalidad','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_asignar_funcionalidad 
 go

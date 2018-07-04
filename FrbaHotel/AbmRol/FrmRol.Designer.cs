@@ -43,6 +43,7 @@
             this.dtGridRoles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtGridRoles.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dtGridRoles.Location = new System.Drawing.Point(164, 24);
+            this.dtGridRoles.MultiSelect = false;
             this.dtGridRoles.Name = "dtGridRoles";
             this.dtGridRoles.ReadOnly = true;
             this.dtGridRoles.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
