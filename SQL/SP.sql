@@ -1,7 +1,36 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------STORED PROCEDURES-------------------------------------------------------------------------
+/*------------------AUXILIARES------------*/
 
+USE GD1C2018;
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_count_parameters','P') IS NOT NULL drop function [NO_TRIGGERS].fn_count_parameters
+go
+create function [NO_TRIGGERS].fn_count_parameters (@spname nvarchar(256))
+returns int
+as begin
+declare @res int
+SELECT @res= count(1)
+--SO.name AS [ObjectName],
+--SO.Type_Desc AS [ObjectType (UDF/SP)],
+--P.parameter_id AS [ParameterID],
+--P.name AS [ParameterName],
+--TYPE_NAME(P.user_type_id) AS [ParameterDataType],
+--P.max_length AS [ParameterMaxBytes],
+--P.is_output AS [IsOutPutParameter]
+FROM sys.objects AS SO
+INNER JOIN sys.parameters AS P 
+ON SO.OBJECT_ID = P.OBJECT_ID
+WHERE SO.OBJECT_ID IN ( SELECT OBJECT_ID 
+FROM sys.objects
+WHERE TYPE IN ('P','FN')) and SCHEMA_NAME(SCHEMA_ID)='NO_TRIGGERS' and so.name=@spname
+--ORDER BY SO.name, P.parameter_id
+
+return @res
+end
+GO
 
 /*******************PARA LOGIN*******************************************/
 
@@ -331,22 +360,25 @@ create procedure [NO_TRIGGERS].sp_rol_crear
 
 	GO
 
-IF OBJECT_ID ('[NO_TRIGGERS].sp_asignar_funcionalidad','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_asignar_funcionalidad 
+IF OBJECT_ID ('[NO_TRIGGERS].sp_asignar_funcionalidad','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_agrega_funcionalidad 
 go
 
-create procedure [NO_TRIGGERS].sp_asignar_funcionalidad
-	@Rol_nombre varchar (100), @Funcionalidad int
+create procedure [NO_TRIGGERS].sp_agrega_funcionalidad
+	@Rol_id int, @Funcionalidad int
 	AS
-	insert into [NO_TRIGGERS].rol_por_funcionalidad values ((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre),@Funcionalidad)
+	if not exists (select 1 from [NO_TRIGGERS].rol_por_funcionalidad where id_rol=@Rol_id and id_funcionalidad=@Funcionalidad)
+	begin
+	insert into [NO_TRIGGERS].rol_por_funcionalidad values (@Rol_id,@Funcionalidad)
+	end
 	GO
 
-IF OBJECT_ID ('[NO_TRIGGERS].sp_desasignar_funcionalidad','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_desasignar_funcionalidad 
+IF OBJECT_ID ('[NO_TRIGGERS].sp_quita_funcionalidad','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_quita_funcionalidad 
 go
 
-create procedure [NO_TRIGGERS].sp_desasignar_funcionalidad
-@Rol_nombre varchar (100), @Funcionalidad int
+create procedure [NO_TRIGGERS].sp_quita_funcionalidad
+@Rol_id int, @Funcionalidad int
 	AS
-		delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=(select id_rol from [NO_TRIGGERS].rol where rol_nombre=@Rol_nombre)
+		delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=@Rol_id
 	GO
 
 

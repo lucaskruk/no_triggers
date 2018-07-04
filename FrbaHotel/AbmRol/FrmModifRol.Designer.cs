@@ -60,7 +60,7 @@
             this.dtgFunc.Name = "dtgFunc";
             this.dtgFunc.ReadOnly = true;
             this.dtgFunc.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dtgFunc.Size = new System.Drawing.Size(190, 269);
+            this.dtgFunc.Size = new System.Drawing.Size(378, 269);
             this.dtgFunc.TabIndex = 0;
             // 
             // cbxAddFun
@@ -220,7 +220,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(615, 293);
+            this.ClientSize = new System.Drawing.Size(803, 293);
             this.Controls.Add(this.lblAgrega);
             this.Controls.Add(this.lblQuita);
             this.Controls.Add(this.btnClean);

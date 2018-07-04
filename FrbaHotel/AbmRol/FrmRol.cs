@@ -36,6 +36,7 @@ namespace FrbaHotel.AbmRol
             //frmMrol.ReloadForm1 += Reload;
             frmMrol.setidRol(idRol);
             frmMrol.Show();
+            this.Close();
         }
     }
 }

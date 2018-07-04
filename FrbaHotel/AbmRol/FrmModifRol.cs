@@ -109,6 +109,9 @@ namespace FrbaHotel.AbmRol
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            //vuelve al menu anterior
+            FrmRol frmRol = new FrmRol();
+            frmRol.Show();
             this.Close();
         }
 
@@ -129,14 +132,25 @@ namespace FrbaHotel.AbmRol
                     {
                         DataRowView drFun = ((DataRowView)(lbxAgrega.Items[i]));
                         int idFun = Convert.ToInt32(drFun["id_funcionalidad"]);
-                        MessageBox.Show(idFun.ToString());
+                        //MessageBox.Show(idFun.ToString());
+                        Utils.execSPnoReturn( string.Concat("sp_agrega_funcionalidad ", Convert.ToString(this.idRol),",",Convert.ToString(idFun)));
                     }
                 }
                 // Quita Funcionalidades
-                if (lbxQuita.Items.Count > 0) { 
-                
+                if (lbxQuita.Items.Count > 0) {
+                    for (int i = 0; i < lbxQuita.Items.Count; i++)
+                    {
+                        DataRowView drFun = ((DataRowView)(lbxQuita.Items[i]));
+                        int idFun = Convert.ToInt32(drFun["id_funcionalidad"]);
+                        //MessageBox.Show(idFun.ToString());
+                        Utils.execSPnoReturn(string.Concat("sp_quita_funcionalidad ", Convert.ToString(this.idRol), ",", Convert.ToString(idFun)));
+                    }
                 }
-                dtgFunc.Refresh();
+
+                //vuelve al menu anterior
+                FrmRol frmRol = new FrmRol();
+                frmRol.Show();
+                this.Close();
                 
             }
             

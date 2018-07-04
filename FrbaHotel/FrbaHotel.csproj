@@ -212,6 +212,7 @@
     <Compile Include="AbmEstadia\FrmEstadia.Designer.cs">
       <DependentUpon>FrmEstadia.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\DBQuery.cs" />
     <Compile Include="Utility\Utils.cs" />
     <EmbeddedResource Include="AbmHabitacion\FrmHabitacion.resx">
       <DependentUpon>FrmHabitacion.cs</DependentUpon>
