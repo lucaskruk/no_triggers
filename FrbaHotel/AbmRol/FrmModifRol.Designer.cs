@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmModifRol));
             this.dtgFunc = new System.Windows.Forms.DataGridView();
             this.cbxAddFun = new System.Windows.Forms.ComboBox();
             this.btnAddFun = new System.Windows.Forms.Button();
@@ -145,7 +146,7 @@
             // 
             // btnAcept
             // 
-            this.btnAcept.Location = new System.Drawing.Point(24, 259);
+            this.btnAcept.Location = new System.Drawing.Point(70, 226);
             this.btnAcept.Name = "btnAcept";
             this.btnAcept.Size = new System.Drawing.Size(75, 23);
             this.btnAcept.TabIndex = 11;
@@ -155,7 +156,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(105, 259);
+            this.btnCancel.Location = new System.Drawing.Point(151, 226);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 12;
@@ -175,7 +176,7 @@
             // lbxAgrega
             // 
             this.lbxAgrega.FormattingEnabled = true;
-            this.lbxAgrega.Location = new System.Drawing.Point(287, 32);
+            this.lbxAgrega.Location = new System.Drawing.Point(241, 30);
             this.lbxAgrega.Name = "lbxAgrega";
             this.lbxAgrega.Size = new System.Drawing.Size(120, 95);
             this.lbxAgrega.TabIndex = 14;
@@ -183,14 +184,14 @@
             // lbxQuita
             // 
             this.lbxQuita.FormattingEnabled = true;
-            this.lbxQuita.Location = new System.Drawing.Point(286, 186);
+            this.lbxQuita.Location = new System.Drawing.Point(240, 184);
             this.lbxQuita.Name = "lbxQuita";
             this.lbxQuita.Size = new System.Drawing.Size(120, 95);
             this.lbxQuita.TabIndex = 15;
             // 
             // btnClean
             // 
-            this.btnClean.Location = new System.Drawing.Point(286, 144);
+            this.btnClean.Location = new System.Drawing.Point(240, 142);
             this.btnClean.Name = "btnClean";
             this.btnClean.Size = new System.Drawing.Size(121, 23);
             this.btnClean.TabIndex = 16;
@@ -201,7 +202,7 @@
             // lblQuita
             // 
             this.lblQuita.AutoSize = true;
-            this.lblQuita.Location = new System.Drawing.Point(312, 168);
+            this.lblQuita.Location = new System.Drawing.Point(266, 166);
             this.lblQuita.Name = "lblQuita";
             this.lblQuita.Size = new System.Drawing.Size(60, 13);
             this.lblQuita.TabIndex = 17;
@@ -210,7 +211,7 @@
             // lblAgrega
             // 
             this.lblAgrega.AutoSize = true;
-            this.lblAgrega.Location = new System.Drawing.Point(312, 16);
+            this.lblAgrega.Location = new System.Drawing.Point(266, 14);
             this.lblAgrega.Name = "lblAgrega";
             this.lblAgrega.Size = new System.Drawing.Size(69, 13);
             this.lblAgrega.TabIndex = 18;
@@ -239,6 +240,7 @@
             this.Controls.Add(this.btnAddFun);
             this.Controls.Add(this.cbxAddFun);
             this.Controls.Add(this.dtgFunc);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmModifRol";
             this.Text = "FrmModifRol";
             this.Load += new System.EventHandler(this.FrmModifRol_Load);

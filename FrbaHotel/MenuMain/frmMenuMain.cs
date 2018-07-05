@@ -100,7 +100,7 @@ namespace FrbaHotel.Login
         private void btnRol1_Click(object sender, EventArgs e)
         {
             FrmRol fRol = new FrmRol();
-            fRol.Show();
+            fRol.ShowDialog();
         }
 
         private void btnUser2_Click(object sender, EventArgs e)

@@ -40,6 +40,8 @@
             // 
             this.dtGridRoles.AllowUserToAddRows = false;
             this.dtGridRoles.AllowUserToDeleteRows = false;
+            this.dtGridRoles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dtGridRoles.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dtGridRoles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtGridRoles.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dtGridRoles.Location = new System.Drawing.Point(164, 24);
@@ -63,6 +65,7 @@
             this.btnCrear.TabIndex = 3;
             this.btnCrear.Text = "Crear";
             this.btnCrear.UseVisualStyleBackColor = false;
+            this.btnCrear.Click += new System.EventHandler(this.btnCrear_Click);
             // 
             // btnMod
             // 
@@ -90,11 +93,14 @@
             this.btnDel.TabIndex = 5;
             this.btnDel.Text = "Eliminar";
             this.btnDel.UseVisualStyleBackColor = false;
+            this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
             // 
             // FrmRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(933, 261);
             this.Controls.Add(this.btnDel);

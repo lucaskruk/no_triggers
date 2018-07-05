@@ -26,6 +26,13 @@ namespace FrbaHotel.AbmRol
             DataTable tblRoles =Utils.getListadoRoles();
             dtGridRoles.DataSource = tblRoles;
             dtGridRoles.AutoResizeColumns();
+            int i = 0;
+            foreach (DataGridViewColumn c in dtGridRoles.Columns)
+            {
+                i += c.Width;
+            }
+            dtGridRoles.Width = i + dtGridRoles.RowHeadersWidth + 2;
+            dtGridRoles.Height = dtGridRoles.GetRowDisplayRectangle(dtGridRoles.NewRowIndex, true).Bottom + dtGridRoles.GetRowDisplayRectangle(dtGridRoles.NewRowIndex, false).Height;
         }
 
         private void btnMod_Click(object sender, EventArgs e)
@@ -35,8 +42,33 @@ namespace FrbaHotel.AbmRol
             FrmModifRol frmMrol = new FrmModifRol();
             //frmMrol.ReloadForm1 += Reload;
             frmMrol.setidRol(idRol);
-            frmMrol.Show();
-            this.Close();
+            frmMrol.ShowDialog();
+            DataTable tblRoles = Utils.getListadoRoles();
+            dtGridRoles.DataSource = tblRoles;
+            dtGridRoles.AutoResizeColumns();
+            //this.Close();
+        }
+
+        private void btnCrear_Click(object sender, EventArgs e)
+        {
+            FrmModifRol frmMrol = new FrmModifRol();
+            //frmMrol.ReloadForm1 += Reload;
+            frmMrol.setidRol(-1);
+            frmMrol.ShowDialog();
+            DataTable tblRoles = Utils.getListadoRoles();
+            dtGridRoles.DataSource = tblRoles;
+            dtGridRoles.AutoResizeColumns();
+            //this.Close();
+        }
+
+        private void btnDel_Click(object sender, EventArgs e)
+        {
+            string idFromGrid = dtGridRoles.CurrentRow.Cells[0].Value.ToString();
+            int idRol = Convert.ToInt32(idFromGrid);
+            Utils.execSPnoReturn(string.Concat("sp_set_rol_estado ",Convert.ToString(idRol),",0"));
+            DataTable tblRoles = Utils.getListadoRoles();
+            dtGridRoles.DataSource = tblRoles;
+            dtGridRoles.AutoResizeColumns();
         }
     }
 }

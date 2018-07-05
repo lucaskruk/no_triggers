@@ -248,7 +248,9 @@ create function [NO_TRIGGERS].fn_abm_Habilitado
 		if exists (select fr.id_funcionalidad from [NO_TRIGGERS].Rol_por_funcionalidad fr 
 				join [NO_TRIGGERS].Usuario us on us.id_rol=fr.id_rol
 				join [NO_TRIGGERS].Funcionalidad f on fr.id_funcionalidad=f.id_funcionalidad
-				where f.funcionalidad_descripcion=@Funcionalidad and us.usuario_username=@user)
+				JOIN [NO_TRIGGERS].Rol  RL ON US.id_rol=RL.id_rol
+				where f.funcionalidad_descripcion=@Funcionalidad and us.usuario_username=@user
+				AND RL.rol_estado=1)
 			set @Resultado=1
 		else
 			set @Resultado=0
@@ -258,7 +260,7 @@ GO
 -- select [no_triggers].fn_abm_habilitado ('Admin','Rol')
 
 
-/*******************PARA ROL*******************************************/
+/***************************************************************************************PARA ROL*******************************************/
 /*Se decide que se creen los roles en estado ACTIVO*/
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_rol_listado','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_rol_listado 
@@ -267,17 +269,18 @@ create procedure [NO_TRIGGERS].sp_rol_listado
 
 	AS
 select 
-rl.id_rol, rol_nombre, rol_estado as rol_activo
-,STUFF((SELECT ',' + funcionalidad_descripcion
+rl.id_rol [ID], rol_nombre [Rol Nombre], rol_estado as [Rol Activo]
+,isnull(STUFF((SELECT ',' + funcionalidad_descripcion
               from [NO_TRIGGERS].Funcionalidad f2, [NO_TRIGGERS].Rol_por_funcionalidad rf2
               WHERE f2.id_funcionalidad = rf2.id_funcionalidad and rf.id_rol=rf2.id_rol order by funcionalidad_descripcion
               FOR XML PATH (''))
-             , 1, 1, '') as lista_func
+             , 1, 1, ''),'') as [Lista Funcionalidades]
 from [NO_TRIGGERS].Rol rl 
-join [NO_TRIGGERS].Rol_por_funcionalidad rf on rl.id_rol=rf.id_rol
-join [NO_TRIGGERS].Funcionalidad f on rf.id_funcionalidad=f.id_funcionalidad
+left join [NO_TRIGGERS].Rol_por_funcionalidad rf on rl.id_rol=rf.id_rol
+left join [NO_TRIGGERS].Funcionalidad f on rf.id_funcionalidad=f.id_funcionalidad
+where rl.rol_nombre <>'ADMINISTRADOR'
 group by rl.id_rol,rf.id_rol, rol_nombre, rol_estado
-	GO
+GO
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_lista_fun_act','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lista_fun_act 
 go
@@ -314,6 +317,7 @@ create function [NO_TRIGGERS].fn_get_rol_nombre
 	return @resultado
 end
 GO
+
 IF OBJECT_ID ('[NO_TRIGGERS].fn_get_rol_estado') IS NOT NULL drop function [NO_TRIGGERS].fn_get_rol_estado
 go
 
@@ -327,6 +331,46 @@ create function [NO_TRIGGERS].fn_get_rol_estado
 end
 GO
 
+IF OBJECT_ID ('[NO_TRIGGERS].fn_next_id_rol') IS NOT NULL drop function [NO_TRIGGERS].fn_next_id_rol
+go
+
+create function [NO_TRIGGERS].fn_next_id_rol () returns int
+	AS 
+		begin
+	declare @Resultado int
+	select @Resultado=max(id_rol) from [NO_TRIGGERS].Rol
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_nombre_rol_unico') IS NOT NULL drop function [NO_TRIGGERS].fn_nombre_rol_unico
+go
+
+create function [NO_TRIGGERS].fn_nombre_rol_unico (@nombre nvarchar (100)) returns int
+	AS 
+		begin
+	declare @Resultado int
+	if exists (select 1 from [NO_TRIGGERS].rol where rol_nombre=@nombre) begin
+
+	select @Resultado=0
+	end else select @Resultado=1
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_nombre_rol_unico_upd') IS NOT NULL drop function [NO_TRIGGERS].fn_nombre_rol_unico_upd
+go
+
+create function [NO_TRIGGERS].fn_nombre_rol_unico_upd (@nombre nvarchar (100), @idrol int) returns int
+	AS 
+		begin
+	declare @Resultado int
+	if exists (select 1 from [NO_TRIGGERS].rol where rol_nombre=@nombre and id_rol <> @idrol) begin
+	select @Resultado=0
+	end else select @Resultado=1
+	return @resultado
+end
+GO
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_set_rol_nombre','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_rol_nombre
 go
@@ -362,7 +406,7 @@ create procedure [NO_TRIGGERS].sp_rol_crear
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_asignar_funcionalidad','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_agrega_funcionalidad 
 go
-
+--select * from [no_triggers].rol
 create procedure [NO_TRIGGERS].sp_agrega_funcionalidad
 	@Rol_id int, @Funcionalidad int
 	AS
