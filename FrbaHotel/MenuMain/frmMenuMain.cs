@@ -90,7 +90,7 @@ namespace FrbaHotel.Login
 
         void Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Utils.deslogueaUsuario(CommonVars.userLogged);
+            logHelper.deslogueaUsuario(CommonVars.userLogged);
             Application.Exit();
             // Autosave and clear up ressources
         }
@@ -106,54 +106,54 @@ namespace FrbaHotel.Login
         private void btnUser2_Click(object sender, EventArgs e)
         {
             FrmUsuario frmUsr = new FrmUsuario();
-            frmUsr.Show();
+            frmUsr.ShowDialog();
         }
 
         private void btnHotel3_Click(object sender, EventArgs e)
         {
             FrmHotel frmHot = new FrmHotel();
-            frmHot.Show();
+            frmHot.ShowDialog();
         }
 
         private void btnHabitacion4_Click(object sender, EventArgs e)
         {
             FrmHabitacion frmHab = new FrmHabitacion();
-            frmHab.Show();
+            frmHab.ShowDialog();
         }
 
         private void btnListado6_Click(object sender, EventArgs e)
         {
             FrmListado frmLis = new FrmListado();
-            frmLis.Show();
+            frmLis.ShowDialog();
         }
 
         private void btnClientes7_Click(object sender, EventArgs e)
         {
             FrmCliente frmCli = new FrmCliente();
-            frmCli.Show();
+            frmCli.ShowDialog();
         }
         private void btnEstadia8_Click(object sender, EventArgs e)
         {
             FrmEstadia frmEstad = new FrmEstadia();
-            frmEstad.Show();
+            frmEstad.ShowDialog();
         }
 
         private void btnConsumibles9_Click(object sender, EventArgs e)
         {
             FrmConsumible frmCons = new FrmConsumible();
-            frmCons.Show();
+            frmCons.ShowDialog();
         }
 
         private void btnFacturacion10_Click(object sender, EventArgs e)
         {
             FrmFactura frmFact = new FrmFactura();
-            frmFact.Show();
+            frmFact.ShowDialog();
         }
 
         private void btnReserva11_Click(object sender, EventArgs e)
         {
             FrmMenuReserva frmReser = new FrmMenuReserva();
-            frmReser.Show();
+            frmReser.ShowDialog();
         }
         
   

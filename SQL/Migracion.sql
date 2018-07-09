@@ -54,50 +54,22 @@ values
 	(3,11) -- Guest / Reserva
 go
 
---estado reserva
-truncate table [NO_TRIGGERS].estado_reserva
-insert into [NO_TRIGGERS].estado_reserva (estado_reserva_descripcion)
-values
-	('RESERVA CORRECTA'),
-	('RESERVA MODIFICADA'),
-	('RESERVA CANCELADA POR RECEPCION'),
-	('RESERVA CANCELADA POR CLIENTE'),
-	('RESERVA CANCELADA POR NO-SHOW'),
-	('RESERVA EFECTIVIZADA')
-go
-
---metodo de pago
-truncate table [NO_TRIGGERS].metodo_de_pago
-insert into [NO_TRIGGERS].metodo_de_pago (metodo_de_pago_nombre,metodo_de_pago_detalles)
-values 
-	('TARJETA DE CREDITO','PAGO EN CUOTAS'),
-	('TARJETA DE DEBITO','EN ARS'),
-	('TARJETA DE CREDITO','UNICO PAGO EN ARS'),
-	('TARJETA DE DEBITO','EN USD'),
-	('EFECTIVO','EN ARS'),
-	('EFECTIVO', 'EN USD')
-go
--- Tipo de documento
-truncate table [NO_TRIGGERS].tipo_documento
-insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values 
-('D.N.I.'),('Pasaporte')
-
---PAIS
-truncate table [NO_TRIGGERS].[pais]
-INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
-	('Argentina','ARGENTINO'),('Brasil','BRASILERO'),('Uruguay','URUGUAYO'),('Indefinido','Indefinido');
---select * from [no_triggers].pais
-
 truncate table [NO_TRIGGERS].usuario
-insert into [NO_TRIGGERS].usuario (usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol)
+insert into [NO_TRIGGERS].usuario (usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol_asignado)
 values
 ('Admin','Administrador','General',[NO_TRIGGERS].fn_encriptar('w23e'),'admin@frbahotel.com',getdate(),0,1,'455','999999',1,1),
 ('Recep','Recepcionista','Hotel1',[NO_TRIGGERS].fn_encriptar('recep1'),'recepcion@frbahotel.com',getdate(),0,1,'455','999999',1,2),
 ('GUEST', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,3)
 GO
 
+truncate table [no_triggers].usuario_roles
+insert into [no_triggers].usuario_roles (id_usuario,id_rol) values 
+(1,1) -- rol admin / administrador
+,(2,2) -- rol Recepcion / Recepcionista
+,(3,3) --rol guest / guest
+,(1,2)
 
---select * from [no_triggers].usuario_por_hotel
+--select * from [no_triggers].usuario_roles
 truncate table [NO_TRIGGERS].usuario_por_hotel
 INSERT INTO [NO_TRIGGERS].usuario_por_hotel
 VALUES 
@@ -132,6 +104,43 @@ VALUES
 (3,13),
 (3,14),
 (3,15)
+
+
+
+
+--estado reserva
+truncate table [NO_TRIGGERS].estado_reserva
+insert into [NO_TRIGGERS].estado_reserva (estado_reserva_descripcion)
+values
+	('RESERVA CORRECTA'),
+	('RESERVA MODIFICADA'),
+	('RESERVA CANCELADA POR RECEPCION'),
+	('RESERVA CANCELADA POR CLIENTE'),
+	('RESERVA CANCELADA POR NO-SHOW'),
+	('RESERVA EFECTIVIZADA')
+go
+
+--metodo de pago
+truncate table [NO_TRIGGERS].metodo_de_pago
+insert into [NO_TRIGGERS].metodo_de_pago (metodo_de_pago_nombre,metodo_de_pago_detalles)
+values 
+	('TARJETA DE CREDITO','PAGO EN CUOTAS'),
+	('TARJETA DE DEBITO','EN ARS'),
+	('TARJETA DE CREDITO','UNICO PAGO EN ARS'),
+	('TARJETA DE DEBITO','EN USD'),
+	('EFECTIVO','EN ARS'),
+	('EFECTIVO', 'EN USD')
+go
+-- Tipo de documento
+truncate table [NO_TRIGGERS].tipo_documento
+insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values 
+('D.N.I.'),('Pasaporte')
+
+--PAIS
+truncate table [NO_TRIGGERS].[pais]
+INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
+	('Argentina','ARGENTINO'),('Brasil','BRASILERO'),('Uruguay','URUGUAYO'),('Indefinido','Indefinido');
+--select * from [no_triggers].pais
 
 --CIUDAD------------------------11
 truncate table [no_triggers].ciudad

@@ -126,6 +126,12 @@
     <Compile Include="AbmReserva\Confirmacion_de_cancelacion.Designer.cs">
       <DependentUpon>Confirmacion_de_cancelacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="AbmUsuario\FrmModUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmUsuario\FrmModUser.Designer.cs">
+      <DependentUpon>FrmModUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="AbmUsuario\FrmUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,6 +180,7 @@
     <Compile Include="AbmListado\FrmListado.Designer.cs">
       <DependentUpon>FrmListado.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\logHelper.cs" />
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -213,6 +220,12 @@
       <DependentUpon>FrmEstadia.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\DBQuery.cs" />
+    <Compile Include="Utility\FrmBuscador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utility\FrmBuscador.Designer.cs">
+      <DependentUpon>FrmBuscador.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utility\Utils.cs" />
     <EmbeddedResource Include="AbmHabitacion\FrmHabitacion.resx">
       <DependentUpon>FrmHabitacion.cs</DependentUpon>
@@ -228,6 +241,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AbmReserva\Confirmacion_de_cancelacion.resx">
       <DependentUpon>Confirmacion_de_cancelacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmUsuario\FrmModUser.resx">
+      <DependentUpon>FrmModUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmUsuario\FrmUsuario.resx">
+      <DependentUpon>FrmUsuario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmInicio.resx">
       <DependentUpon>FrmInicio.cs</DependentUpon>
@@ -268,6 +287,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Utility\FrmBuscador.resx">
+      <DependentUpon>FrmBuscador.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

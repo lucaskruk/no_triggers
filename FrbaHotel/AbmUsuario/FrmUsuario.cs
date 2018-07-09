@@ -16,5 +16,27 @@ namespace FrbaHotel.AbmUsuario
         {
             InitializeComponent();
         }
+
+        private void FrmUsuario_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FrmModUser frmAlta = new FrmModUser();
+            frmAlta.toggleAltaOn();
+            frmAlta.ShowDialog();
+        }
+
+        private void btnBaja_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnModif_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

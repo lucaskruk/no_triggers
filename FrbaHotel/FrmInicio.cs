@@ -1,4 +1,5 @@
-﻿using FrbaHotel.Utility;
+﻿using FrbaHotel.Login;
+using FrbaHotel.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,15 +42,15 @@ namespace FrbaHotel
             string uservar = "Guest";
             string passvar = "user_guest";
 
-            int asd = Utils.validaUsuario(uservar, passvar);
+            int asd = logHelper.validaUsuario(uservar, passvar);
             if (asd == 1)
             {
                 //MessageBox.Show("Login OK");
-                Utils.reseteaContadorfallidos(uservar);
+                logHelper.reseteaContadorfallidos(uservar);
                 this.Visible = false;
                 CommonVars.userLogged = uservar;
 
-                int idHotelUser = Utils.getIDHotelUser(uservar);
+                int idHotelUser = logHelper.getIDHotelUser(uservar);
                 if (idHotelUser == 0)
                 {
                     FrbaHotel.Login.Frm_Sel_Hotel frm_SHotel = new FrbaHotel.Login.Frm_Sel_Hotel();
@@ -59,7 +60,7 @@ namespace FrbaHotel
                 {
 
                     CommonVars.idHotelSeleccionado = idHotelUser;
-                    Utils.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
+                    logHelper.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
                     FrbaHotel.Login.FrmMenu frmMenu = new FrbaHotel.Login.FrmMenu();
                     frmMenu.Show();
                 }

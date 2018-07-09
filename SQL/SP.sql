@@ -81,10 +81,26 @@ go
 create procedure [NO_TRIGGERS].sp_set_hotel_logueado (@usuario nvarchar(100), @hotel_id int)
 as
 begin
+
 update us
 set us.usuario_hotel_logueado=@hotel_id,us.usuario_last_activity=GETDATE()
 from [NO_TRIGGERS].usuario us
 where us.usuario_username=@usuario
+
+declare @rolecnt int
+select @rolecnt= count(1) 
+from [NO_TRIGGERS].usuario_roles ur 
+join [NO_TRIGGERS].Usuario u on ur.id_usuario=u.id_usuario 
+join [NO_TRIGGERS].Rol r on ur.id_rol=r.id_rol
+where u.usuario_username=@usuario and r.rol_estado=1
+
+if @rolecnt = 1
+begin
+update us
+set us.id_rol=ur.id_rol
+from [NO_TRIGGERS].Usuario us join [NO_TRIGGERS].usuario_roles ur on us.id_usuario=ur.id_usuario
+end
+
 end
 go
 
@@ -156,7 +172,8 @@ declare @result int, @count int
 
 select @count=count(1) from [NO_TRIGGERS].usuario_por_hotel uh 
 join [NO_TRIGGERS].Usuario us on uh.id_usuario=us.id_usuario
-where us.usuario_username=@usuario
+join [NO_TRIGGERS].Hotel hl on uh.id_hotel=hl.id_hotel
+where us.usuario_username=@usuario and hl.hotel_estado=1
 
 if (@count >1)  begin select @result=1 end else begin select @result=0 end
 
@@ -166,26 +183,75 @@ end
 
 go
 
+IF OBJECT_ID ('[NO_TRIGGERS].fn_check_multirole') IS NOT NULL drop function [NO_TRIGGERS].fn_check_multirole
+go
+
+-- select [NO_TRIGGERS].fn_chequear_usuario_si_multihotel('user_guest1')
+create function [no_triggers].fn_check_multirole (@usuario nvarchar(100))
+returns int
+as
+begin
+declare @result int, @count int
+
+select @count=count(1) from [NO_TRIGGERS].usuario_roles uh 
+join [NO_TRIGGERS].Usuario us on uh.id_usuario=us.id_usuario
+join [NO_TRIGGERS].Rol r on uh.id_rol=r.id_rol
+where us.usuario_username=@usuario and r.rol_estado=1
+
+if (@count >1)  begin select @result=1 end else begin select @result=0 end
+
+return @result
+
+end
+
+go
+
+
 IF OBJECT_ID ('[NO_TRIGGERS].fn_get_id_hotel_usuario') IS NOT NULL drop function [NO_TRIGGERS].fn_get_id_hotel_usuario
 go
--- select [NO_TRIGGERS].fn_chequear_usuario_si_multihotel('user_guest1')
+-- select [NO_TRIGGERS].fn_get_id_hotel_usuario('admin')
 create function [no_triggers].fn_get_id_hotel_usuario (@usuario nvarchar(100))
 returns int
 as
 begin
 		declare @result int, @multi int
 		select @multi=[NO_TRIGGERS].fn_chequear_usuario_si_multihotel(@usuario)
-		if (@multi=0)
-		begin
-		select @result=max(uh.id_hotel) from [no_triggers].usuario_por_hotel uh
-		join [no_triggers].Usuario us on uh.id_usuario=us.id_usuario
-		where us.usuario_username=@usuario
-		end
-		else select @result=0
+			if (@multi=0)
+			begin
+			select @result=max(uh.id_hotel) from [no_triggers].usuario_por_hotel uh
+			join [no_triggers].Usuario us on uh.id_usuario=us.id_usuario
+			join [no_triggers].Hotel  h on  uh.id_hotel=h.id_hotel
+			where us.usuario_username=@usuario and h.hotel_estado=1
+			end
+			else select @result=0--usuario multihotel O SIN HOTELES DISPONIBLES
+		
+		
 		return @result
 
 end
+go
 
+IF OBJECT_ID ('[NO_TRIGGERS].fn_usuario_tiene_hotel') IS NOT NULL drop function [NO_TRIGGERS].fn_usuario_tiene_hotel
+go
+-- select [NO_TRIGGERS].fn_get_id_hotel_usuario('admin')
+create function [no_triggers].fn_usuario_tiene_hotel (@usuario nvarchar(100))
+returns int
+as
+begin
+		declare @result int
+		if exists (select 1 from [no_triggers].usuario_por_hotel uh
+			join [no_triggers].Usuario us on uh.id_usuario=us.id_usuario
+			join [no_triggers].Hotel  h on  uh.id_hotel=h.id_hotel
+			where us.usuario_username=@usuario and h.hotel_estado=1)
+			begin
+			select @result=1
+			end
+			else select @result=0--usuario SIN HOTELES DISPONIBLES
+		
+		
+		return @result
+
+end
 go
 
 IF OBJECT_ID ('[NO_TRIGGERS].fn_get_hotel_nombre') IS NOT NULL drop function [NO_TRIGGERS].fn_get_hotel_nombre
@@ -212,7 +278,53 @@ join [NO_TRIGGERS].Usuario u on uh.id_usuario=u.id_usuario
 where usuario_username=@usuario
 end
 go
---exec [no_triggers].sp_lista_hotel_usuario 'admin'
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lista_rol_usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lista_rol_usuario
+go
+create procedure [NO_TRIGGERS].sp_lista_rol_usuario (@usuario nvarchar(100))
+as 
+begin
+select h.id_rol, h.rol_nombre from [NO_TRIGGERS].rol h
+join [NO_TRIGGERS].usuario_roles uh on h.id_rol=uh.id_rol
+join [NO_TRIGGERS].Usuario u on uh.id_usuario=u.id_usuario
+where usuario_username=@usuario and h.rol_estado=1
+end
+go
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_usuario_rol_habilitado') IS NOT NULL drop function [NO_TRIGGERS].fn_get_usuario_rol_habilitado
+go
+
+create function [NO_TRIGGERS].fn_get_usuario_rol_habilitado
+(@usern nvarchar(100)) returns int
+	AS 
+		begin
+	declare @Resultado int
+	if exists 
+	(select uh.id_rol from [NO_TRIGGERS].usuario_roles uh 
+	join [NO_TRIGGERS].rol rl on uh.id_rol=rl.id_rol
+	join [NO_TRIGGERS].Usuario u on uh.id_usuario=u.id_usuario
+	where u.usuario_username=@usern and rl.rol_estado=1
+	--
+	)
+	begin
+	select @Resultado=1
+	end else select @resultado=0
+	return @resultado
+end
+GO
+
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_set_usuario_rol_asignado','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_usuario_rol_asignado
+go
+create procedure [NO_TRIGGERS].sp_set_usuario_rol_asignado
+@id_rol int, @username varchar (100)
+	AS
+		update [NO_TRIGGERS].Usuario
+				set id_rol_asignado=@id_rol
+		where usuario_username=@username
+	GO
+
+
 IF OBJECT_ID ('[NO_TRIGGERS].fn_validar_password') IS NOT NULL drop function [NO_TRIGGERS].fn_validar_password
 go
 create function [NO_TRIGGERS].fn_validar_password (@usuario nvarchar(100), @password nvarchar(256))
@@ -303,6 +415,7 @@ select
 f.id_funcionalidad,f.funcionalidad_descripcion
 from [NO_TRIGGERS].Funcionalidad f 
 where f.id_funcionalidad not in (select id_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rff where rff.id_rol=@id_rol)
+and funcionalidad_descripcion != 'USUARIO'-- REMOVIDO USUARIO DADO QUE NO DEBE SER ASIGNADO A NINGUN ROL
 	GO
 
 IF OBJECT_ID ('[NO_TRIGGERS].fn_get_rol_nombre') IS NOT NULL drop function [NO_TRIGGERS].fn_get_rol_nombre

@@ -117,9 +117,22 @@ id_tipo_documento int,
 usuario_numero_documento nvarchar(50),
 usuario_telefono nvarchar(50),
 usuario_habilitado bit,
-id_rol int
+id_rol_asignado int, ------------------un usuario puede tener mas de un rol
 CONSTRAINT pk_id_usuario PRIMARY KEY CLUSTERED (id_usuario)
 )
+
+if OBJECT_ID('[no_triggers].usuario_roles', 'u') is not null drop table [NO_TRIGGERS].usuario_roles
+
+CREATE TABLE [NO_TRIGGERS].usuario_roles
+(
+id_usuario_roles int identity (1,1) NOT NULL,
+id_usuario int,
+id_rol int
+CONSTRAINT pk_id_usuario_roles PRIMARY KEY CLUSTERED (id_usuario_roles)
+)
+
+
+if OBJECT_ID('[no_triggers].usuario_por_hotel', 'u') is not null drop table [NO_TRIGGERS].usuario_por_hotel
 
 CREATE TABLE [NO_TRIGGERS].usuario_por_hotel
 (
@@ -275,6 +288,7 @@ factura_total float,
 id_cliente int,
 id_estadia int,
 id_hotel int,
+id_metodo_pago int,
 CONSTRAINT pk_id_factura PRIMARY KEY CLUSTERED (id_factura)
 )
 

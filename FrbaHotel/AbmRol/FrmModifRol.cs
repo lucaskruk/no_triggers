@@ -131,8 +131,7 @@ namespace FrbaHotel.AbmRol
         private void btnCancel_Click(object sender, EventArgs e)
         {
             //vuelve al menu anterior
-            FrmRol frmRol = new FrmRol();
-            frmRol.Show();
+  
             this.Close();
         }
 
@@ -195,8 +194,7 @@ namespace FrbaHotel.AbmRol
                       }//fin eliminacion items
 
                                     //vuelve al menu anterior
-                                    FrmRol frmRol = new FrmRol();
-                                    frmRol.Show();
+
                                     this.Close();
 
                 }//fin validacion nombre vacio

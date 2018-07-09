@@ -33,33 +33,47 @@ namespace FrbaHotel.Login
                 string uservar = txtUsuario.Text;
                 string passvar = txtPasswd.Text;
 
-                int asd = Utils.validaUsuario(uservar, passvar);
+                int asd = logHelper.validaUsuario(uservar, passvar);
                 if (asd == 1)
                 {
                     //MessageBox.Show("Login OK");
-                    Utils.reseteaContadorfallidos(uservar);
-                    this.Visible = false;
+                    logHelper.reseteaContadorfallidos(uservar);
+                    
                     CommonVars.userLogged = uservar;
-
-                    int idHotelUser = Utils.getIDHotelUser(uservar);
-                    if (idHotelUser == 0)
+                    int idHotelUser = logHelper.getIDHotelUser(uservar);
+                    int multiRole = logHelper.checkMultirole(uservar);
+                    if (idHotelUser == 0 || multiRole==1)
                     {
+                        //MessageBox.Show("Usuario multi hotel o multirol");
+                        this.Visible = false;
                         Frm_Sel_Hotel frm_SHotel = new Frm_Sel_Hotel();
                         frm_SHotel.Show();
+                        //this.Close();
                     }
                     else
                     {
-
-                        CommonVars.idHotelSeleccionado = idHotelUser;
-                        Utils.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
-                        FrmMenu frmMenu = new FrmMenu();
-                        frmMenu.Show();
+                        if (logHelper.userTieneHotel(uservar) == 1)
+                        {
+                            //MessageBox.Show("Usuario tiene hotel");
+                            int rolOK = Utils.exeFunInt(string.Concat("fn_get_usuario_rol_habilitado ('", CommonVars.userLogged, "')"));
+                            if (rolOK == 1)
+                            {
+                                this.Visible = false;
+                                CommonVars.idHotelSeleccionado = idHotelUser;
+                                logHelper.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
+                                FrmMenu frmMenu = new FrmMenu();
+                                frmMenu.Show();
+                                //this.Close(); me cierra toda la aplicacion
+                            }
+                            else { MessageBox.Show("No existen roles habilitados para ese usuario. Favor contactar administrador"); }
+                        }
+                        else { MessageBox.Show("No existe hotel habilitado para este usuario. Favor contactar administrador."); }
                     }
                 }
                 else
                 {
                     MessageBox.Show("Login Erroneo");
-                    Utils.aumentaContadorfallidos(uservar);
+                    logHelper.aumentaContadorfallidos(uservar);
                     txtPasswd.Text = "";
                 }
             }

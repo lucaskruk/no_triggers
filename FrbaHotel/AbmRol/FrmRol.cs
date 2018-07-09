@@ -18,12 +18,18 @@ namespace FrbaHotel.AbmRol
             InitializeComponent();
         }
 
-
+        internal static DataTable getListadoRoles()
+        {
+            DataTable result = new DataTable();
+            string sql = "sp_rol_listado";
+            result = Utils.sptoTable(sql);
+            return result;
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             
-            DataTable tblRoles =Utils.getListadoRoles();
+            DataTable tblRoles =getListadoRoles();
             dtGridRoles.DataSource = tblRoles;
             dtGridRoles.AutoResizeColumns();
             int i = 0;
@@ -43,7 +49,7 @@ namespace FrbaHotel.AbmRol
             //frmMrol.ReloadForm1 += Reload;
             frmMrol.setidRol(idRol);
             frmMrol.ShowDialog();
-            DataTable tblRoles = Utils.getListadoRoles();
+            DataTable tblRoles = getListadoRoles();
             dtGridRoles.DataSource = tblRoles;
             dtGridRoles.AutoResizeColumns();
             //this.Close();
@@ -55,7 +61,7 @@ namespace FrbaHotel.AbmRol
             //frmMrol.ReloadForm1 += Reload;
             frmMrol.setidRol(-1);
             frmMrol.ShowDialog();
-            DataTable tblRoles = Utils.getListadoRoles();
+            DataTable tblRoles = getListadoRoles();
             dtGridRoles.DataSource = tblRoles;
             dtGridRoles.AutoResizeColumns();
             //this.Close();
@@ -66,7 +72,7 @@ namespace FrbaHotel.AbmRol
             string idFromGrid = dtGridRoles.CurrentRow.Cells[0].Value.ToString();
             int idRol = Convert.ToInt32(idFromGrid);
             Utils.execSPnoReturn(string.Concat("sp_set_rol_estado ",Convert.ToString(idRol),",0"));
-            DataTable tblRoles = Utils.getListadoRoles();
+            DataTable tblRoles = getListadoRoles();
             dtGridRoles.DataSource = tblRoles;
             dtGridRoles.AutoResizeColumns();
         }
