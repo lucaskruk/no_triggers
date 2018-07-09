@@ -56,6 +56,26 @@ namespace FrbaHotel.Utility
         
         }
 
+        internal static DataTable querytoTable(string query,string fields)
+        {
+            if (fields == null || fields == "") { fields = "*"; }
+            DataTable result = new DataTable();
+            SqlConnection conex = new SqlConnection(con_str);
+            string runFN = string.Concat("select ",fields, " from [no_triggers].", query, ";");
+            SqlCommand cmdRunFN = new SqlCommand(runFN, conex);
+            SqlDataAdapter adap = new SqlDataAdapter(cmdRunFN);
+            try
+            {
+                adap.Fill(result);
+            }
+            catch (Exception e) {
+                MessageBox.Show(string.Concat("Error en querytotable. Query: ",runFN, "Error: ", e.ToString()));
+            }
+
+            return result;
+
+        }
+
         // en una funcion los parametros se pasan entre parentesis y separados por comas
         internal static string exeFunString(string query)
         {

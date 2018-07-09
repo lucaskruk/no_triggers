@@ -219,7 +219,6 @@
     <Compile Include="AbmEstadia\FrmEstadia.Designer.cs">
       <DependentUpon>FrmEstadia.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utility\DBQuery.cs" />
     <Compile Include="Utility\FrmBuscador.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -13,6 +13,14 @@ namespace FrbaHotel.AbmUsuario
     public partial class FrmModUser : Form
     {
         int esAlta = 0;
+        int idUser;
+
+        public void setIdUser(int id) 
+        {
+            this.idUser = id;
+        }
+        public int getIdUser() { return this.idUser; }
+
         public void toggleAltaOn()
         {
             this.esAlta = 1;

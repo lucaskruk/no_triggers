@@ -6,7 +6,7 @@
 USE GD1C2018;
 GO
 
-IF OBJECT_ID ('[NO_TRIGGERS].fn_count_parameters','P') IS NOT NULL drop function [NO_TRIGGERS].fn_count_parameters
+IF OBJECT_ID ('[NO_TRIGGERS].fn_count_parameters') IS NOT NULL drop function [NO_TRIGGERS].fn_count_parameters
 go
 create function [NO_TRIGGERS].fn_count_parameters (@spname nvarchar(256))
 returns int
@@ -97,7 +97,7 @@ where u.usuario_username=@usuario and r.rol_estado=1
 if @rolecnt = 1
 begin
 update us
-set us.id_rol=ur.id_rol
+set us.id_rol_asignado=ur.id_rol
 from [NO_TRIGGERS].Usuario us join [NO_TRIGGERS].usuario_roles ur on us.id_usuario=ur.id_usuario
 end
 
@@ -358,9 +358,9 @@ create function [NO_TRIGGERS].fn_abm_Habilitado
 		begin
 			declare @Resultado bit
 		if exists (select fr.id_funcionalidad from [NO_TRIGGERS].Rol_por_funcionalidad fr 
-				join [NO_TRIGGERS].Usuario us on us.id_rol=fr.id_rol
+				join [NO_TRIGGERS].Usuario us on us.id_rol_asignado=fr.id_rol
 				join [NO_TRIGGERS].Funcionalidad f on fr.id_funcionalidad=f.id_funcionalidad
-				JOIN [NO_TRIGGERS].Rol  RL ON US.id_rol=RL.id_rol
+				JOIN [NO_TRIGGERS].Rol  RL ON US.id_rol_asignado=RL.id_rol
 				where f.funcionalidad_descripcion=@Funcionalidad and us.usuario_username=@user
 				AND RL.rol_estado=1)
 			set @Resultado=1
@@ -517,7 +517,7 @@ create procedure [NO_TRIGGERS].sp_rol_crear
 
 	GO
 
-IF OBJECT_ID ('[NO_TRIGGERS].sp_asignar_funcionalidad','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_agrega_funcionalidad 
+IF OBJECT_ID ('[NO_TRIGGERS].sp_agrega_funcionalidad','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_agrega_funcionalidad 
 go
 --select * from [no_triggers].rol
 create procedure [NO_TRIGGERS].sp_agrega_funcionalidad
@@ -562,9 +562,9 @@ DECLARE @responseMessage nvarchar(250)
 	BEGIN TRY 
 		INSERT INTO [NO_TRIGGERS].Usuario 
 		(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento,usuario_cantidad_intentos_fallidos
-		,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol--,id_hotel
+		,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado--,id_rol_asignado--,id_hotel
 		)
-		VALUES (@nombreusuario, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@password), @email, @fechanacimiento, 0,@tipodocumento, @numero_documento, @numerotelefono,1, @rolasignado) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
+		VALUES (@nombreusuario, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@password), @email, @fechanacimiento, 0,@tipodocumento, @numero_documento, @numerotelefono,1) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
 		INSERT INTO [NO_TRIGGERS].usuario_por_hotel VALUES ((select id_usuario from [NO_TRIGGERS].usuario us where us.usuario_username=@nombreusuario),@hotel)
 		SET @responseMessage= 'Usuario creado con exito'
 	END TRY
@@ -583,28 +583,7 @@ values
 */
 
 
-IF OBJECT_ID ('[NO_TRIGGERS].fn_permitir_cambios_administrador') IS NOT NULL drop function [NO_TRIGGERS].fn_permitir_cambios_administrador
-go
 
-create function [NO_TRIGGERS].fn_permitir_cambios_administrador(@usuarioAdministrador nvarchar(100), @usuarioAModificar nvarchar (100)) --verifica que el usuario que quiera modificar el administrador trabaje en el mismo hotel
-RETURNS bit
-AS
-BEGIN
-DECLARE @aprobador bit
-	IF(((select usxh.id_hotel from [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuarioAdministrador and usxh.id_usuario=us.id_usuario)=
-	(SELECT usxh.id_hotel FROM [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE usxh.id_usuario=us.id_usuario and us.usuario_username=@usuarioAModificar))and((select r.rol_nombre from [NO_TRIGGERS].Usuario u, [NO_TRIGGERS].Rol r where r.id_rol = u.id_rol and u.usuario_username=@usuarioAdministrador)='Administrador'))
-		BEGIN
-			set @aprobador=1
-		END
-	ELSE
-		BEGIN
-		set @aprobador=0
-		END
-return @aprobador
-END
-GO
-
---SELECT [NO_TRIGGERS].fn_permitir_cambios_administrador('REYDELOSMINISUPERS','USER_GUEST3')
 IF OBJECT_ID ('[NO_TRIGGERS].sp_Cambiar_Contrasenia') IS NOT NULL drop procedure [NO_TRIGGERS].sp_Cambiar_Contrasenia
 go
 
@@ -622,64 +601,53 @@ go
 IF OBJECT_ID ('[NO_TRIGGERS].sp_Dar_Baja_Usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_Dar_Baja_Usuario
 go
 create proc [NO_TRIGGERS].sp_Dar_Baja_Usuario
-@UsuarioAdministrador nvarchar(100), @UsuarioADarBAja nvarchar(100)
+@idUser int
 as
-begin
-DECLARE @responseMessage nvarchar(250)  
-	if(([NO_TRIGGERS].fn_permitir_cambios_administrador(@UsuarioAdministrador,@UsuarioADarBAja)=1) and ((select r.rol_nombre from [NO_TRIGGERS].Usuario u, [NO_TRIGGERS].Rol r where r.id_rol = u.id_rol and u.usuario_username=@usuarioAdministrador)='Administrador'))
-	begin
-			begin try
 				update [NO_TRIGGERS].Usuario
-				set usuario_habilitado = 0 where @UsuarioADarBAja = usuario_username
-				select ('Dado de Baja Exitosamente')
-			end try 
-			begin catch
-				select ('Usuario Inexistente')
-			end catch
-	end
-	else
-		begin
-			select ('No tenes permisos')
-		end 
-	end
+				set usuario_habilitado = 0 where id_usuario=@idUser
+
 go
 
---exec [NO_TRIGGERS].sp_Dar_Baja_Usuario 'REYDELOSMINISUPERS', 'USER_GUEST3'
 
-IF OBJECT_ID ('[NO_TRIGGERS].fn_Devolve_Usuarios') IS NOT NULL drop function [NO_TRIGGERS].fn_Devolve_Usuarios
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_usuario
 go
-create function [NO_TRIGGERS].fn_Devolve_Usuarios (@Usuario nvarchar(100))
-returns table
+create procedure [NO_TRIGGERS].sp_lis_usuario 
+@idUser int
 as
-	RETURN (select * from [NO_TRIGGERS].Usuario us where us.usuario_username = @Usuario)
+	select id_usuario, usuario_username as Nombre_Usuario, usuario_nombre as nombre  
+	, usuario_apellido as apellido, usuario_email as email, usuario_fecha_nacimiento as fecha_nac
+	,td.tipo_de_documento_nombre as tipo_doc, usuario_numero_documento as nro_doc, usuario_telefono as telefono, usuario_habilitado
+	from [NO_TRIGGERS].Usuario us
+	left join [NO_TRIGGERS].Tipo_documento td on us.id_tipo_documento=td.id_tipo_documento
+	where us.id_usuario=@idUser
 go
+--exec [no_triggers].sp_lis_usuario 1
 
---select * from [NO_TRIGGERS].fn_Devolve_Usuarios('REYDELOSMINISUPERS')
-IF OBJECT_ID ('[NO_TRIGGERS].sp_modificarUsuarios') IS NOT NULL drop procedure [NO_TRIGGERS].sp_modificarUsuarios
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_usu_roles') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_usu_roles
 go
-create proc [NO_TRIGGERS].sp_modificarUsuarios 
-@UsuarioAMofificar nvarchar(100),@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50),@rol int, @hotel int
+create procedure [NO_TRIGGERS].sp_lis_usu_roles
+@idUser int
 as
-declare @id int
-	set @id = (SElect id_usuario from [NO_TRIGGERS].Usuario where usuario_username = @UsuarioAMofificar)
-	update [NO_TRIGGERS].Usuario
-	set usuario_nombre = @nombre, usuario_apellido = @apellido, usuario_username = @nombreusuario, usuario_email = @email, usuario_fecha_nacimiento = @fechanacimiento, id_tipo_documento=(select t.id_tipo_documento from [NO_TRIGGERS].Tipo_documento t where t.tipo_de_documento_nombre = @tipodocumento), usuario_numero_documento = @numero_documento, usuario_telefono = @numerotelefono, id_rol = @rol
-	where usuario_username = @UsuarioAMofificar
-	update [NO_TRIGGERS].usuario_por_hotel
-	set id_hotel=@hotel
-	where id_usuario = @id
+	select r.id_rol, rol_nombre, rol_estado as rol_activo
+	from [NO_TRIGGERS].Rol r
+	join [NO_TRIGGERS].usuario_roles ur on r.id_rol=ur.id_rol
+	where ur.id_usuario=@idUser
 go
+--exec [no_triggers].sp_lis_usu_roles 2
 
-create function [NO_TRIGGERS].fn_hoteles_de_usuario (@Usuario nvarchar(100))
-returns int
-as	
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_usu_id_hotel') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_usu_id_hotel
+go
+create procedure [NO_TRIGGERS].sp_lis_usu_id_hotel (@idUser int)
+as 
 begin
-	declare @auxiliar int
-	 set @auxiliar =(SELECT count(id_hotel) FROM [NO_TRIGGERS].Usuario us, [NO_TRIGGERS].usuario_por_hotel uxh WHERE us.usuario_username=@Usuario and us.id_usuario=uxh.id_usuario)
-	 return @auxiliar
+select h.id_hotel,hotel_nombre  from [NO_TRIGGERS].hotel h
+join [NO_TRIGGERS].usuario_por_hotel uh on h.id_hotel=uh.id_hotel
+where uh.id_usuario=@idUser
 end
 go
 
+IF OBJECT_ID ('[NO_TRIGGERS].fn_castear_DataTime') IS NOT NULL drop function [NO_TRIGGERS].fn_castear_DataTime
+go
 create function [NO_TRIGGERS].fn_castear_DataTime(@fecha nvarchar(50))
 returns datetime
 as
@@ -692,14 +660,8 @@ go
 /*************************PAIS- CIUDAD - DIRECCION*************************************************/
 go
 
-create procedure [NO_TRIGGERS].sp_add_pais
-@pais nvarchar(100), @nacionalidad nvarchar(100)
-as
-	if((select distinct count (id_pais) from [NO_TRIGGERS].Pais p where p.pais_nacionalidad=@nacionalidad and p.pais_nombre=@pais)<1)
-	insert into [NO_TRIGGERS].Pais values (@pais,@nacionalidad)
+IF OBJECT_ID ('[NO_TRIGGERS].sp_add_ciudad') IS NOT NULL drop procedure [NO_TRIGGERS].sp_add_ciudad
 go
-
---exec [NO_TRIGGERS].sp_add_pais 'israel','judio'
 
 create procedure [NO_TRIGGERS].sp_add_ciudad
 @ciudad nvarchar(100), @pais nvarchar(100), @nacionalidad nvarchar(100)
@@ -714,6 +676,8 @@ exec [NO_TRIGGERS].sp_add_pais @pais, @nacionalidad
 GO
 
 --exec [NO_TRIGGERS].sp_add_ciudad 'jerusalen','israel','judio'
+IF OBJECT_ID ('[NO_TRIGGERS].sp_add_direccion') IS NOT NULL drop procedure [NO_TRIGGERS].sp_add_direccion
+go
 
 create procedure [NO_TRIGGERS].sp_add_direccion 
 @calle nvarchar(200), @altura int, @piso int, @departamento nvarchar(10), @ciudad nvarchar(200), @paisresidencia nvarchar(100), @NombreNacionalidadResidencia nvarchar(100)
@@ -738,6 +702,8 @@ go
 
 /********************CLIENTES***************************************************/
 
+IF OBJECT_ID ('[NO_TRIGGERS].fn_cliente_habilitado') IS NOT NULL drop function [NO_TRIGGERS].fn_cliente_habilitado
+go
 
 create function [NO_TRIGGERS].fn_cliente_habilitado (@ClienteNombre nvarchar(100), @ClienteApellido nvarchar(100), @ClienteEmail nvarchar(200))
 returns bit
@@ -815,7 +781,7 @@ go
 Create PROCEDURE [NO_TRIGGERS].sp_crear_hotel @nombreAdministrador nvarchar(100), @email nvarchar(100), @telefono nvarchar(50), @calle nvarchar(100), @altura int, @ciudad nvarchar(100), @pais nvarchar(100), @nacionalidadpais nvarchar(100), @cantidadestrellas int
 as
 declare @id_direccion_agregar int
-	if((select id_rol from [NO_TRIGGERS].Usuario us where us.usuario_username=@nombreAdministrador and us.usuario_email=@email and us.usuario_telefono=@telefono)=3)
+	if((select id_rol_asignado from [NO_TRIGGERS].Usuario us where us.usuario_username=@nombreAdministrador and us.usuario_email=@email and us.usuario_telefono=@telefono)=3)
 	begin
 	exec [NO_TRIGGERS].sp_add_direccion @calle,@altura, NULL,NULL,@ciudad,@pais,@nacionalidadpais
 	set @id_direccion_agregar=(select id_direccion from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@calle and d.direccion_altura=@altura and( d.direccion_departamento is null ) and (d.direccion_piso is null) and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)

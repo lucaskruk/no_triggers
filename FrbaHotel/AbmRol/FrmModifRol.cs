@@ -112,6 +112,12 @@ namespace FrbaHotel.AbmRol
             lbxAgrega.Items.Clear();
             //lstfuncToAdd.Clear();
             lbxQuita.Items.Clear();
+            if (this.idRol == -1) { txBRoleName.Text = ""; } 
+            else 
+            {
+                txBRoleName.Text = Utils.exeFunString(string.Concat("fn_get_rol_nombre (", Convert.ToString(this.idRol), ")"));
+                if (this.roleEnabled == 1) { chkEstado.Checked = true; };
+            }
             //lstfuncToRem.Clear();
         }
 
@@ -135,71 +141,75 @@ namespace FrbaHotel.AbmRol
             this.Close();
         }
 
+        private int validarDatos()
+        {
+            int resultado = 1;
+            
+            if (txBRoleName.Text == "") { resultado = 0; MessageBox.Show("No se puede dejar el nombre vacio."); }
+
+            //validaciones de alta
+            if (this.idRol == -1)
+            {
+                int nombreUnico = Utils.exeFunInt(string.Concat("fn_nombre_rol_unico ('", txBRoleName.Text, "')"));
+                int cantFuncionalidades = lbxAgrega.Items.Count;
+                if (cantFuncionalidades == 0) { MessageBox.Show("No se puede crear un rol sin funcionalidades"); resultado = 0; }
+                if (nombreUnico != 1) { MessageBox.Show("El nombre a utilizar ya existe"); resultado = 0; }
+            }
+            else //validaciones de modificacion
+            {
+                int nombreUniP = Utils.exeFunInt(string.Concat("fn_nombre_rol_unico_upd ('", txBRoleName.Text, "',", Convert.ToString(this.idRol), ")"));
+                if (nombreUniP != 1) { MessageBox.Show("El nombre a utilizar ya existe"); resultado = 0; }
+            }
+
+            return resultado;
+        }
+
         private void btnAcept_Click(object sender, EventArgs e)
         {
 
                 //validacion de datos
-                if (txBRoleName.Text != "")
+                if (validarDatos() == 1)
                 {
-
-
                     if (this.idRol == -1)//define modificacion o creacion
                     {
-                        int nombreUnico = Utils.exeFunInt(string.Concat("fn_nombre_rol_unico ('", txBRoleName.Text, "')"));
-                        if (nombreUnico == 1)
-                        {
-                            if (lbxAgrega.Items.Count > 0)
-                            {
-                                //creacion de nuevo rol
+                         //creacion de nuevo rol
                                 Utils.execSPnoReturn(string.Concat("sp_rol_crear '", txBRoleName.Text, "'"));
                                 this.idRol = Utils.exeFunInt("fn_next_id_rol()");
-                            }
-                            else { MessageBox.Show("No puede crear un rol sin funcionalidades"); return; }
-                        }
-                        else { MessageBox.Show("El nombre seleccionado ya existe"); return;  }
-
                     }
                     else
                     {
-                        int nombreUniP = Utils.exeFunInt(string.Concat("fn_nombre_rol_unico_upd ('", txBRoleName.Text, "',",Convert.ToString(this.idRol),")"));
-                        if (nombreUniP == 1)
-                        {
                             // Modifica datos especificos del rol
                             Utils.execSPnoReturn(string.Concat("sp_set_rol_nombre ", Convert.ToString(this.idRol), ",'", txBRoleName.Text, "'"));
                             Utils.execSPnoReturn(string.Concat("sp_set_rol_estado ", Convert.ToString(this.idRol), ",", Convert.ToString(this.roleEnabled)));
-                        }
-                        else { MessageBox.Show("El nombre al que quieres actualizar esta siendo usado por otro rol"); return; }
-                     } //fin update rol existente
+                    } //fin update rol existente
+
                     //cosas genericas a ambos casos 
                     if (lbxAgrega.Items.Count > 0)
-                      {                                //insercion de funcionalidades
-                       for (int i = 0; i < lbxAgrega.Items.Count; i++)
+                    {                                //insercion de funcionalidades
+                        for (int i = 0; i < lbxAgrega.Items.Count; i++)
                         {
-                          DataRowView drFun = ((DataRowView)(lbxAgrega.Items[i]));
-                          int idFun = Convert.ToInt32(drFun["id_funcionalidad"]);
-                           //MessageBox.Show(string.Concat(idFun.ToString()," ", this.idRol.ToString()));
+                            DataRowView drFun = ((DataRowView)(lbxAgrega.Items[i]));
+                            int idFun = Convert.ToInt32(drFun["id_funcionalidad"]);
+                            //MessageBox.Show(string.Concat(idFun.ToString()," ", this.idRol.ToString()));
                             Utils.execSPnoReturn(string.Concat("sp_agrega_funcionalidad ", Convert.ToString(this.idRol), ",", Convert.ToString(idFun)));
                         }
-                      } //fin insercion funcionalidades
-                      
-                    if (lbxQuita.Items.Count > 0) 
-                      {
+                    } //fin insercion funcionalidades
+
+                    if (lbxQuita.Items.Count > 0)
+                    {
                         for (int i = 0; i < lbxQuita.Items.Count; i++)
-                           {
-                             DataRowView drFun = ((DataRowView)(lbxQuita.Items[i]));
-                             int idFun = Convert.ToInt32(drFun["id_funcionalidad"]);
-                             //MessageBox.Show(idFun.ToString());
-                             Utils.execSPnoReturn(string.Concat("sp_quita_funcionalidad ", Convert.ToString(this.idRol), ",", Convert.ToString(idFun)));
-                           }
-                      }//fin eliminacion items
+                        {
+                            DataRowView drFun = ((DataRowView)(lbxQuita.Items[i]));
+                            int idFun = Convert.ToInt32(drFun["id_funcionalidad"]);
+                            //MessageBox.Show(idFun.ToString());
+                            Utils.execSPnoReturn(string.Concat("sp_quita_funcionalidad ", Convert.ToString(this.idRol), ",", Convert.ToString(idFun)));
+                        }
+                    }//fin eliminacion items
 
-                                    //vuelve al menu anterior
+                    //vuelve al menu anterior
 
-                                    this.Close();
-
-                }//fin validacion nombre vacio
-                else { MessageBox.Show("No puede crear un rol sin nombre"); }
-              
+                    this.Close();
+                }//fin validacion datos
 
                 
             }// fin de metodo boton aceptar
