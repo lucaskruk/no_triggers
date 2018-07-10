@@ -22,7 +22,8 @@ namespace FrbaHotel.AbmUsuario
 
         private void FrmUsuario_Load(object sender, EventArgs e)
         {
-
+            btnBaja.Enabled = false;
+            btnModif.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -39,9 +40,15 @@ namespace FrbaHotel.AbmUsuario
 
         private void btnModif_Click(object sender, EventArgs e)
         {
-            FrmModUser frmModif = new FrmModUser();
-            frmModif.toggleAltaOff();
-            frmModif.setIdUser(this.idUsuario);
+            if (this.idUsuario != 0)
+            {
+                FrmModUser frmModif = new FrmModUser();
+                frmModif.toggleAltaOff();
+                frmModif.setIdUser(this.idUsuario);
+                frmModif.ShowDialog();
+                refrescarGrids();
+            }
+            else { MessageBox.Show("Debe buscar un usuario para poder modificar."); }
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
@@ -57,21 +64,27 @@ namespace FrbaHotel.AbmUsuario
                 {
                     this.idUsuario = frmUsearch.getID();
                     lblUserId.Text = string.Concat("ID Usuario: ", Convert.ToString(this.idUsuario));
-                    
-                    DataTable usersel = Utils.sptoTable(string.Concat("sp_lis_usuario ", Convert.ToString(this.idUsuario)));
-                    dGridUser.DataSource = usersel;
-                    dGridUser.AutoResizeColumns();
 
-                    DataTable userRoles = Utils.sptoTable(string.Concat("sp_lis_usu_roles ", Convert.ToString(this.idUsuario)));
-                    dGridRoles.DataSource = userRoles;
-                    dGridRoles.AutoResizeColumns();
-
-                    DataTable userHotel = Utils.sptoTable(string.Concat("sp_lis_usu_id_hotel ", Convert.ToString(this.idUsuario)));
-                    dGridHoteles.DataSource = userHotel;
-                    dGridHoteles.AutoResizeColumns();
+                    refrescarGrids();
+                    btnModif.Enabled = true;
+                    btnBaja.Enabled = true;
                 }
             }
             
+        }
+        private void refrescarGrids()
+        {
+            DataTable usersel = Utils.sptoTable(string.Concat("sp_lis_usuario ", Convert.ToString(this.idUsuario)));
+            dGridUser.DataSource = usersel;
+            dGridUser.AutoResizeColumns();
+
+            DataTable userRoles = Utils.sptoTable(string.Concat("sp_lis_usu_roles ", Convert.ToString(this.idUsuario)));
+            dGridRoles.DataSource = userRoles;
+            dGridRoles.AutoResizeColumns();
+
+            DataTable userHotel = Utils.sptoTable(string.Concat("sp_lis_usu_id_hotel ", Convert.ToString(this.idUsuario)));
+            dGridHoteles.DataSource = userHotel;
+            dGridHoteles.AutoResizeColumns();
         }
     }
 }

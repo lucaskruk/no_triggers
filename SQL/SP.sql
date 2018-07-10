@@ -584,15 +584,15 @@ values
 
 
 
-IF OBJECT_ID ('[NO_TRIGGERS].sp_Cambiar_Contrasenia') IS NOT NULL drop procedure [NO_TRIGGERS].sp_Cambiar_Contrasenia
+IF OBJECT_ID ('[NO_TRIGGERS].sp_user_Set_pass') IS NOT NULL drop procedure [NO_TRIGGERS].sp_user_Set_pass
 go
 
-create proc [NO_TRIGGERS].sp_Cambiar_Contrasenia
-@Usuario nvarchar(100), @NuevaContraseña nvarchar(256)
+create proc [NO_TRIGGERS].sp_user_Set_pass
+@userID int, @pass nvarchar(256)
 as
 begin
 	update [NO_TRIGGERS].Usuario 
-	set usuario_password = [NO_TRIGGERS].fn_encriptar(@NuevaContraseña) where usuario_username = @Usuario
+	set usuario_password = [NO_TRIGGERS].fn_encriptar(@pass) where id_usuario = @userID
 end
 go
 
@@ -623,6 +623,15 @@ as
 go
 --exec [no_triggers].sp_lis_usuario 1
 
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_tipo_DNI') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_tipo_DNI
+go
+create procedure [NO_TRIGGERS].sp_lis_tipo_DNI
+
+as
+	select id_tipo_documento,tipo_de_documento_nombre
+	from [NO_TRIGGERS].Tipo_documento
+go
+
 IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_usu_roles') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_usu_roles
 go
 create procedure [NO_TRIGGERS].sp_lis_usu_roles
@@ -633,29 +642,183 @@ as
 	join [NO_TRIGGERS].usuario_roles ur on r.id_rol=ur.id_rol
 	where ur.id_usuario=@idUser
 go
---exec [no_triggers].sp_lis_usu_roles 2
+--exec [no_triggers].sp_lis_usu_roles 1
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_usu_id_hotel') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_usu_id_hotel
 go
 create procedure [NO_TRIGGERS].sp_lis_usu_id_hotel (@idUser int)
 as 
 begin
-select h.id_hotel,hotel_nombre  from [NO_TRIGGERS].hotel h
+select h.id_hotel,hotel_nombre, hotel_estado  from [NO_TRIGGERS].hotel h
 join [NO_TRIGGERS].usuario_por_hotel uh on h.id_hotel=uh.id_hotel
 where uh.id_usuario=@idUser
 end
 go
+--exec [no_triggers].sp_lis_usu_id_hotel 1
 
-IF OBJECT_ID ('[NO_TRIGGERS].fn_castear_DataTime') IS NOT NULL drop function [NO_TRIGGERS].fn_castear_DataTime
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_u_roles_libres') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_u_roles_libres
 go
-create function [NO_TRIGGERS].fn_castear_DataTime(@fecha nvarchar(50))
-returns datetime
+create procedure [NO_TRIGGERS].sp_lis_u_roles_libres
+@idUser int
 as
+	select r.id_rol, rol_nombre	from [NO_TRIGGERS].Rol r
+	where id_rol not in (select id_rol from [NO_TRIGGERS].usuario_roles ur	where ur.id_usuario=@idUser) and rol_estado=1
+go
+--exec [no_triggers].sp_lis_u_roles_libres 2
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_u_hotel_libres') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_u_hotel_libres
+go
+create procedure [NO_TRIGGERS].sp_lis_u_hotel_libres (@idUser int)
+as 
 begin
-	return (select CONVERT(datetime,@fecha,121))
+select h.id_hotel,hotel_nombre, hotel_estado  from [NO_TRIGGERS].hotel h
+where id_hotel not in (select id_hotel from [NO_TRIGGERS].usuario_por_hotel uh where uh.id_usuario=@idUser) and hotel_estado=1
+end
+go
+-- exec [NO_TRIGGERS].sp_lis_u_hotel_libres 2
+--getters and setters de variables: username, nombre, apellido, contraseña (solo set), email, fechaNAC,tipoDoc,nroDoc
+--Setters:
+IF OBJECT_ID ('[NO_TRIGGERS].sp_set_usuario_datos') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_usuario_datos
+go
+create procedure [NO_TRIGGERS].sp_set_usuario_datos (@idUser int, @usern nvarchar(100), @nombre nvarchar(100), @apell nvarchar(100), @email nvarchar(100), @fechanac nvarchar(100), @tipoD int, @ndoc int, @ntel int)
+as 
+begin
+update u
+set 
+u.usuario_username=@usern,
+u.usuario_nombre=@nombre,
+u.usuario_apellido=@apell,
+u.usuario_email=@email,
+u.usuario_fecha_nacimiento= CONVERT(date,@fechanac,103),
+u.id_tipo_documento=@tipoD,
+u.usuario_numero_documento=@ndoc,
+u.usuario_telefono=@ntel
+from [NO_TRIGGERS].Usuario U
+where u.id_usuario=@idUser
 end
 go
 
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_username') IS NOT NULL drop function [NO_TRIGGERS].fn_get_username
+go
+
+create function [NO_TRIGGERS].fn_get_username
+(@id int) returns nvarchar(100)
+	AS 
+		begin
+	declare @Resultado nvarchar(100)
+	select @Resultado=usuario_username from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_usuario_nombre') IS NOT NULL drop function [NO_TRIGGERS].fn_get_usuario_nombre
+go
+
+create function [NO_TRIGGERS].fn_get_usuario_nombre
+(@id int) returns nvarchar(100)
+	AS 
+		begin
+	declare @Resultado nvarchar(100)
+	select @Resultado=usuario_nombre from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_usuario_apellido') IS NOT NULL drop function [NO_TRIGGERS].fn_get_usuario_apellido
+go
+
+create function [NO_TRIGGERS].fn_get_usuario_apellido
+(@id int) returns nvarchar(100)
+	AS 
+		begin
+	declare @Resultado nvarchar(100)
+	select @Resultado=usuario_apellido from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_user_mail') IS NOT NULL drop function [NO_TRIGGERS].fn_get_user_mail
+go
+
+create function [NO_TRIGGERS].fn_get_user_mail
+(@id int) returns nvarchar(200)
+	AS 
+		begin
+	declare @Resultado nvarchar(200)
+	select @Resultado=usuario_email from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_user_fechanac') IS NOT NULL drop function [NO_TRIGGERS].fn_get_user_fechanac
+go
+
+create function [NO_TRIGGERS].fn_get_user_fechanac
+(@id int) returns nvarchar(100)
+	AS 
+		begin
+	declare @Resultado nvarchar(100)
+	select @Resultado=
+	CONVERT(nvarchar(100),usuario_fecha_nacimiento,103) from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+--select [NO_TRIGGERS].fn_get_user_fechanac(1)
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_user_dni') IS NOT NULL drop function [NO_TRIGGERS].fn_get_user_dni
+go
+
+create function [NO_TRIGGERS].fn_get_user_dni
+(@id int) returns nvarchar(100)
+	AS 
+		begin
+	declare @Resultado nvarchar(100)
+	select @Resultado=convert(nvarchar(100),usuario_numero_documento) from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_user_phone') IS NOT NULL drop function [NO_TRIGGERS].fn_get_user_phone
+go
+
+create function [NO_TRIGGERS].fn_get_user_phone
+(@id int) returns nvarchar(100)
+	AS 
+		begin
+	declare @Resultado nvarchar(100)
+	select @Resultado=convert(nvarchar(100),usuario_telefono) from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_user_active') IS NOT NULL drop function [NO_TRIGGERS].fn_get_user_active
+go
+
+create function [NO_TRIGGERS].fn_get_user_active
+(@id int) returns int
+	AS 
+		begin
+	declare @Resultado int
+	select @Resultado=usuario_habilitado from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+--select [NO_TRIGGERS].fn_get_user_active(1)
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_user_tipoDocID') IS NOT NULL drop function [NO_TRIGGERS].fn_get_user_tipoDocID
+go
+
+create function [NO_TRIGGERS].fn_get_user_tipoDocID
+(@id int) returns int
+	AS 
+		begin
+	declare @Resultado int
+	select @Resultado=id_tipo_documento from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+
+
+--select CONVERT(date,'09/07/2017',103)
+-- populadores de tablas de mapeo de roles y hoteles.
 
 /*************************PAIS- CIUDAD - DIRECCION*************************************************/
 go

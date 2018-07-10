@@ -13,7 +13,18 @@ namespace FrbaHotel.Utility
     {
         static string con_str = Properties.Settings.Default.ConnectionString.ToString();
 
-
+        internal static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         /// <summary>
         /// Metodos genericos para acceder a la base de datos
         /// </summary>

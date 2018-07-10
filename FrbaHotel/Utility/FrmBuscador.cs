@@ -277,5 +277,12 @@ namespace FrbaHotel.Utility
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            txbFil1.Text = "";
+            txbFil2.Text = "";
+            txbFil4.Text = "";
+        }
     }
 }

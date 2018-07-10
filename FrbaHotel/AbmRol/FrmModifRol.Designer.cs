@@ -47,6 +47,7 @@
             this.btnClean = new System.Windows.Forms.Button();
             this.lblQuita = new System.Windows.Forms.Label();
             this.lblAgrega = new System.Windows.Forms.Label();
+            this.lblAdvise = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtgFunc)).BeginInit();
             this.SuspendLayout();
             // 
@@ -119,9 +120,11 @@
             // lblRol
             // 
             this.lblRol.AutoSize = true;
+            this.lblRol.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRol.ForeColor = System.Drawing.Color.Red;
             this.lblRol.Location = new System.Drawing.Point(13, 32);
             this.lblRol.Name = "lblRol";
-            this.lblRol.Size = new System.Drawing.Size(63, 13);
+            this.lblRol.Size = new System.Drawing.Size(73, 13);
             this.lblRol.TabIndex = 7;
             this.lblRol.Text = "Nombre Rol";
             // 
@@ -217,11 +220,23 @@
             this.lblAgrega.TabIndex = 18;
             this.lblAgrega.Text = "Para Agregar";
             // 
+            // lblAdvise
+            // 
+            this.lblAdvise.AutoSize = true;
+            this.lblAdvise.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAdvise.ForeColor = System.Drawing.Color.Red;
+            this.lblAdvise.Location = new System.Drawing.Point(13, 300);
+            this.lblAdvise.Name = "lblAdvise";
+            this.lblAdvise.Size = new System.Drawing.Size(316, 13);
+            this.lblAdvise.TabIndex = 19;
+            this.lblAdvise.Text = "* Nota, los campos resaltados en rojo son obligatorios.";
+            // 
             // FrmModifRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(803, 293);
+            this.ClientSize = new System.Drawing.Size(803, 331);
+            this.Controls.Add(this.lblAdvise);
             this.Controls.Add(this.lblAgrega);
             this.Controls.Add(this.lblQuita);
             this.Controls.Add(this.btnClean);
@@ -270,5 +285,6 @@
         private System.Windows.Forms.Button btnClean;
         private System.Windows.Forms.Label lblQuita;
         private System.Windows.Forms.Label lblAgrega;
+        private System.Windows.Forms.Label lblAdvise;
     }
 }

@@ -99,11 +99,17 @@ namespace FrbaHotel.AbmRol
 
         private void btnAddFun_Click(object sender, EventArgs e)
         {
-            if (lbxAgrega.Items.Contains(cbxAddFun.SelectedItem)){
-            MessageBox.Show("Ese valor ya ha sido seleccionado");
-            } else {
-                lbxAgrega.Items.Add(cbxAddFun.SelectedItem);
-                //lstfuncToAdd.Add(Convert.ToInt32(cbxAddFun.SelectedValue.ToString()));
+            if (cbxAddFun.SelectedItem != null)
+            {
+                if (lbxAgrega.Items.Contains(cbxAddFun.SelectedItem))
+                {
+                    MessageBox.Show("Ese valor ya ha sido seleccionado");
+                }
+                else
+                {
+                    lbxAgrega.Items.Add(cbxAddFun.SelectedItem);
+                    //lstfuncToAdd.Add(Convert.ToInt32(cbxAddFun.SelectedValue.ToString()));
+                }
             }
         }
 
@@ -123,14 +129,17 @@ namespace FrbaHotel.AbmRol
 
         private void btnQuita_Click(object sender, EventArgs e)
         {
-            if (lbxQuita.Items.Contains(cbxRemFun.SelectedItem))
+            if (cbxRemFun.SelectedItem != null)
             {
-                MessageBox.Show("Ese valor ya ha sido seleccionado");
-            }
-            else
-            {
-                lbxQuita.Items.Add(cbxRemFun.SelectedItem);
-                //lstfuncToAdd.Add(Convert.ToInt32(cbxAddFun.SelectedValue.ToString()));
+                if (lbxQuita.Items.Contains(cbxRemFun.SelectedItem))
+                {
+                    MessageBox.Show("Ese valor ya ha sido seleccionado");
+                }
+                else
+                {
+                    lbxQuita.Items.Add(cbxRemFun.SelectedItem);
+             
+                }
             }
         }
 
