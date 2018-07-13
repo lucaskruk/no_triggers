@@ -14,6 +14,7 @@ namespace FrbaHotel.Login
     public partial class Frm_Sel_Hotel : Form
     {
         int roleSelected=0;
+        //int goodbuttonPressed = 0;
 
         public Frm_Sel_Hotel()
         {
@@ -34,6 +35,7 @@ namespace FrbaHotel.Login
 
         private void Frm_Sel_Hotel_Load(object sender, EventArgs e)
         {
+            //goodbuttonPressed = 0;
             lblUsuario.Text = string.Concat("Usuario: ", CommonVars.userLogged);
             string queryHotel = string.Concat("sp_lista_hotel_usuario '", CommonVars.userLogged,"'");
             string queryRol = string.Concat("sp_lista_rol_usuario '", CommonVars.userLogged, "'");
@@ -68,20 +70,27 @@ namespace FrbaHotel.Login
             {
                 CommonVars.idHotelSeleccionado = Convert.ToInt32(listBx_hotel.SelectedValue.ToString());
             }
-            if (cbxRol.Items.Count > 1)
-            {
-                Utils.execSPnoReturn(string.Concat("sp_set_usuario_rol_asignado ", Convert.ToString(this.roleSelected), ",'", CommonVars.userLogged, "'"));
-            }
                 logHelper.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
-                this.Visible = false;
-                FrmMenu frmMenu = new FrmMenu();
-                frmMenu.Show();
+                if (cbxRol.Items.Count > 1)
+                {
+                    Utils.execSPnoReturn(string.Concat("sp_set_usuario_rol_asignado ", Convert.ToString(this.roleSelected), ",'", CommonVars.userLogged, "'"));
+                } 
+                //this.Visible = false;
+                //FrmMenu frmMenu = new FrmMenu();
+                //frmMenu.Show();
+               // goodbuttonPressed = 1;
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             
         }
 
         private void Frm_Sel_Hotel_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+           // if (goodbuttonPressed == 0)
+            {
+              //  Application.Exit();
+            }
+            
         }
 
         private void label1_Click(object sender, EventArgs e)

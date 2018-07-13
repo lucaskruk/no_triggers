@@ -4,7 +4,7 @@ using System;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-
+using FrbaHotel.Login;
 namespace FrbaHotel
 {
     static class Program
@@ -18,7 +18,7 @@ namespace FrbaHotel
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmInicio());
+            Application.Run(new FrmMenu());
         }
     }
 
@@ -26,6 +26,8 @@ namespace FrbaHotel
     {
         public static int idHotelSeleccionado;
         public static string userLogged;
+        
+
         
     }
 }

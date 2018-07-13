@@ -90,3 +90,4 @@ C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHot
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.Utility.FrmBuscador.resources
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.AbmUsuario.FrmModUser.resources
 C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.AbmUsuario.FrmUsuario.resources
+C:\Users\Marilu\Documents\GitHub\no_triggers_private\FrbaHotel\obj\Debug\FrbaHotel.AbmCliente.FrmCliente.resources

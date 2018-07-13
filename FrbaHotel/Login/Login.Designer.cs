@@ -73,7 +73,7 @@
             this.txtUsuario.Location = new System.Drawing.Point(227, 124);
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(211, 17);
-            this.txtUsuario.TabIndex = 2;
+            this.txtUsuario.TabIndex = 1;
             this.txtUsuario.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtPasswd
@@ -86,7 +86,7 @@
             this.txtPasswd.Name = "txtPasswd";
             this.txtPasswd.PasswordChar = '*';
             this.txtPasswd.Size = new System.Drawing.Size(211, 17);
-            this.txtPasswd.TabIndex = 3;
+            this.txtPasswd.TabIndex = 2;
             this.txtPasswd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtPasswd.UseSystemPasswordChar = true;
             // 
@@ -110,7 +110,7 @@
             this.Iniciar_Sesion.Location = new System.Drawing.Point(224, 218);
             this.Iniciar_Sesion.Name = "Iniciar_Sesion";
             this.Iniciar_Sesion.Size = new System.Drawing.Size(211, 47);
-            this.Iniciar_Sesion.TabIndex = 5;
+            this.Iniciar_Sesion.TabIndex = 3;
             this.Iniciar_Sesion.Text = "Iniciar sesión";
             this.Iniciar_Sesion.UseVisualStyleBackColor = false;
             this.Iniciar_Sesion.Click += new System.EventHandler(this.Iniciar_Sesion_Click);
@@ -134,7 +134,7 @@
             this.Ir_a_pantalla_principal.Location = new System.Drawing.Point(532, 285);
             this.Ir_a_pantalla_principal.Name = "Ir_a_pantalla_principal";
             this.Ir_a_pantalla_principal.Size = new System.Drawing.Size(114, 23);
-            this.Ir_a_pantalla_principal.TabIndex = 7;
+            this.Ir_a_pantalla_principal.TabIndex = 4;
             this.Ir_a_pantalla_principal.Text = "Atrás";
             this.Ir_a_pantalla_principal.UseVisualStyleBackColor = false;
             this.Ir_a_pantalla_principal.Click += new System.EventHandler(this.Ir_a_pantalla_principal_Click);

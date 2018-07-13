@@ -23,6 +23,8 @@ namespace FrbaHotel.Utility
         string camposaMostrar = "*";
         string campo1="";
         string campo2="";
+        string campo5 = "";
+        string campo6 = "";
         string nomSPcomboB="";
         string campoBus="";
         int idSeleccionado {get;set;}
@@ -90,22 +92,56 @@ namespace FrbaHotel.Utility
         }
         public string getCampo2()
         {
-            return this.campo1;
+            return this.campo2;
+        }
+
+        //campo 5 guarda solo numeros
+        public void setCampo5(string nombreCampo, string lblStr)
+        {
+            if (nombreCampo != null && nombreCampo != "")
+            {
+                this.campo5 = nombreCampo;
+                if (lblStr != null && lblStr != "")
+                { lblFil5.Text = lblStr; }
+                else { lblFil5.Text = nombreCampo; }
+            }
+        }
+        public string getCampo5()
+        {
+            return this.campo5;
+        }
+
+        public void setCampo6(string nombreCampo, string lblStr)
+        {
+            if (nombreCampo != null && nombreCampo != "")
+            {
+                this.campo6 = nombreCampo;
+                if (lblStr != null && lblStr != "")
+                { lblFil6.Text = lblStr; }
+                else { lblFil6.Text = nombreCampo; }
+            }
+        }
+        public string getCampo6()
+        {
+            return this.campo6;
         }
 
         public int getID()
         {
             return this.idSeleccionado;
         }
-        public void setSPcomboB(string nombreCampo, string lblStr)
+        public void setSPcomboB(string query, string lblStr, string campoID, string campoValue)
         {
-            if (nombreCampo != null && nombreCampo !="")
+            if (query != null && query !="")
             {
-                this.nomSPcomboB = nombreCampo;
+                this.nomSPcomboB = query;
                 if (lblStr != null && lblStr!="")
                 { lblFil3.Text = lblStr; }
-                else { lblFil3.Text = nombreCampo; }
-                DataTable distValues = Utils.querytoTable(this.getBuscar(), string.Concat("distinct ", nombreCampo));
+                else { lblFil3.Text=""; }
+                DataTable distValues = Utils.querytoTable(query);
+                cbxFil3.DataSource=distValues;
+                cbxFil3.ValueMember=campoID;
+                cbxFil3.DisplayMember = campoValue;
             }
         }
         public string getSPcomboB()
@@ -143,7 +179,7 @@ namespace FrbaHotel.Utility
             {
                 resultado = string.Concat(resultado, this.campo1, " like ('%", txbFil1.Text, "%')");
                 //si hay mas campos para filtrar
-                if (this.campo2 != "" || this.cbxFil3.Items.Count > 0 || this.campoBus != "")
+                if (this.campo2 != "" || this.cbxFil3.Items.Count > 0 || this.campoBus != "" || this.campo5 != "" || this.campo6 != "")
                 { resultado = string.Concat(resultado, " and "); }
 
             }
@@ -157,12 +193,54 @@ namespace FrbaHotel.Utility
             {
                 resultado = string.Concat(resultado, this.campo2, " like ('%", txbFil2.Text, "%')");
                 //si hay mas campos para filtrar
-                if (this.cbxFil3.Items.Count > 0 || this.campoBus != "")
+                if (this.cbxFil3.Items.Count > 0 || this.campoBus != "" || this.campo5 != "" || this.campo6 != "")
+                { resultado = string.Concat(resultado, " and "); }
+            }
+            return resultado;
+        }
+        
+        public string getWhereCampo3()
+        {
+            string resultado = "";
+
+            if (this.nomSPcomboB != null && this.nomSPcomboB != "")
+            {
+                string campo3 = cbxFil3.ValueMember.ToString();
+                string value3 =cbxFil3.SelectedValue.ToString();
+                resultado = string.Concat(resultado, campo3, " = ", value3  );
+                //si hay mas campos para filtrar
+                if ( this.campoBus != ""||this.campo5!="" ||this.campo6!="")
                 { resultado = string.Concat(resultado, " and "); }
             }
             return resultado;
         }
 
+        public string getWhereCampo5()
+        {
+            string resultado = "";
+
+            if (this.campo5 != null && this.campo5 != "")
+            {
+                resultado = string.Concat(resultado, this.campo5, " like ('%", txbFil5.Text, "%')");
+                //si hay mas campos para filtrar
+                if (this.campo6 != "")
+                { resultado = string.Concat(resultado, " and "); }
+            }
+            return resultado;
+        }
+        public string getWhereCampo6()
+        {
+            string resultado = "";
+
+            if (this.campo6 != null && this.campo6 != "")
+            {
+                resultado = string.Concat(resultado, this.campo6, " like ('%", txbFil6.Text, "%')");
+                
+                
+                
+            }
+            return resultado;
+        }
         public void inicializar() {
 
             if (this.tablaBuscar != "")
@@ -178,6 +256,16 @@ namespace FrbaHotel.Utility
                 {
                     lblFil2.Visible = true;
                     txbFil2.Visible = true;
+                }
+                if (this.campo5 != "")
+                {
+                    lblFil5.Visible = true;
+                    txbFil5.Visible = true;
+                }
+                if (this.campo6 != "")
+                {
+                    lblFil6.Visible = true;
+                    txbFil6.Visible = true;
                 }
                 if (this.nomSPcomboB != "")
                 {
@@ -202,7 +290,7 @@ namespace FrbaHotel.Utility
             FrmBuscador result = new FrmBuscador();
             result.setCampo1(cp1,lb1);
             result.setCampo2(cp2,lb2);
-            result.setSPcomboB(spCB,lb3);
+            //result.setSPcomboB(spCB,lb3);
             if (cpFecha != null)
             {
                 result.toggleFechaOn();
@@ -254,17 +342,17 @@ namespace FrbaHotel.Utility
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            if (getCampo1() != "" || getCampo2() != "" || getCampoBus() != "" || cbxFil3.Items.Count > 0)
-            {
-                string query = string.Concat(this.getBuscar(), " where ", this.getWhereCampo1(),this.getWhereCampo2());
-               // MessageBox.Show(query);
-                DataTable lisRes = Utils.querytoTable(query, this.camposaMostrar);
+           
+            
+                string query = string.Concat(this.getBuscar(), " where ", this.getWhereCampo1(), this.getWhereCampo2(), this.getWhereCampo3(), this.getWhereCampo5(), this.getWhereCampo6());
+                //MessageBox.Show(query);
+                DataTable lisRes = Utils.querytop100Table(query, this.camposaMostrar);
                 dtgridSearch.DataSource = lisRes;
                 dtgridSearch.AutoResizeColumns();
-                //if (dtgridSearch.RowCount == 1) { dtgridSearch.s }
+                if (dtgridSearch.RowCount == 100) { MessageBox.Show("La busqueda ha arrojado demasiados resultados. Intente ser mas preciso"); }
 
-            }
-            else { MessageBox.Show("Debe seleccionar al menos un filtro de busqueda"); }
+            
+           
         }
 
         private void FrmBuscador_Load(object sender, EventArgs e)
@@ -283,6 +371,17 @@ namespace FrbaHotel.Utility
             txbFil1.Text = "";
             txbFil2.Text = "";
             txbFil4.Text = "";
+        }
+
+        private void txbFil6_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+         (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+  
         }
     }
 }

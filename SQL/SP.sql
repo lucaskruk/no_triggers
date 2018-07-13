@@ -1,4 +1,6 @@
 
+
+
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------STORED PROCEDURES-------------------------------------------------------------------------
 /*------------------AUXILIARES------------*/
@@ -75,37 +77,46 @@ where uh.id_usuario=@usuario
 
 go
 
-
+----- este SP loguea al usuario
 IF OBJECT_ID ('[NO_TRIGGERS].sp_set_hotel_logueado','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_hotel_logueado
 go
 create procedure [NO_TRIGGERS].sp_set_hotel_logueado (@usuario nvarchar(100), @hotel_id int)
 as
 begin
 
-update us
-set us.usuario_hotel_logueado=@hotel_id,us.usuario_last_activity=GETDATE()
-from [NO_TRIGGERS].usuario us
-where us.usuario_username=@usuario
+		---elimina todo lo que haya quedado de un cierre inesperado
+		if not exists (select * from [NO_TRIGGERS].tablaControl where cierre_exitoso=1) 
+		begin 
+			update [NO_TRIGGERS].Usuario
+			set usuario_hotel_logueado=0,id_rol_asignado=0;
+		end
 
-declare @rolecnt int
-select @rolecnt= count(1) 
-from [NO_TRIGGERS].usuario_roles ur 
-join [NO_TRIGGERS].Usuario u on ur.id_usuario=u.id_usuario 
-join [NO_TRIGGERS].Rol r on ur.id_rol=r.id_rol
-where u.usuario_username=@usuario and r.rol_estado=1
+		update us
+		set us.usuario_hotel_logueado=@hotel_id,us.usuario_last_activity=GETDATE()
+		from [NO_TRIGGERS].usuario us
+		where us.usuario_username=@usuario
 
-if @rolecnt = 1
-begin
-update us
-set us.id_rol_asignado=ur.id_rol
-from [NO_TRIGGERS].Usuario us join [NO_TRIGGERS].usuario_roles ur on us.id_usuario=ur.id_usuario
-end
+		declare @rolecnt int
+		select @rolecnt= count(1) 
+		from [NO_TRIGGERS].usuario_roles ur 
+		join [NO_TRIGGERS].Usuario u on ur.id_usuario=u.id_usuario 
+		join [NO_TRIGGERS].Rol r on ur.id_rol=r.id_rol
+		where u.usuario_username=@usuario and r.rol_estado=1
+
+		if @rolecnt = 1
+		begin
+			update us
+			set us.id_rol_asignado=ur.id_rol
+			from [NO_TRIGGERS].Usuario us join [NO_TRIGGERS].usuario_roles ur on us.id_usuario=ur.id_usuario
+		end
+
+		update [NO_TRIGGERS].tablaControl set cierre_exitoso=0;
 
 end
 go
 
 
--- exec [no_triggers].sp_desloguea_user 'Admin2',1
+-- exec [no_triggers].sp_set_hotel_logueado 'Admin',1
 
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_desloguea_user','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_desloguea_user
@@ -113,10 +124,16 @@ go
 create procedure [NO_TRIGGERS].sp_desloguea_user (@usuario nvarchar(100))
 as
 begin
+
 update us
-set us.usuario_hotel_logueado=0
+set us.usuario_hotel_logueado=0,us.id_rol_asignado=0
 from [NO_TRIGGERS].usuario us
 where us.usuario_username=@usuario
+
+--confirma que el sistema tuvo un cierre normal.
+
+update [NO_TRIGGERS].tablaControl set cierre_exitoso=1;
+
 end
 go
 
@@ -548,65 +565,63 @@ create procedure [NO_TRIGGERS].sp_quita_funcionalidad
 
 /***********************PARA USUARIO*************************************/
 GO
-
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_crear_usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_crear_usuario
+IF OBJECT_ID ('[NO_TRIGGERS].sp_quita_rol','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_quita_rol
 go
 
-create procedure [NO_TRIGGERS].sp_crear_usuario --se decide que el usuario quede habilitado al crearse--
-@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @password nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50), @rolasignado int, @hotel int --RECIBE EL HOTEL DEL ADMINISTRADOR
-AS
-BEGIN
-DECLARE @responseMessage nvarchar(250) 
-	SET NOCOUNT ON 
-	BEGIN TRY 
-		INSERT INTO [NO_TRIGGERS].Usuario 
-		(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento,usuario_cantidad_intentos_fallidos
-		,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado--,id_rol_asignado--,id_hotel
-		)
-		VALUES (@nombreusuario, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@password), @email, @fechanacimiento, 0,@tipodocumento, @numero_documento, @numerotelefono,1) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
-		INSERT INTO [NO_TRIGGERS].usuario_por_hotel VALUES ((select id_usuario from [NO_TRIGGERS].usuario us where us.usuario_username=@nombreusuario),@hotel)
-		SET @responseMessage= 'Usuario creado con exito'
-	END TRY
-	BEGIN CATCH 
-		SET @responseMessage= ERROR_MESSAGE()
-	END CATCH
-END
+create procedure [NO_TRIGGERS].sp_quita_rol
+@user_id int, @rol_id int
+	AS
+		delete [NO_TRIGGERS].usuario_roles where id_usuario=@user_id and id_rol=@Rol_id
+	GO
+IF OBJECT_ID ('[NO_TRIGGERS].sp_quita_hotel','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_quita_hotel
 go
 
-/*
-insert into [NO_TRIGGERS].usuario 
-(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
-,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
-values
-('USER_GUEST3', 'User','Generico', [no_triggers].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,1)
-*/
+create procedure [NO_TRIGGERS].sp_quita_hotel
+@user_id int, @hotel_id int
+	AS
+		delete [NO_TRIGGERS].usuario_por_hotel where id_usuario=@user_id and id_hotel=@hotel_id
+	GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_agrega_urole','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_agrega_urole
+go
+--select * from [no_triggers].rol
+create procedure [NO_TRIGGERS].sp_agrega_urole
+	@user_id int, @rol_id int
+	AS
+	if not exists (select 1 from [NO_TRIGGERS].usuario_roles where id_rol=@Rol_id and id_usuario=@user_id)
+	begin
+	insert into [NO_TRIGGERS].usuario_roles (id_rol,id_usuario) values (@Rol_id,@user_id)
+	end
+	GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_agrega_uhotel','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_agrega_uhotel
+go
+--select * from [no_triggers].rol
+create procedure [NO_TRIGGERS].sp_agrega_uhotel
+	@user_id int, @hotel_id int
+	AS
+	if not exists (select 1 from [NO_TRIGGERS].usuario_por_hotel where id_hotel=@hotel_id and id_usuario=@user_id)
+	begin
+	insert into [NO_TRIGGERS].usuario_por_hotel(id_hotel,id_usuario) values (@hotel_id,@user_id)
+	end
+	GO
 
 
 
-IF OBJECT_ID ('[NO_TRIGGERS].sp_user_Set_pass') IS NOT NULL drop procedure [NO_TRIGGERS].sp_user_Set_pass
+IF OBJECT_ID ('[NO_TRIGGERS].fn_username_unico') IS NOT NULL drop function [NO_TRIGGERS].fn_username_unico
 go
 
-create proc [NO_TRIGGERS].sp_user_Set_pass
-@userID int, @pass nvarchar(256)
-as
-begin
-	update [NO_TRIGGERS].Usuario 
-	set usuario_password = [NO_TRIGGERS].fn_encriptar(@pass) where id_usuario = @userID
+create function [NO_TRIGGERS].fn_username_unico (@username nvarchar (100), @userid int) returns int
+	AS 
+		begin
+	declare @Resultado int
+	if exists (select 1 from [NO_TRIGGERS].usuario where usuario_username=@username and id_usuario<>@userid) begin
+	
+	select @Resultado=0
+	end else select @Resultado=1
+	return @resultado
 end
-go
-
---exec [NO_TRIGGERS].sp_Cambiar_Contraseña 'USER_GUEST2', 'pepita'
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_Dar_Baja_Usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_Dar_Baja_Usuario
-go
-create proc [NO_TRIGGERS].sp_Dar_Baja_Usuario
-@idUser int
-as
-				update [NO_TRIGGERS].Usuario
-				set usuario_habilitado = 0 where id_usuario=@idUser
-
-go
+GO
 
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_usuario
@@ -614,14 +629,15 @@ go
 create procedure [NO_TRIGGERS].sp_lis_usuario 
 @idUser int
 as
-	select id_usuario, usuario_username as Nombre_Usuario, usuario_nombre as nombre  
+	select distinct us.id_usuario, usuario_username as Nombre_Usuario, usuario_nombre as nombre  
 	, usuario_apellido as apellido, usuario_email as email, usuario_fecha_nacimiento as fecha_nac
 	,td.tipo_de_documento_nombre as tipo_doc, usuario_numero_documento as nro_doc, usuario_telefono as telefono, usuario_habilitado
 	from [NO_TRIGGERS].Usuario us
+	join [NO_TRIGGERS].usuario_por_hotel uh on us.id_usuario=uh.id_usuario
 	left join [NO_TRIGGERS].Tipo_documento td on us.id_tipo_documento=td.id_tipo_documento
-	where us.id_usuario=@idUser
+	where us.id_usuario=@idUser-- and uh.id_hotel in (select uh.id_hotel from [NO_TRIGGERS].usuario_por_hotel where id_usuario=@loggedUser)
 go
---exec [no_triggers].sp_lis_usuario 1
+
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_tipo_DNI') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_tipo_DNI
 go
@@ -697,6 +713,48 @@ from [NO_TRIGGERS].Usuario U
 where u.id_usuario=@idUser
 end
 go
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_crear_usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_crear_usuario
+go
+
+create procedure [NO_TRIGGERS].sp_crear_usuario --se decide que el usuario quede habilitado al crearse--
+@uname nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @pass nvarchar(100), @email nvarchar(200), @fechanac nvarchar(20), @tipodoc int, @n_doc nvarchar(50), @ntel nvarchar(50)
+AS
+BEGIN
+DECLARE @responseMessage nvarchar(250) 
+	SET NOCOUNT ON 
+
+		INSERT INTO [NO_TRIGGERS].Usuario 
+		(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento,usuario_cantidad_intentos_fallidos
+		,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado	)
+		VALUES (@uname, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@pass), @email, CONVERT(date,@fechanac,103), 0,@tipodoc, @n_doc, @ntel,1)
+END
+go
+
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_user_Set_pass') IS NOT NULL drop procedure [NO_TRIGGERS].sp_user_Set_pass
+go
+
+create proc [NO_TRIGGERS].sp_user_Set_pass
+@userID int, @pass nvarchar(256)
+as
+begin
+	update [NO_TRIGGERS].Usuario 
+	set usuario_password = [NO_TRIGGERS].fn_encriptar(@pass) where id_usuario = @userID
+end
+go
+
+--exec [NO_TRIGGERS].sp_Cambiar_Contraseña 'USER_GUEST2', 'pepita'
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_Dar_Baja_Usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_Dar_Baja_Usuario
+go
+create proc [NO_TRIGGERS].sp_Dar_Baja_Usuario
+@idUser int
+as
+				update [NO_TRIGGERS].Usuario
+				set usuario_habilitado = 0 where id_usuario=@idUser
+go
+
 
 
 IF OBJECT_ID ('[NO_TRIGGERS].fn_get_username') IS NOT NULL drop function [NO_TRIGGERS].fn_get_username
@@ -786,6 +844,19 @@ create function [NO_TRIGGERS].fn_get_user_phone
 		begin
 	declare @Resultado nvarchar(100)
 	select @Resultado=convert(nvarchar(100),usuario_telefono) from [NO_TRIGGERS].usuario where id_usuario=@id
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('[NO_TRIGGERS].fn_get_usrid_f_username') IS NOT NULL drop function [NO_TRIGGERS].fn_get_usrid_f_username
+go
+
+create function [NO_TRIGGERS].fn_get_usrid_f_username
+(@uname nvarchar(100)) returns int
+	AS 
+		begin
+	declare @Resultado int
+	select @Resultado=id_usuario from [NO_TRIGGERS].usuario where usuario_username=@uname
 	return @resultado
 end
 GO
@@ -1052,3 +1123,19 @@ go
 --select top 1000 * from [NO_TRIGGERS].fn_buscar_cliente_para_modificar('AARON','Castillo',null,97645361,null)
 
 
+/**
+
+VISTAS 
+
+
+**/
+if object_id('[no_triggers].view_usuario') is not null drop view [NO_TRIGGERS].view_usuario
+go
+create view [no_triggers].view_usuario
+as
+
+select distinct u.* from [NO_TRIGGERS].Usuario u
+join [NO_TRIGGERS].usuario_por_Hotel h on u.id_usuario=h.id_usuario 
+where h.id_hotel in (select usuario_hotel_logueado from [NO_TRIGGERS].usuario)
+
+go

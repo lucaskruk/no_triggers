@@ -182,27 +182,28 @@
             this.chkActive.Location = new System.Drawing.Point(19, 283);
             this.chkActive.Name = "chkActive";
             this.chkActive.Size = new System.Drawing.Size(73, 17);
-            this.chkActive.TabIndex = 10;
+            this.chkActive.TabIndex = 11;
             this.chkActive.Text = "Habilitado";
             this.chkActive.UseVisualStyleBackColor = true;
             this.chkActive.CheckedChanged += new System.EventHandler(this.chkActive_CheckedChanged);
             // 
             // btnAceptar
             // 
-            this.btnAceptar.Location = new System.Drawing.Point(88, 469);
+            this.btnAceptar.Location = new System.Drawing.Point(88, 494);
             this.btnAceptar.Name = "btnAceptar";
             this.btnAceptar.Size = new System.Drawing.Size(75, 23);
-            this.btnAceptar.TabIndex = 12;
+            this.btnAceptar.TabIndex = 21;
             this.btnAceptar.Text = "Aceptar";
             this.btnAceptar.UseVisualStyleBackColor = true;
             this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(169, 469);
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(169, 494);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 13;
+            this.btnCancel.TabIndex = 22;
             this.btnCancel.Text = "Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -210,43 +211,50 @@
             // txbUname
             // 
             this.txbUname.Location = new System.Drawing.Point(88, 48);
+            this.txbUname.MaxLength = 50;
             this.txbUname.Name = "txbUname";
             this.txbUname.Size = new System.Drawing.Size(249, 20);
-            this.txbUname.TabIndex = 14;
+            this.txbUname.TabIndex = 1;
             // 
             // txbName
             // 
             this.txbName.Location = new System.Drawing.Point(88, 78);
+            this.txbName.MaxLength = 50;
             this.txbName.Name = "txbName";
             this.txbName.Size = new System.Drawing.Size(87, 20);
-            this.txbName.TabIndex = 15;
+            this.txbName.TabIndex = 2;
             // 
             // txbApell
             // 
             this.txbApell.Location = new System.Drawing.Point(235, 78);
+            this.txbApell.MaxLength = 50;
             this.txbApell.Name = "txbApell";
             this.txbApell.Size = new System.Drawing.Size(100, 20);
-            this.txbApell.TabIndex = 16;
+            this.txbApell.TabIndex = 3;
             // 
             // txbPass
             // 
             this.txbPass.Location = new System.Drawing.Point(137, 108);
+            this.txbPass.MaxLength = 15;
             this.txbPass.Name = "txbPass";
             this.txbPass.PasswordChar = '*';
             this.txbPass.Size = new System.Drawing.Size(200, 20);
-            this.txbPass.TabIndex = 17;
+            this.txbPass.TabIndex = 4;
+            this.txbPass.TextChanged += new System.EventHandler(this.txbPass_TextChanged);
             // 
             // txbMail
             // 
             this.txbMail.Location = new System.Drawing.Point(88, 158);
+            this.txbMail.MaxLength = 100;
             this.txbMail.Name = "txbMail";
             this.txbMail.Size = new System.Drawing.Size(249, 20);
-            this.txbMail.TabIndex = 18;
+            this.txbMail.TabIndex = 6;
             // 
             // txbNac
             // 
             this.txbNac.Enabled = false;
             this.txbNac.Location = new System.Drawing.Point(88, 187);
+            this.txbNac.MaxLength = 32;
             this.txbNac.Name = "txbNac";
             this.txbNac.Size = new System.Drawing.Size(110, 20);
             this.txbNac.TabIndex = 19;
@@ -256,16 +264,17 @@
             this.txbDoc.Location = new System.Drawing.Point(237, 217);
             this.txbDoc.Name = "txbDoc";
             this.txbDoc.Size = new System.Drawing.Size(100, 20);
-            this.txbDoc.TabIndex = 20;
+            this.txbDoc.TabIndex = 9;
             this.txbDoc.TextChanged += new System.EventHandler(this.txbDoc_TextChanged);
             this.txbDoc.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbDoc_KeyPress);
             // 
             // txbPhone
             // 
             this.txbPhone.Location = new System.Drawing.Point(88, 251);
+            this.txbPhone.MaxLength = 20;
             this.txbPhone.Name = "txbPhone";
             this.txbPhone.Size = new System.Drawing.Size(249, 20);
-            this.txbPhone.TabIndex = 21;
+            this.txbPhone.TabIndex = 10;
             this.txbPhone.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbPhone_KeyPress);
             // 
             // btnSel
@@ -273,7 +282,7 @@
             this.btnSel.Location = new System.Drawing.Point(237, 184);
             this.btnSel.Name = "btnSel";
             this.btnSel.Size = new System.Drawing.Size(100, 23);
-            this.btnSel.TabIndex = 22;
+            this.btnSel.TabIndex = 7;
             this.btnSel.Text = "Seleccionar";
             this.btnSel.UseVisualStyleBackColor = true;
             this.btnSel.Click += new System.EventHandler(this.btnSel_Click);
@@ -284,7 +293,7 @@
             this.cbxTdoc.Location = new System.Drawing.Point(88, 217);
             this.cbxTdoc.Name = "cbxTdoc";
             this.cbxTdoc.Size = new System.Drawing.Size(87, 21);
-            this.cbxTdoc.TabIndex = 23;
+            this.cbxTdoc.TabIndex = 8;
             this.cbxTdoc.SelectedIndexChanged += new System.EventHandler(this.cbxTdoc_SelectedIndexChanged);
             // 
             // lbxAgregaRol
@@ -293,7 +302,8 @@
             this.lbxAgregaRol.Location = new System.Drawing.Point(19, 368);
             this.lbxAgregaRol.Name = "lbxAgregaRol";
             this.lbxAgregaRol.Size = new System.Drawing.Size(144, 95);
-            this.lbxAgregaRol.TabIndex = 24;
+            this.lbxAgregaRol.TabIndex = 99;
+            this.lbxAgregaRol.TabStop = false;
             this.lbxAgregaRol.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // lbxAgregaHotel
@@ -302,7 +312,8 @@
             this.lbxAgregaHotel.Location = new System.Drawing.Point(186, 368);
             this.lbxAgregaHotel.Name = "lbxAgregaHotel";
             this.lbxAgregaHotel.Size = new System.Drawing.Size(151, 95);
-            this.lbxAgregaHotel.TabIndex = 25;
+            this.lbxAgregaHotel.TabIndex = 98;
+            this.lbxAgregaHotel.TabStop = false;
             this.lbxAgregaHotel.SelectedIndexChanged += new System.EventHandler(this.lbxAgregaHotel_SelectedIndexChanged);
             // 
             // cbxAgregaRol
@@ -311,7 +322,7 @@
             this.cbxAgregaRol.Location = new System.Drawing.Point(19, 315);
             this.cbxAgregaRol.Name = "cbxAgregaRol";
             this.cbxAgregaRol.Size = new System.Drawing.Size(144, 21);
-            this.cbxAgregaRol.TabIndex = 26;
+            this.cbxAgregaRol.TabIndex = 12;
             this.cbxAgregaRol.SelectedIndexChanged += new System.EventHandler(this.cbxAgregaRol_SelectedIndexChanged);
             // 
             // cbxAgregaHotel
@@ -320,7 +331,7 @@
             this.cbxAgregaHotel.Location = new System.Drawing.Point(184, 315);
             this.cbxAgregaHotel.Name = "cbxAgregaHotel";
             this.cbxAgregaHotel.Size = new System.Drawing.Size(151, 21);
-            this.cbxAgregaHotel.TabIndex = 27;
+            this.cbxAgregaHotel.TabIndex = 14;
             this.cbxAgregaHotel.SelectedIndexChanged += new System.EventHandler(this.cbxAgregaHotel_SelectedIndexChanged);
             // 
             // btnAgregaHotel
@@ -328,7 +339,7 @@
             this.btnAgregaHotel.Location = new System.Drawing.Point(184, 339);
             this.btnAgregaHotel.Name = "btnAgregaHotel";
             this.btnAgregaHotel.Size = new System.Drawing.Size(153, 23);
-            this.btnAgregaHotel.TabIndex = 28;
+            this.btnAgregaHotel.TabIndex = 15;
             this.btnAgregaHotel.Text = "Agregar Hotel";
             this.btnAgregaHotel.UseVisualStyleBackColor = true;
             this.btnAgregaHotel.Click += new System.EventHandler(this.btnAgregaHotel_Click);
@@ -338,7 +349,7 @@
             this.btnAgregaRol.Location = new System.Drawing.Point(19, 339);
             this.btnAgregaRol.Name = "btnAgregaRol";
             this.btnAgregaRol.Size = new System.Drawing.Size(144, 23);
-            this.btnAgregaRol.TabIndex = 29;
+            this.btnAgregaRol.TabIndex = 13;
             this.btnAgregaRol.Text = "Agregar Rol";
             this.btnAgregaRol.UseVisualStyleBackColor = true;
             this.btnAgregaRol.Click += new System.EventHandler(this.btnAgregaRol_Click);
@@ -348,7 +359,7 @@
             this.btnQuitaRol.Location = new System.Drawing.Point(363, 67);
             this.btnQuitaRol.Name = "btnQuitaRol";
             this.btnQuitaRol.Size = new System.Drawing.Size(144, 23);
-            this.btnQuitaRol.TabIndex = 32;
+            this.btnQuitaRol.TabIndex = 17;
             this.btnQuitaRol.Text = "Quitar Rol";
             this.btnQuitaRol.UseVisualStyleBackColor = true;
             this.btnQuitaRol.Click += new System.EventHandler(this.btnQuitaRol_Click);
@@ -359,7 +370,7 @@
             this.cbxQuitaRol.Location = new System.Drawing.Point(363, 43);
             this.cbxQuitaRol.Name = "cbxQuitaRol";
             this.cbxQuitaRol.Size = new System.Drawing.Size(144, 21);
-            this.cbxQuitaRol.TabIndex = 31;
+            this.cbxQuitaRol.TabIndex = 16;
             // 
             // lbxQuitaRol
             // 
@@ -368,13 +379,14 @@
             this.lbxQuitaRol.Name = "lbxQuitaRol";
             this.lbxQuitaRol.Size = new System.Drawing.Size(144, 95);
             this.lbxQuitaRol.TabIndex = 30;
+            this.lbxQuitaRol.TabStop = false;
             // 
             // btnQuitaHotel
             // 
             this.btnQuitaHotel.Location = new System.Drawing.Point(363, 238);
             this.btnQuitaHotel.Name = "btnQuitaHotel";
             this.btnQuitaHotel.Size = new System.Drawing.Size(144, 23);
-            this.btnQuitaHotel.TabIndex = 35;
+            this.btnQuitaHotel.TabIndex = 19;
             this.btnQuitaHotel.Text = "Quitar Hotel";
             this.btnQuitaHotel.UseVisualStyleBackColor = true;
             this.btnQuitaHotel.Click += new System.EventHandler(this.btnQuitaHotel_Click);
@@ -385,7 +397,7 @@
             this.cbxQuitaHotel.Location = new System.Drawing.Point(363, 212);
             this.cbxQuitaHotel.Name = "cbxQuitaHotel";
             this.cbxQuitaHotel.Size = new System.Drawing.Size(144, 21);
-            this.cbxQuitaHotel.TabIndex = 34;
+            this.cbxQuitaHotel.TabIndex = 18;
             // 
             // lbxQuitaHotel
             // 
@@ -394,14 +406,16 @@
             this.lbxQuitaHotel.Name = "lbxQuitaHotel";
             this.lbxQuitaHotel.Size = new System.Drawing.Size(144, 95);
             this.lbxQuitaHotel.TabIndex = 33;
+            this.lbxQuitaHotel.TabStop = false;
             // 
             // txbPass2
             // 
             this.txbPass2.Location = new System.Drawing.Point(137, 130);
+            this.txbPass2.MaxLength = 15;
             this.txbPass2.Name = "txbPass2";
             this.txbPass2.PasswordChar = '*';
             this.txbPass2.Size = new System.Drawing.Size(200, 20);
-            this.txbPass2.TabIndex = 37;
+            this.txbPass2.TabIndex = 5;
             // 
             // lblPass2
             // 
@@ -429,7 +443,7 @@
             this.lblAdvise.AutoSize = true;
             this.lblAdvise.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAdvise.ForeColor = System.Drawing.Color.Red;
-            this.lblAdvise.Location = new System.Drawing.Point(16, 507);
+            this.lblAdvise.Location = new System.Drawing.Point(16, 466);
             this.lblAdvise.Name = "lblAdvise";
             this.lblAdvise.Size = new System.Drawing.Size(316, 13);
             this.lblAdvise.TabIndex = 39;
@@ -440,17 +454,19 @@
             this.btnClear.Location = new System.Drawing.Point(257, 8);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
-            this.btnClear.TabIndex = 40;
+            this.btnClear.TabIndex = 20;
             this.btnClear.Text = "Limpiar";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // FrmModUser
             // 
+            this.AcceptButton = this.btnAceptar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(539, 529);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.lblAdvise);

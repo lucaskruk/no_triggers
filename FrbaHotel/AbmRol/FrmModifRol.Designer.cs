@@ -64,6 +64,7 @@
             this.dtgFunc.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dtgFunc.Size = new System.Drawing.Size(378, 269);
             this.dtgFunc.TabIndex = 0;
+            this.dtgFunc.TabStop = false;
             // 
             // cbxAddFun
             // 
@@ -71,14 +72,14 @@
             this.cbxAddFun.Location = new System.Drawing.Point(105, 84);
             this.cbxAddFun.Name = "cbxAddFun";
             this.cbxAddFun.Size = new System.Drawing.Size(121, 21);
-            this.cbxAddFun.TabIndex = 1;
+            this.cbxAddFun.TabIndex = 3;
             // 
             // btnAddFun
             // 
             this.btnAddFun.Location = new System.Drawing.Point(105, 114);
             this.btnAddFun.Name = "btnAddFun";
             this.btnAddFun.Size = new System.Drawing.Size(121, 23);
-            this.btnAddFun.TabIndex = 2;
+            this.btnAddFun.TabIndex = 4;
             this.btnAddFun.Text = "Agregar";
             this.btnAddFun.UseVisualStyleBackColor = true;
             this.btnAddFun.Click += new System.EventHandler(this.btnAddFun_Click);
@@ -88,7 +89,7 @@
             this.btnQuita.Location = new System.Drawing.Point(105, 176);
             this.btnQuita.Name = "btnQuita";
             this.btnQuita.Size = new System.Drawing.Size(121, 23);
-            this.btnQuita.TabIndex = 3;
+            this.btnQuita.TabIndex = 6;
             this.btnQuita.Text = "Quitar";
             this.btnQuita.UseVisualStyleBackColor = true;
             this.btnQuita.Click += new System.EventHandler(this.btnQuita_Click);
@@ -99,7 +100,7 @@
             this.cbxRemFun.Location = new System.Drawing.Point(105, 146);
             this.cbxRemFun.Name = "cbxRemFun";
             this.cbxRemFun.Size = new System.Drawing.Size(121, 21);
-            this.cbxRemFun.TabIndex = 4;
+            this.cbxRemFun.TabIndex = 5;
             // 
             // lblAdd
             // 
@@ -134,7 +135,7 @@
             this.txBRoleName.MaxLength = 30;
             this.txBRoleName.Name = "txBRoleName";
             this.txBRoleName.Size = new System.Drawing.Size(121, 20);
-            this.txBRoleName.TabIndex = 8;
+            this.txBRoleName.TabIndex = 1;
             // 
             // chkEstado
             // 
@@ -142,14 +143,14 @@
             this.chkEstado.Location = new System.Drawing.Point(105, 58);
             this.chkEstado.Name = "chkEstado";
             this.chkEstado.Size = new System.Drawing.Size(75, 17);
-            this.chkEstado.TabIndex = 10;
+            this.chkEstado.TabIndex = 2;
             this.chkEstado.Text = "Rol Activo";
             this.chkEstado.UseVisualStyleBackColor = true;
             this.chkEstado.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // btnAcept
             // 
-            this.btnAcept.Location = new System.Drawing.Point(70, 226);
+            this.btnAcept.Location = new System.Drawing.Point(49, 256);
             this.btnAcept.Name = "btnAcept";
             this.btnAcept.Size = new System.Drawing.Size(75, 23);
             this.btnAcept.TabIndex = 11;
@@ -159,7 +160,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(151, 226);
+            this.btnCancel.Location = new System.Drawing.Point(130, 256);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 12;
@@ -183,6 +184,7 @@
             this.lbxAgrega.Name = "lbxAgrega";
             this.lbxAgrega.Size = new System.Drawing.Size(120, 95);
             this.lbxAgrega.TabIndex = 14;
+            this.lbxAgrega.TabStop = false;
             // 
             // lbxQuita
             // 
@@ -191,13 +193,14 @@
             this.lbxQuita.Name = "lbxQuita";
             this.lbxQuita.Size = new System.Drawing.Size(120, 95);
             this.lbxQuita.TabIndex = 15;
+            this.lbxQuita.TabStop = false;
             // 
             // btnClean
             // 
             this.btnClean.Location = new System.Drawing.Point(240, 142);
             this.btnClean.Name = "btnClean";
             this.btnClean.Size = new System.Drawing.Size(121, 23);
-            this.btnClean.TabIndex = 16;
+            this.btnClean.TabIndex = 7;
             this.btnClean.Text = "Limpiar";
             this.btnClean.UseVisualStyleBackColor = true;
             this.btnClean.Click += new System.EventHandler(this.btnClean_Click);
@@ -222,12 +225,11 @@
             // 
             // lblAdvise
             // 
-            this.lblAdvise.AutoSize = true;
             this.lblAdvise.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAdvise.ForeColor = System.Drawing.Color.Red;
-            this.lblAdvise.Location = new System.Drawing.Point(13, 300);
+            this.lblAdvise.Location = new System.Drawing.Point(12, 293);
             this.lblAdvise.Name = "lblAdvise";
-            this.lblAdvise.Size = new System.Drawing.Size(316, 13);
+            this.lblAdvise.Size = new System.Drawing.Size(238, 29);
             this.lblAdvise.TabIndex = 19;
             this.lblAdvise.Text = "* Nota, los campos resaltados en rojo son obligatorios.";
             // 

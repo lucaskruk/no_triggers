@@ -4,6 +4,14 @@ go
 --------------------------------------------------------------------------------------------------------------------------
 /*Creación de tablas */---------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------
+
+--tabla auxiliar para saber si la aplicación fue cerrada con éxito
+IF OBJECT_ID('[NO_TRIGGERS].tablaControl', 'U') IS NOT NULL 
+  DROP TABLE [NO_TRIGGERS].tablaControl;
+create table [no_triggers].tablaControl 
+( cierre_exitoso int)
+
+
 --Tabla Pais
 IF OBJECT_ID('[NO_TRIGGERS].Pais', 'U') IS NOT NULL 
   DROP TABLE [NO_TRIGGERS].Pais;

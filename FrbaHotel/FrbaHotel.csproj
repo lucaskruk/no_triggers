@@ -226,6 +226,9 @@
       <DependentUpon>FrmBuscador.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\Utils.cs" />
+    <EmbeddedResource Include="AbmCliente\FrmCliente.resx">
+      <DependentUpon>FrmCliente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AbmHabitacion\FrmHabitacion.resx">
       <DependentUpon>FrmHabitacion.cs</DependentUpon>
     </EmbeddedResource>

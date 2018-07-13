@@ -112,8 +112,15 @@ namespace FrbaHotel.AbmUsuario
             int result = 1;
 
             if (Utils.IsValidEmail(txbMail.Text) == false) { result = 0; MessageBox.Show("E-Mail Invalido."); }
+            
             if (txbUname.Text == "" || txbName.Text==""||txbApell.Text==""||txbPhone.Text==""||txbNac.Text==""||txbMail.Text==""||txbDoc.Text=="") 
             { result = 0; MessageBox.Show("Alguno de los campos obligatorios esta vacio."); }
+            
+            if (Utils.exeFunInt(string.Concat("fn_username_unico ('", txbUname.Text, "',", this.idUser.ToString(), ")"))==0) 
+            {        result = 0; MessageBox.Show("El nombre de usuario ya existe");            }
+            
+            if (txbPass.Text != txbPass2.Text) { result = 0; MessageBox.Show("Las contraseñas no son iguales"); }
+            
             if (this.esAlta == 1)
             {
                 if (txbPass.Text == "" || txbPass2.Text == "") { MessageBox.Show("Contraseña no puede estar vacia"); result = 0; }
@@ -131,6 +138,9 @@ namespace FrbaHotel.AbmUsuario
                 if (this.esAlta == 1)
                 {
                     //alta de usuario
+                    //@uname nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @pass nvarchar(100), @email nvarchar(200), @fechanac nvarchar(20), @tipodoc int, @n_doc nvarchar(50), @ntel nvarchar(50)
+                    Utils.execSPnoReturn(string.Concat("sp_crear_usuario '", txbUname.Text, "','", txbName.Text, "','", txbApell.Text, "','",txbPass.Text , "','",txbMail.Text, "','", txbNac.Text, "',", cbxTdoc.SelectedValue.ToString(), ",", txbDoc.Text, ",", txbPhone.Text));
+                    this.idUser=Utils.exeFunInt(string.Concat("fn_get_usrid_f_username ('", txbUname.Text, "')"));
                 }
                 else
                 {
@@ -138,21 +148,58 @@ namespace FrbaHotel.AbmUsuario
                     //[NO_TRIGGERS].sp_set_usuario_datos (@idUser int, @usern nvarchar(100), @nombre nvarchar(100), @apell nvarchar(100), @email nvarchar(100), @fechanac nvarchar(100), @tipoD int, @ndoc int)
                     Utils.execSPnoReturn(string.Concat("sp_set_usuario_datos ", Convert.ToString(this.idUser),",'",txbUname.Text,"','",txbName.Text,"','",txbApell.Text,"','",txbMail.Text,"','",txbNac.Text,"',",cbxTdoc.SelectedValue.ToString(),",",txbDoc.Text,",",txbPhone.Text ));
                     if (txbPass.Modified) { Utils.execSPnoReturn(string.Concat("sp_user_set_Pass ",this.idUser,",'",txbPass.Text,"'")); }
+                    
+                    //actualiza estado usuario
+                    int estado=1;
+                    if (chkActive.Checked) { estado = 1; } else { estado = 0; }
+                    Utils.execSPnoReturn(string.Concat("sp_set_user_estado ", this.idUser.ToString(), ",", estado.ToString()));
 
                   //elimina hoteles y roles si es necesario
                     if (lbxQuitaHotel.Items.Count > 0)
-                    {                                //insercion de funcionalidades
+                    {                                
                         for (int i = 0; i < lbxQuitaHotel.Items.Count; i++)
                         {
-                            DataRowView drFun = ((DataRowView)(lbxQuitaHotel.Items[i]));
-                            //int idFun = Convert.ToInt32(drFun["id_funcionalidad"]);
+                            DataRowView drHot = ((DataRowView)(lbxQuitaHotel.Items[i]));
+                            int idhot = Convert.ToInt32(drHot["id_hotel"]);
                             //MessageBox.Show(string.Concat(idFun.ToString()," ", this.idRol.ToString()));
-                            //Utils.execSPnoReturn(string.Concat("sp_agrega_funcionalidad ", Convert.ToString(this.idRol), ",", Convert.ToString(idFun)));
+                            Utils.execSPnoReturn(string.Concat("sp_quita_hotel ", Convert.ToString(this.idUser), ",", Convert.ToString(idhot)));
                         }
+
+                    }
+                    if (lbxQuitaRol.Items.Count > 0)
+                    {
+                        for (int i = 0; i < lbxQuitaRol.Items.Count; i++)
+                        {
+                            DataRowView drRol = ((DataRowView)(lbxQuitaRol.Items[i]));
+                            int idRol = Convert.ToInt32(drRol["id_rol"]);
+                            //MessageBox.Show(string.Concat(idFun.ToString()," ", this.idRol.ToString()));
+                            Utils.execSPnoReturn(string.Concat("sp_quita_rol ", Convert.ToString(this.idUser), ",", Convert.ToString(idRol)));
+                        }
+
                     }
                 }
 
                 //inserta hoteles y roles si es necesario
+                if (lbxAgregaHotel.Items.Count > 0)
+                {
+                    for (int i = 0; i < lbxAgregaHotel.Items.Count; i++)
+                    {
+                        DataRowView drHot = ((DataRowView)(lbxAgregaHotel.Items[i]));
+                        int idhot = Convert.ToInt32(drHot["id_hotel"]);
+                        //MessageBox.Show(string.Concat(idFun.ToString()," ", this.idRol.ToString()));
+                        Utils.execSPnoReturn(string.Concat("sp_agrega_uhotel ", Convert.ToString(this.idUser), ",", Convert.ToString(idhot)));
+                    }
+                }
+                if (lbxAgregaRol.Items.Count > 0)
+                {
+                    for (int i = 0; i < lbxAgregaRol.Items.Count; i++)
+                    {
+                        DataRowView drRol = ((DataRowView)(lbxAgregaRol.Items[i]));
+                        int idRol = Convert.ToInt32(drRol["id_rol"]);
+                        //MessageBox.Show(string.Concat(idFun.ToString()," ", this.idRol.ToString()));
+                        Utils.execSPnoReturn(string.Concat("sp_agrega_urole ", Convert.ToString(this.idUser), ",", Convert.ToString(idRol)));
+                    }
+                }
 
                 this.Close();
             }
@@ -207,6 +254,11 @@ namespace FrbaHotel.AbmUsuario
             lbxAgregaHotel.ValueMember = "id_hotel";
             lbxAgregaHotel.DisplayMember = "hotel_nombre";
 
+            DataTable lisTdoc = Utils.sptoTable("sp_lis_tipo_dni");
+            cbxTdoc.ValueMember = "id_tipo_documento";
+            cbxTdoc.DisplayMember = "tipo_de_documento_nombre";
+            cbxTdoc.DataSource = lisTdoc;
+
             if (this.esAlta == 1)
             {
                 this.Text = "Alta de Usuario";
@@ -251,16 +303,12 @@ namespace FrbaHotel.AbmUsuario
                 }
                 else { chkActive.Checked = false; this.userAct = 0; }
                 
-                //carga listbox de tipos de DNI y define el actual como seleccionado
+                //define tipo id usuario seleccionado
 
                 int tipoDoc = Utils.exeFunInt(string.Concat("fn_get_user_tipoDocID (", idUser, ")"));
-                DataTable lisTdoc = Utils.sptoTable("sp_lis_tipo_dni");
-                cbxTdoc.ValueMember="id_tipo_documento";
-                cbxTdoc.DisplayMember="tipo_de_documento_nombre";
-                cbxTdoc.DataSource=lisTdoc;
                 cbxTdoc.SelectedValue = tipoDoc;
                 
-                //carga comboboxes de hoteles y de roles, tanto disponibles como actuales
+                //carga comboboxes de hoteles y de roles actuales
                 
                 DataTable roleAct = Utils.sptoTable(string.Concat("sp_lis_usu_roles ", idUser, ""));
                 cbxQuitaRol.ValueMember = "id_rol";
@@ -390,6 +438,12 @@ namespace FrbaHotel.AbmUsuario
                 e.Handled = true;
             }
 
+        }
+
+        private void txbPass_TextChanged(object sender, EventArgs e)
+        {
+            if (txbPass.Text != "") { lblPass.ForeColor = System.Drawing.Color.Red; lblPass2.ForeColor = System.Drawing.Color.Red; }
+            else { lblPass.ForeColor = System.Drawing.Color.Black; lblPass2.ForeColor = System.Drawing.Color.Black; }
         }
     }
 }

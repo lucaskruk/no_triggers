@@ -23,7 +23,9 @@ namespace FrbaHotel.Login
         private void Ir_a_pantalla_principal_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new FrmInicio().Show();
+            this.DialogResult = DialogResult.Cancel;
+            //new FrmInicio().Show();
+            //this.Dispose();
         }
 
         private void Iniciar_Sesion_Click(object sender, EventArgs e)
@@ -46,9 +48,17 @@ namespace FrbaHotel.Login
                     {
                         //MessageBox.Show("Usuario multi hotel o multirol");
                         this.Visible = false;
-                        Frm_Sel_Hotel frm_SHotel = new Frm_Sel_Hotel();
-                        frm_SHotel.Show();
-                        //this.Close();
+
+                        using (var hotelFrm = new Frm_Sel_Hotel())
+                        {
+
+                            var result = hotelFrm.ShowDialog();
+                            if (result != DialogResult.OK)
+                            {
+                                Application.Exit();
+                            }
+                            else { this.DialogResult = DialogResult.OK; this.Close(); }
+                        }
                     }
                     else
                     {
@@ -61,9 +71,10 @@ namespace FrbaHotel.Login
                                 this.Visible = false;
                                 CommonVars.idHotelSeleccionado = idHotelUser;
                                 logHelper.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
-                                FrmMenu frmMenu = new FrmMenu();
-                                frmMenu.Show();
-                                //this.Close(); me cierra toda la aplicacion
+                                //FrmMenu frmMenu = new FrmMenu();
+                                //frmMenu.Show();
+                                this.DialogResult = DialogResult.OK;
+                                this.Close();
                             }
                             else { MessageBox.Show("No existen roles habilitados para ese usuario. Favor contactar administrador"); }
                         }
@@ -89,7 +100,7 @@ namespace FrbaHotel.Login
         }
         private void frmLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            //Application.Exit();
             // Autosave and clear up ressources
         }
 

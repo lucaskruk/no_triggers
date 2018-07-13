@@ -22,12 +22,14 @@ namespace FrbaHotel.Login
 {
     public partial class FrmMenu : Form
     {
+     //   int goodbuttonPressed = 0;
+        FrmInicio ini;
         public FrmMenu()
         {
             InitializeComponent();
         }
 
-        private void Form3_Load(object sender, EventArgs e)
+        private void cargar()
         {
             btnRol1.Visible = false;
             btnUser2.Visible = false;
@@ -39,8 +41,8 @@ namespace FrbaHotel.Login
             btnConsumibles9.Visible = false;
             btnFacturacion10.Visible = false;
             btnReserva11.Visible = false;
-           // MessageBox.Show(Convert.ToString(CommonVars.idHotelSeleccionado));
-            lblUsr.Text = string.Concat("Usuario: ", CommonVars.userLogged, "Hotel: ",Utils.getNombreHotel(CommonVars.idHotelSeleccionado));
+            // MessageBox.Show(Convert.ToString(CommonVars.idHotelSeleccionado));
+            lblUsr.Text = string.Concat("Usuario: ", CommonVars.userLogged, "Hotel: ", Utils.getNombreHotel(CommonVars.idHotelSeleccionado));
 
             // Habilita botones segun funcionalidades
             if (Utils.checkAccesoABM("Rol") == 1)
@@ -83,15 +85,35 @@ namespace FrbaHotel.Login
             {
                 btnReserva11.Visible = true;
             }
+            this.Activate();
+        }
 
+        private void Form3_Load(object sender, EventArgs e)
+        {
+            using ( ini = new FrmInicio())
+            {
+                var result=ini.ShowDialog();
+                if (result != DialogResult.OK)
+                {
+                    Application.Exit();
+                }
+            }
+            
+            //goodbuttonPressed = 0;
 
+            this.cargar();
 
         }
 
         void Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            logHelper.deslogueaUsuario(CommonVars.userLogged);
-            Application.Exit();
+           // if (goodbuttonPressed == 0)
+            {
+                logHelper.deslogueaUsuario(CommonVars.userLogged);
+                Application.Exit();
+            }
+            
+            
             // Autosave and clear up ressources
         }
 
@@ -154,6 +176,23 @@ namespace FrbaHotel.Login
         {
             FrmMenuReserva frmReser = new FrmMenuReserva();
             frmReser.ShowDialog();
+        }
+
+        private void btnLogoff_Click(object sender, EventArgs e)
+        {
+            logHelper.deslogueaUsuario(CommonVars.userLogged);
+            this.Hide();
+            using ( ini =new FrmInicio())
+            {
+                var result = ini.ShowDialog();
+                if (result != DialogResult.OK)
+                {
+                    Application.Exit();
+                }
+            }
+            this.Show();
+            this.cargar();
+            
         }
         
   

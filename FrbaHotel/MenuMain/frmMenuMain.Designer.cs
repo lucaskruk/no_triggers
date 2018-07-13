@@ -41,6 +41,7 @@
             this.btnRol1 = new System.Windows.Forms.Button();
             this.btnUser2 = new System.Windows.Forms.Button();
             this.btnConsumibles9 = new System.Windows.Forms.Button();
+            this.btnLogoff = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -63,7 +64,7 @@
             this.btnReserva11.Location = new System.Drawing.Point(321, 138);
             this.btnReserva11.Name = "btnReserva11";
             this.btnReserva11.Size = new System.Drawing.Size(211, 42);
-            this.btnReserva11.TabIndex = 18;
+            this.btnReserva11.TabIndex = 6;
             this.btnReserva11.Text = "Reservas";
             this.btnReserva11.UseVisualStyleBackColor = false;
             this.btnReserva11.Click += new System.EventHandler(this.btnReserva11_Click);
@@ -77,7 +78,7 @@
             this.btnEstadia8.Location = new System.Drawing.Point(15, 138);
             this.btnEstadia8.Name = "btnEstadia8";
             this.btnEstadia8.Size = new System.Drawing.Size(211, 42);
-            this.btnEstadia8.TabIndex = 19;
+            this.btnEstadia8.TabIndex = 2;
             this.btnEstadia8.Text = "Check-in/Check Out";
             this.btnEstadia8.UseVisualStyleBackColor = false;
             this.btnEstadia8.Click += new System.EventHandler(this.btnEstadia8_Click);
@@ -91,7 +92,7 @@
             this.btnFacturacion10.Location = new System.Drawing.Point(321, 64);
             this.btnFacturacion10.Name = "btnFacturacion10";
             this.btnFacturacion10.Size = new System.Drawing.Size(211, 42);
-            this.btnFacturacion10.TabIndex = 20;
+            this.btnFacturacion10.TabIndex = 5;
             this.btnFacturacion10.Text = "Facturacion";
             this.btnFacturacion10.UseVisualStyleBackColor = false;
             this.btnFacturacion10.Click += new System.EventHandler(this.btnFacturacion10_Click);
@@ -105,7 +106,7 @@
             this.btnHotel3.Location = new System.Drawing.Point(627, 212);
             this.btnHotel3.Name = "btnHotel3";
             this.btnHotel3.Size = new System.Drawing.Size(211, 42);
-            this.btnHotel3.TabIndex = 21;
+            this.btnHotel3.TabIndex = 9;
             this.btnHotel3.Text = "Administración de hoteles";
             this.btnHotel3.UseVisualStyleBackColor = false;
             this.btnHotel3.Click += new System.EventHandler(this.btnHotel3_Click);
@@ -119,7 +120,7 @@
             this.btnHabitacion4.Location = new System.Drawing.Point(627, 286);
             this.btnHabitacion4.Name = "btnHabitacion4";
             this.btnHabitacion4.Size = new System.Drawing.Size(211, 42);
-            this.btnHabitacion4.TabIndex = 22;
+            this.btnHabitacion4.TabIndex = 10;
             this.btnHabitacion4.Text = "Administracion habitaciones";
             this.btnHabitacion4.UseVisualStyleBackColor = false;
             this.btnHabitacion4.Click += new System.EventHandler(this.btnHabitacion4_Click);
@@ -133,7 +134,7 @@
             this.btnClientes7.Location = new System.Drawing.Point(12, 64);
             this.btnClientes7.Name = "btnClientes7";
             this.btnClientes7.Size = new System.Drawing.Size(211, 42);
-            this.btnClientes7.TabIndex = 23;
+            this.btnClientes7.TabIndex = 1;
             this.btnClientes7.Text = "Clientes";
             this.btnClientes7.UseVisualStyleBackColor = false;
             this.btnClientes7.Click += new System.EventHandler(this.btnClientes7_Click);
@@ -156,7 +157,7 @@
             this.btnListado6.Location = new System.Drawing.Point(12, 286);
             this.btnListado6.Name = "btnListado6";
             this.btnListado6.Size = new System.Drawing.Size(211, 42);
-            this.btnListado6.TabIndex = 27;
+            this.btnListado6.TabIndex = 4;
             this.btnListado6.Text = "Listado estadístico";
             this.btnListado6.UseVisualStyleBackColor = false;
             this.btnListado6.Click += new System.EventHandler(this.btnListado6_Click);
@@ -170,7 +171,7 @@
             this.btnRol1.Location = new System.Drawing.Point(627, 64);
             this.btnRol1.Name = "btnRol1";
             this.btnRol1.Size = new System.Drawing.Size(211, 42);
-            this.btnRol1.TabIndex = 26;
+            this.btnRol1.TabIndex = 7;
             this.btnRol1.Text = "Administración de roles de usuario";
             this.btnRol1.UseVisualStyleBackColor = false;
             this.btnRol1.Click += new System.EventHandler(this.btnRol1_Click);
@@ -184,7 +185,7 @@
             this.btnUser2.Location = new System.Drawing.Point(627, 138);
             this.btnUser2.Name = "btnUser2";
             this.btnUser2.Size = new System.Drawing.Size(211, 42);
-            this.btnUser2.TabIndex = 25;
+            this.btnUser2.TabIndex = 8;
             this.btnUser2.Text = "Administración de usuarios";
             this.btnUser2.UseVisualStyleBackColor = false;
             this.btnUser2.Click += new System.EventHandler(this.btnUser2_Click);
@@ -198,10 +199,25 @@
             this.btnConsumibles9.Location = new System.Drawing.Point(12, 212);
             this.btnConsumibles9.Name = "btnConsumibles9";
             this.btnConsumibles9.Size = new System.Drawing.Size(211, 42);
-            this.btnConsumibles9.TabIndex = 28;
+            this.btnConsumibles9.TabIndex = 3;
             this.btnConsumibles9.Text = "Consumibles";
             this.btnConsumibles9.UseVisualStyleBackColor = false;
             this.btnConsumibles9.Click += new System.EventHandler(this.btnConsumibles9_Click);
+            // 
+            // btnLogoff
+            // 
+            this.btnLogoff.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnLogoff.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnLogoff.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnLogoff.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogoff.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnLogoff.Location = new System.Drawing.Point(321, 212);
+            this.btnLogoff.Name = "btnLogoff";
+            this.btnLogoff.Size = new System.Drawing.Size(211, 42);
+            this.btnLogoff.TabIndex = 11;
+            this.btnLogoff.Text = "Cerrar Sesion";
+            this.btnLogoff.UseVisualStyleBackColor = false;
+            this.btnLogoff.Click += new System.EventHandler(this.btnLogoff_Click);
             // 
             // FrmMenu
             // 
@@ -211,7 +227,9 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.CancelButton = this.btnLogoff;
             this.ClientSize = new System.Drawing.Size(854, 365);
+            this.Controls.Add(this.btnLogoff);
             this.Controls.Add(this.btnConsumibles9);
             this.Controls.Add(this.btnListado6);
             this.Controls.Add(this.btnRol1);
@@ -248,5 +266,6 @@
         private System.Windows.Forms.Button btnRol1;
         private System.Windows.Forms.Button btnUser2;
         private System.Windows.Forms.Button btnConsumibles9;
+        private System.Windows.Forms.Button btnLogoff;
     }
 }

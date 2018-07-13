@@ -70,6 +70,7 @@ insert into [no_triggers].usuario_roles (id_usuario,id_rol) values
 ,(1,2)
 
 --select * from [no_triggers].usuario_roles
+
 truncate table [NO_TRIGGERS].usuario_por_hotel
 INSERT INTO [NO_TRIGGERS].usuario_por_hotel
 VALUES 
@@ -139,7 +140,77 @@ insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values
 --PAIS
 truncate table [NO_TRIGGERS].[pais]
 INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
-	('Argentina','ARGENTINO'),('Brasil','BRASILERO'),('Uruguay','URUGUAYO'),('Indefinido','Indefinido');
+('Afganistán','afgano'),
+('Alemania','alemán'),
+('Arabia Saudita','árabe'),
+('Argentina','argentino'),
+('Australia','australiano'),
+('Bélgica','belga'),
+('Bolivia','boliviano'),
+('Brasil','brasileño'),
+('Camboya','camboyano'),
+('Canadá','canadiense'),
+('Chile','chileno'),
+('China','chino'),
+('Colombia','colombiano'),
+('Corea','coreano'),
+('Costa Rica','costarricense'),
+('Cuba','cubano'),
+('Dinamarca','danés'),
+('Ecuador','ecuatoriano'),
+('Egipto','egipcio'),
+('El Salvador','salvadoreño'),
+('Escocia','escocés'),
+('España','español'),
+('Estados Unidos','estadounidense'),
+('Estonia','estonio'),
+('Etiopia','etiope'),
+('Filipinas','filipino'),
+('Finlandia','finlandés'),
+('Francia','francés'),
+('Gales','galés'),
+('Grecia','griego'),
+('Guatemala','guatemalteco'),
+('Haití','haitiano'),
+('Holanda','holandés'),
+('Honduras','hondureño'),
+('Indonesia','indonés'),
+('Inglaterra','inglés'),
+('Irak','iraquí'),
+('Irán','iraní'),
+('Irlanda','irlandés'),
+('Israel','israelí'),
+('Italia','italiano'),
+('Japón','japonés'),
+('Jordania','jordano'),
+('Laos','laosiano'),
+('Letonia','letón'),
+('Lituania','letonés'),
+('Malasia','malayo'),
+('Marruecos','marroquí'),
+('México','mexicano'),
+('Nicaragua','nicaragüense'),
+('Noruega','noruego'),
+('Nueva Zelanda','neozelandés'),
+('Panamá','panameño'),
+('Paraguay','paraguayo'),
+('Perú','peruano'),
+('Polonia','polaco'),
+('Portugal','portugués'),
+('Puerto Rico','puertorriqueño'),
+('Republica Dominicana','dominicano'),
+('Rumania','rumano'),
+('Rusia','ruso'),
+('Suecia','sueco'),
+('Suiza','suizo'),
+('Tailandia','tailandés'),
+('Taiwán','taiwanes'),
+('Turquía','turco'),
+('Ucrania','ucraniano'),
+('Uruguay','uruguayo'),
+('Venezuela','venezolano'),
+('Vietnam','vietnamita'),
+('Indefinido','Indefinido');
 --select * from [no_triggers].pais
 
 --CIUDAD------------------------11

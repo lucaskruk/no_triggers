@@ -35,7 +35,12 @@ namespace FrbaHotel.AbmUsuario
 
         private void btnBaja_Click(object sender, EventArgs e)
         {
-
+            if (this.idUsuario != 0)
+            {
+                Utils.execSPnoReturn(string.Concat("sp_Dar_Baja_Usuario ", this.idUsuario.ToString()));
+            refrescarGrids();
+            }
+            else { MessageBox.Show("Debe buscar un usuario para poder modificar."); }
         }
 
         private void btnModif_Click(object sender, EventArgs e)
@@ -55,7 +60,7 @@ namespace FrbaHotel.AbmUsuario
         {
             using (var frmUsearch = new FrmBuscador())
             {
-                frmUsearch.setBuscar("usuario");
+                frmUsearch.setBuscar("view_usuario");
                 frmUsearch.setCampos("id_usuario,usuario_username,usuario_nombre,usuario_apellido,usuario_email,usuario_fecha_nacimiento,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,usuario_last_activity");
                 frmUsearch.setCampo1("usuario_username", "Nombre de Usuario");
                 frmUsearch.setCampo2("usuario_apellido", "Apellido");

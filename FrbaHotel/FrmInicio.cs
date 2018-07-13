@@ -16,7 +16,7 @@ namespace FrbaHotel
 
     public partial class FrmInicio : Form
     {
-  
+      //  private int goodbuttonPressed = 0;
   
 
         public FrmInicio()
@@ -27,18 +27,38 @@ namespace FrbaHotel
 
         void FRBAhotel_pantallaPrincipal_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+          //  if (this.goodbuttonPressed == 0)
+            {
+                //Application.Exit();
+            }
         }
 
         private void Ingresar_hotel_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new Login.frmLogin().Show();
+            using (var logFrm = new frmLogin())
+            {
+                var result= logFrm.ShowDialog();
+                if (result != DialogResult.OK)
+                {
+                    if (result == DialogResult.Cancel)
+                    {
+                        this.Show();
+                    }
+                    else
+                    {
+                        Application.Exit();
+                    }
+                }
+                else { this.DialogResult = DialogResult.OK; this.Close(); }
+            }
+           // this.goodbuttonPressed = 1;
+          //  this.Close();
         }
 
         private void Ingresar_para_huespedes_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            
             string uservar = "Guest";
             string passvar = "user_guest";
 
@@ -47,23 +67,36 @@ namespace FrbaHotel
             {
                 //MessageBox.Show("Login OK");
                 logHelper.reseteaContadorfallidos(uservar);
-                this.Visible = false;
+                
                 CommonVars.userLogged = uservar;
 
                 int idHotelUser = logHelper.getIDHotelUser(uservar);
                 if (idHotelUser == 0)
                 {
-                    FrbaHotel.Login.Frm_Sel_Hotel frm_SHotel = new FrbaHotel.Login.Frm_Sel_Hotel();
-                    frm_SHotel.Show();
+                    this.Hide();
+                    using (var hotelFrm = new Frm_Sel_Hotel())
+                    {
+                        
+                        var result = hotelFrm.ShowDialog();
+                        if (result != DialogResult.OK)
+                        {
+                            Application.Exit();
+                        }
+                        else { this.DialogResult = DialogResult.OK; this.Close(); }
+                    }
                 }
                 else
                 {
 
                     CommonVars.idHotelSeleccionado = idHotelUser;
                     logHelper.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
-                    FrbaHotel.Login.FrmMenu frmMenu = new FrbaHotel.Login.FrmMenu();
-                    frmMenu.Show();
+                    //FrbaHotel.Login.FrmMenu frmMenu = new FrbaHotel.Login.FrmMenu();
+                    //frmMenu.Show();
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
+           //     this.goodbuttonPressed = 1;
+           //     this.Close();
             }
         }
   
