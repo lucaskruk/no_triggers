@@ -629,8 +629,8 @@ go
 create procedure [NO_TRIGGERS].sp_lis_usuario 
 @idUser int
 as
-	select distinct us.id_usuario, usuario_username as Nombre_Usuario, usuario_nombre as nombre  
-	, usuario_apellido as apellido, usuario_email as email, usuario_fecha_nacimiento as fecha_nac
+	select distinct us.id_usuario, usuario_username as UserName, usuario_nombre as Nombre  
+	, usuario_apellido as Apellido, usuario_email as email, usuario_fecha_nacimiento as fecha_nac
 	,td.tipo_de_documento_nombre as tipo_doc, usuario_numero_documento as nro_doc, usuario_telefono as telefono, usuario_habilitado
 	from [NO_TRIGGERS].Usuario us
 	join [NO_TRIGGERS].usuario_por_hotel uh on us.id_usuario=uh.id_usuario
@@ -754,6 +754,16 @@ as
 				update [NO_TRIGGERS].Usuario
 				set usuario_habilitado = 0 where id_usuario=@idUser
 go
+
+IF OBJECT_ID ('[NO_TRIGGERS].sp_set_user_estado') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_user_estado
+go
+create proc [NO_TRIGGERS].sp_set_user_estado
+@idUser int,@estado int
+as
+				update [NO_TRIGGERS].Usuario
+				set usuario_habilitado = @estado where id_usuario=@idUser
+go
+
 
 
 

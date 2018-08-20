@@ -78,6 +78,12 @@
     <Compile Include="AbmCliente\FrmCliente.Designer.cs">
       <DependentUpon>FrmCliente.cs</DependentUpon>
     </Compile>
+    <Compile Include="AbmCliente\FrmModCli.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmCliente\FrmModCli.Designer.cs">
+      <DependentUpon>FrmModCli.cs</DependentUpon>
+    </Compile>
     <Compile Include="AbmFactura\FrmFactura.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -228,6 +234,9 @@
     <Compile Include="Utility\Utils.cs" />
     <EmbeddedResource Include="AbmCliente\FrmCliente.resx">
       <DependentUpon>FrmCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmCliente\FrmModCli.resx">
+      <DependentUpon>FrmModCli.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AbmHabitacion\FrmHabitacion.resx">
       <DependentUpon>FrmHabitacion.cs</DependentUpon>

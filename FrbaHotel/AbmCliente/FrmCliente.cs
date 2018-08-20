@@ -44,5 +44,10 @@ namespace FrbaHotel.AbmCliente
         {
             llamarBuscador();    
         }
+
+        private void btnBaja_Click(object sender, EventArgs e)
+        {
+            llamarBuscador(); 
+        }
     }
 }
