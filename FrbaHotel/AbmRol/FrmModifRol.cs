@@ -1,4 +1,4 @@
-﻿using FrbaHotel.Utility;
+﻿using PalcoNet.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.AbmRol
+namespace PalcoNet.AbmRol
 {
     public partial class FrmModifRol : Form
     {
@@ -53,9 +53,9 @@ namespace FrbaHotel.AbmRol
                      chkEstado.Checked = true;
                      chkEstado.Enabled = false;
                      cbxAddFun.DataSource = lisFunDisp;
-                     cbxAddFun.DisplayMember = "funcionalidad_descripcion";
+                     cbxAddFun.DisplayMember = "funcionalidadNombre";
                      cbxAddFun.ValueMember = "id_funcionalidad";
-                     lbxAgrega.DisplayMember = "funcionalidad_descripcion";
+                     lbxAgrega.DisplayMember = "funcionalidadNombre";
                      lbxAgrega.ValueMember = "id_funcionalidad";
                      dtgFunc.Visible = false;
                      lbxQuita.Visible = false;
@@ -84,15 +84,15 @@ namespace FrbaHotel.AbmRol
                   dtgFunc.DataSource = lisFunAC;
                   dtgFunc.AutoResizeColumns();
                   cbxAddFun.DataSource = lisFunDisp;
-                  cbxAddFun.DisplayMember = "funcionalidad_descripcion";
+                  cbxAddFun.DisplayMember = "funcionalidadNombre";
                   cbxAddFun.ValueMember = "id_funcionalidad";
 
                   cbxRemFun.DataSource = lisFunAC;
-                  cbxRemFun.DisplayMember = "funcionalidad_descripcion";
+                  cbxRemFun.DisplayMember = "funcionalidadNombre";
                   cbxRemFun.ValueMember = "id_funcionalidad";
-                  lbxAgrega.DisplayMember = "funcionalidad_descripcion";
+                  lbxAgrega.DisplayMember = "funcionalidadNombre";
                   lbxAgrega.ValueMember = "id_funcionalidad";
-                  lbxQuita.DisplayMember = "funcionalidad_descripcion";
+                  lbxQuita.DisplayMember = "funcionalidadNombre";
                   lbxQuita.ValueMember = "id_funcionalidad";
             }
         }

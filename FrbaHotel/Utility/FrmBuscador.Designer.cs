@@ -1,4 +1,4 @@
-﻿namespace FrbaHotel.Utility
+﻿namespace PalcoNet.Utility
 {
     partial class FrmBuscador
     {

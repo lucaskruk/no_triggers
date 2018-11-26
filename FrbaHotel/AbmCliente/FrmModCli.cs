@@ -1,4 +1,4 @@
-﻿using FrbaHotel.Utility;
+﻿using PalcoNet.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.AbmCliente
+namespace PalcoNet.AbmCliente
 {
     public partial class FrmModCli : Form
     {
@@ -26,16 +26,16 @@ namespace FrbaHotel.AbmCliente
 
         private void FrmModCli_Load(object sender, EventArgs e)
         {
-            dtFNac.MaxDate = DateTime.Today.AddDays(-1825); ;
+            //dtFNac.MaxDate = DateTime.Today.AddDays(-1825); ;
             DataTable lisTdoc = Utils.sptoTable("sp_lis_tipo_dni");
-            cbxtDoc.ValueMember = "id_tipo_documento";
-            cbxtDoc.DisplayMember = "tipo_de_documento_nombre";
-            cbxtDoc.DataSource = lisTdoc;
+          //  cbxtDoc.ValueMember = "id_tipo_documento";
+           // cbxtDoc.DisplayMember = "tipo_de_documento_nombre";
+           // cbxtDoc.DataSource = lisTdoc;
             
             if (esAlta) {
 
                 this.Text = "Alta de cliente";
-                lblID.Visible=false;
+           //     lblID.Visible=false;
 
             }
         }

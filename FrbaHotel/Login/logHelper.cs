@@ -1,4 +1,5 @@
-﻿using FrbaHotel.Utility;
+﻿using PalcoNet.Utility;
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,50 +7,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PalcoNet;
 
-namespace FrbaHotel.Login
+namespace PalcoNet.Login
 {
     class logHelper
     {
 
-        internal static void aumentaContadorfallidos(string userN)
+        
+
+
+    
+        internal static int login(string userN, string passwd)
         {
-            string queryAumentaCont = string.Concat("sp_incrementar_intentos_fallidos '", userN, "'");
+            
+            string queryUserEnabled = string.Concat("fnUserEnabled('", userN, "')");
+            
+            string spLogin = "spLogin";
 
-            Utils.execSPnoReturn(queryAumentaCont);
+            PalcoNet.Utility.Utils.Parametros p1 = new PalcoNet.Utility.Utils.Parametros();
+            p1.nombrePar = "usuario";
+            p1.valorPar = userN;
+            PalcoNet.Utility.Utils.Parametros p2 = new PalcoNet.Utility.Utils.Parametros();
+            p2.nombrePar = "password";
+            p2.valorPar = passwd;
 
-        }
-
-        internal static void reseteaContadorfallidos(string userN)
-        {
-
-            Utils.execSPnoReturn(string.Concat("sp_a_cero_intentos_fallidos '", userN, "'"));
-        }
-
-
-        internal static void deslogueaUsuario(string userN)
-        {
-
-            Utils.execSPnoReturn(string.Concat("sp_desloguea_user '", userN, "'"));
-        }
-        internal static void logueaUsuario(string userN, int idHotelSel)
-        {
-            Utils.execSPnoReturn(string.Concat("sp_set_hotel_logueado '", userN, "',", idHotelSel));
-        }
-
-
-        internal static int validaUsuario(string userN, string passwd)
-        {
-
-            string queryUserEnabled = string.Concat("fn_chequear_usuario_si_habilitado('", userN, "')");
-
-            string queryPassOk = string.Concat("fn_validar_password('", userN, "','", passwd, "')");
-
+            List<PalcoNet.Utility.Utils.Parametros> lisPar = new List<PalcoNet.Utility.Utils.Parametros>();
+            lisPar.Add(p1);
+            lisPar.Add(p2);
             int result = 0;
             result = Utils.exeFunInt(queryUserEnabled);
             if (result == 1)
             {
-                result = Utils.exeFunInt(queryPassOk);
+                result = Utils.exeSPInt(spLogin,lisPar);
             }
             else
             {
@@ -60,21 +50,6 @@ namespace FrbaHotel.Login
         }
 
 
-        internal static int getIDHotelUser(string userN)
-        {
-            int result = Utils.exeFunInt(string.Concat("fn_get_id_hotel_usuario ('", userN, "')"));
-            return result;
-        }
-        internal static int checkMultirole(string userN)
-        {
-            int result = Utils.exeFunInt(string.Concat("fn_check_multirole ('", userN, "')"));
-            return result;
-        }
-        internal static int userTieneHotel(string userN)
-        {
-            int result = Utils.exeFunInt(string.Concat("fn_usuario_tiene_hotel ('", userN, "')"));
-            return result;
-        }
 
     }
 }

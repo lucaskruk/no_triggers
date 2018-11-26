@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FrbaHotel.Properties {
+namespace PalcoNet.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

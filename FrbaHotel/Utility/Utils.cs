@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Data;
+using System.Configuration;
 
-namespace FrbaHotel.Utility
+namespace PalcoNet.Utility
 {
     public class Utils
     {
-        static string con_str = Properties.Settings.Default.ConnectionString.ToString();
-
+        static string con_str = ConfigurationSettings.AppSettings["ConnectionString"];
+        
         internal static bool IsValidEmail(string email)
+        
+
+
+        
         {
             try
             {
@@ -25,6 +30,8 @@ namespace FrbaHotel.Utility
                 return false;
             }
         }
+
+
         /// <summary>
         /// Metodos genericos para acceder a la base de datos
         /// </summary>
@@ -34,7 +41,7 @@ namespace FrbaHotel.Utility
         internal static void execSPnoReturn(string query)
         {
             SqlConnection conex = new SqlConnection(con_str);
-            string runSP = string.Concat("exec [no_triggers].", query,";");
+            string runSP = string.Concat("exec elgalego.", query,";");
             SqlCommand cmdExecSP = new SqlCommand(runSP, conex);
 
             try {
@@ -58,7 +65,7 @@ namespace FrbaHotel.Utility
         {
             DataTable result = new DataTable();
             SqlConnection conex = new SqlConnection(con_str);
-            string runFN = string.Concat("exec [no_triggers].", query, ";");
+            string runFN = string.Concat("exec elgalego.", query, ";");
             SqlCommand cmdRunFN = new SqlCommand(runFN, conex);
             SqlDataAdapter adap = new SqlDataAdapter(cmdRunFN);
             adap.Fill(result);
@@ -72,7 +79,7 @@ namespace FrbaHotel.Utility
             if (fields == null || fields == "") { fields = "*"; }
             DataTable result = new DataTable();
             SqlConnection conex = new SqlConnection(con_str);
-            string runFN = string.Concat("select top 100", fields, " from [no_triggers].", query, ";");
+            string runFN = string.Concat("select top 100", fields, " from elgalego.", query, ";");
             SqlCommand cmdRunFN = new SqlCommand(runFN, conex);
             SqlDataAdapter adap = new SqlDataAdapter(cmdRunFN);
             try
@@ -92,7 +99,7 @@ namespace FrbaHotel.Utility
             if (fields == null || fields == "") { fields = "*"; }
             DataTable result = new DataTable();
             SqlConnection conex = new SqlConnection(con_str);
-            string runFN = string.Concat("select ",fields, " from [no_triggers].", query, ";");
+            string runFN = string.Concat("select ", fields, " from elgalego.", query, ";");
             SqlCommand cmdRunFN = new SqlCommand(runFN, conex);
             SqlDataAdapter adap = new SqlDataAdapter(cmdRunFN);
             try
@@ -126,12 +133,13 @@ namespace FrbaHotel.Utility
             return result;
 
         }
+    
         // en una funcion los parametros se pasan entre parentesis y separados por comas
         internal static string exeFunString(string query)
         {
             string result = "";
             SqlConnection conex = new SqlConnection(con_str);
-            string runFN = string.Concat("select [no_triggers].", query, ";");
+            string runFN = string.Concat("select elgalego.", query, ";");
             SqlCommand cmdRunFN = new SqlCommand(runFN, conex);
             try
             {
@@ -155,7 +163,7 @@ namespace FrbaHotel.Utility
         {
             int result=-1;
             SqlConnection conex = new SqlConnection(con_str);
-            string runFN = string.Concat("select [no_triggers].",query,";");
+            string runFN = string.Concat("select elgalego.", query, ";");
             SqlCommand cmdRunFN = new SqlCommand(runFN, conex);
             try
             {
@@ -174,6 +182,39 @@ namespace FrbaHotel.Utility
             }
             return result;
         }
+       public struct Parametros
+       {
+           public string nombrePar;
+           public string valorPar;
+       }
+        // no se me ocurrio otra forma de mandar la lista de parametros sin crear una clase para este metodo
+       internal static int exeSPInt(string spName, List<Parametros> parameters)
+       {
+           
+           SqlConnection conex = new SqlConnection(con_str);
+           string runSP = string.Concat("elgalego.", spName);
+           
+           using (SqlCommand cmd = conex.CreateCommand())
+           {
+               int result;
+               cmd.CommandText = runSP;
+               cmd.CommandType = CommandType.StoredProcedure;
+
+               foreach (Parametros par in parameters)
+               {
+                   cmd.Parameters.AddWithValue(par.nombrePar, par.valorPar);
+               }
+
+               var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+               returnParameter.Direction = ParameterDirection.ReturnValue;
+               string res;
+               conex.Open();
+               cmd.ExecuteNonQuery();
+               res=returnParameter.Value.ToString();
+               Int32.TryParse(res, out result);
+               return result;
+           }
+       }
 
        /// <summary>
        /// A partir de aca tenemos los metodos que aplican los genericos creados mas arriba
@@ -184,17 +225,11 @@ namespace FrbaHotel.Utility
         internal static int checkAccesoABM(string nombreABM)
        {
            int result = 0;
-           string qHabil = string.Concat("fn_abm_Habilitado ('",CommonVars.userLogged,"','",nombreABM,"');");
+           string qHabil = string.Concat("fnABMHabilitado ('", CommonVars.userLogged, "','", nombreABM, "');");
            result = exeFunInt(qHabil);
            return result;
        }
-       internal static string getNombreHotel(int hotelid)
-       {
-           string result = "";
-           string qHotel = string.Concat("fn_get_hotel_nombre (", Convert.ToString(hotelid), ");");
-           result = exeFunString(qHotel);
-           return result;
-       }
+
        
     }
 }

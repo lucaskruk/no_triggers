@@ -1,4 +1,4 @@
-﻿namespace FrbaHotel.Login
+﻿namespace PalcoNet.Login
 {
     partial class FrmMenu
     {
@@ -29,138 +29,124 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMenu));
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnReserva11 = new System.Windows.Forms.Button();
-            this.btnEstadia8 = new System.Windows.Forms.Button();
-            this.btnFacturacion10 = new System.Windows.Forms.Button();
-            this.btnHotel3 = new System.Windows.Forms.Button();
-            this.btnHabitacion4 = new System.Windows.Forms.Button();
-            this.btnClientes7 = new System.Windows.Forms.Button();
-            this.lblUsr = new System.Windows.Forms.Label();
-            this.btnListado6 = new System.Windows.Forms.Button();
+            this.btnRendicion10 = new System.Windows.Forms.Button();
+            this.btnCompra7 = new System.Windows.Forms.Button();
+            this.btnCanje9 = new System.Windows.Forms.Button();
+            this.btnEmpresa3 = new System.Windows.Forms.Button();
+            this.btnRubro4 = new System.Windows.Forms.Button();
+            this.btnPublicacion6 = new System.Windows.Forms.Button();
+            this.btnGrado5 = new System.Windows.Forms.Button();
             this.btnRol1 = new System.Windows.Forms.Button();
-            this.btnUser2 = new System.Windows.Forms.Button();
-            this.btnConsumibles9 = new System.Windows.Forms.Button();
+            this.btnCliente2 = new System.Windows.Forms.Button();
+            this.btnHistorial8 = new System.Windows.Forms.Button();
             this.btnLogoff = new System.Windows.Forms.Button();
+            this.btnListado11 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
+            // btnRendicion10
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("MS Reference Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label1.Location = new System.Drawing.Point(12, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(218, 16);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Por favor, elija la opción deseada";
+            this.btnRendicion10.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnRendicion10.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnRendicion10.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRendicion10.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnRendicion10.Location = new System.Drawing.Point(2, 51);
+            this.btnRendicion10.Name = "btnRendicion10";
+            this.btnRendicion10.Size = new System.Drawing.Size(211, 42);
+            this.btnRendicion10.TabIndex = 6;
+            this.btnRendicion10.Text = "Rendicion de Comisiones";
+            this.btnRendicion10.UseVisualStyleBackColor = false;
+            this.btnRendicion10.Visible = false;
+            this.btnRendicion10.Click += new System.EventHandler(this.btnRendicion10_Click);
             // 
-            // btnReserva11
+            // btnCompra7
             // 
-            this.btnReserva11.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnReserva11.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnReserva11.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReserva11.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnReserva11.Location = new System.Drawing.Point(321, 138);
-            this.btnReserva11.Name = "btnReserva11";
-            this.btnReserva11.Size = new System.Drawing.Size(211, 42);
-            this.btnReserva11.TabIndex = 6;
-            this.btnReserva11.Text = "Reservas";
-            this.btnReserva11.UseVisualStyleBackColor = false;
-            this.btnReserva11.Click += new System.EventHandler(this.btnReserva11_Click);
+            this.btnCompra7.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnCompra7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCompra7.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCompra7.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnCompra7.Location = new System.Drawing.Point(2, 3);
+            this.btnCompra7.Name = "btnCompra7";
+            this.btnCompra7.Size = new System.Drawing.Size(211, 42);
+            this.btnCompra7.TabIndex = 2;
+            this.btnCompra7.Text = "Compra de Ubicaciones";
+            this.btnCompra7.UseVisualStyleBackColor = false;
+            this.btnCompra7.Visible = false;
+            this.btnCompra7.Click += new System.EventHandler(this.btnCompra7_Click);
             // 
-            // btnEstadia8
+            // btnCanje9
             // 
-            this.btnEstadia8.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnEstadia8.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnEstadia8.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEstadia8.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnEstadia8.Location = new System.Drawing.Point(15, 138);
-            this.btnEstadia8.Name = "btnEstadia8";
-            this.btnEstadia8.Size = new System.Drawing.Size(211, 42);
-            this.btnEstadia8.TabIndex = 2;
-            this.btnEstadia8.Text = "Check-in/Check Out";
-            this.btnEstadia8.UseVisualStyleBackColor = false;
-            this.btnEstadia8.Click += new System.EventHandler(this.btnEstadia8_Click);
+            this.btnCanje9.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnCanje9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCanje9.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCanje9.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnCanje9.Location = new System.Drawing.Point(2, 51);
+            this.btnCanje9.Name = "btnCanje9";
+            this.btnCanje9.Size = new System.Drawing.Size(211, 42);
+            this.btnCanje9.TabIndex = 5;
+            this.btnCanje9.Text = "Canje de Premios";
+            this.btnCanje9.UseVisualStyleBackColor = false;
+            this.btnCanje9.Visible = false;
+            this.btnCanje9.Click += new System.EventHandler(this.btnCanje9_Click);
             // 
-            // btnFacturacion10
+            // btnEmpresa3
             // 
-            this.btnFacturacion10.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnFacturacion10.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnFacturacion10.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFacturacion10.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnFacturacion10.Location = new System.Drawing.Point(321, 64);
-            this.btnFacturacion10.Name = "btnFacturacion10";
-            this.btnFacturacion10.Size = new System.Drawing.Size(211, 42);
-            this.btnFacturacion10.TabIndex = 5;
-            this.btnFacturacion10.Text = "Facturacion";
-            this.btnFacturacion10.UseVisualStyleBackColor = false;
-            this.btnFacturacion10.Click += new System.EventHandler(this.btnFacturacion10_Click);
+            this.btnEmpresa3.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnEmpresa3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnEmpresa3.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEmpresa3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnEmpresa3.Location = new System.Drawing.Point(219, 51);
+            this.btnEmpresa3.Name = "btnEmpresa3";
+            this.btnEmpresa3.Size = new System.Drawing.Size(211, 42);
+            this.btnEmpresa3.TabIndex = 9;
+            this.btnEmpresa3.Text = "Empresas de Espectaculos";
+            this.btnEmpresa3.UseVisualStyleBackColor = false;
+            this.btnEmpresa3.Visible = false;
+            this.btnEmpresa3.Click += new System.EventHandler(this.btnEmpresa3_Click);
             // 
-            // btnHotel3
+            // btnRubro4
             // 
-            this.btnHotel3.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnHotel3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnHotel3.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHotel3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnHotel3.Location = new System.Drawing.Point(627, 212);
-            this.btnHotel3.Name = "btnHotel3";
-            this.btnHotel3.Size = new System.Drawing.Size(211, 42);
-            this.btnHotel3.TabIndex = 9;
-            this.btnHotel3.Text = "Administración de hoteles";
-            this.btnHotel3.UseVisualStyleBackColor = false;
-            this.btnHotel3.Click += new System.EventHandler(this.btnHotel3_Click);
+            this.btnRubro4.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnRubro4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnRubro4.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRubro4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnRubro4.Location = new System.Drawing.Point(219, 99);
+            this.btnRubro4.Name = "btnRubro4";
+            this.btnRubro4.Size = new System.Drawing.Size(211, 42);
+            this.btnRubro4.TabIndex = 10;
+            this.btnRubro4.Text = "Administracion Rubros";
+            this.btnRubro4.UseVisualStyleBackColor = false;
+            this.btnRubro4.Visible = false;
+            this.btnRubro4.Click += new System.EventHandler(this.btnRubro4_Click);
             // 
-            // btnHabitacion4
+            // btnPublicacion6
             // 
-            this.btnHabitacion4.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnHabitacion4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnHabitacion4.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHabitacion4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnHabitacion4.Location = new System.Drawing.Point(627, 286);
-            this.btnHabitacion4.Name = "btnHabitacion4";
-            this.btnHabitacion4.Size = new System.Drawing.Size(211, 42);
-            this.btnHabitacion4.TabIndex = 10;
-            this.btnHabitacion4.Text = "Administracion habitaciones";
-            this.btnHabitacion4.UseVisualStyleBackColor = false;
-            this.btnHabitacion4.Click += new System.EventHandler(this.btnHabitacion4_Click);
+            this.btnPublicacion6.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnPublicacion6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnPublicacion6.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPublicacion6.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnPublicacion6.Location = new System.Drawing.Point(2, 51);
+            this.btnPublicacion6.Name = "btnPublicacion6";
+            this.btnPublicacion6.Size = new System.Drawing.Size(211, 42);
+            this.btnPublicacion6.TabIndex = 1;
+            this.btnPublicacion6.Text = "Publicaciones";
+            this.btnPublicacion6.UseVisualStyleBackColor = false;
+            this.btnPublicacion6.Visible = false;
+            this.btnPublicacion6.Click += new System.EventHandler(this.btnPublicacion6_Click);
             // 
-            // btnClientes7
+            // btnGrado5
             // 
-            this.btnClientes7.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnClientes7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnClientes7.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClientes7.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnClientes7.Location = new System.Drawing.Point(12, 64);
-            this.btnClientes7.Name = "btnClientes7";
-            this.btnClientes7.Size = new System.Drawing.Size(211, 42);
-            this.btnClientes7.TabIndex = 1;
-            this.btnClientes7.Text = "Clientes";
-            this.btnClientes7.UseVisualStyleBackColor = false;
-            this.btnClientes7.Click += new System.EventHandler(this.btnClientes7_Click);
-            // 
-            // lblUsr
-            // 
-            this.lblUsr.AutoSize = true;
-            this.lblUsr.Location = new System.Drawing.Point(12, 9);
-            this.lblUsr.Name = "lblUsr";
-            this.lblUsr.Size = new System.Drawing.Size(91, 13);
-            this.lblUsr.TabIndex = 24;
-            this.lblUsr.Text = "Usuario: Hotel ID:";
-            // 
-            // btnListado6
-            // 
-            this.btnListado6.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnListado6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnListado6.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnListado6.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnListado6.Location = new System.Drawing.Point(12, 286);
-            this.btnListado6.Name = "btnListado6";
-            this.btnListado6.Size = new System.Drawing.Size(211, 42);
-            this.btnListado6.TabIndex = 4;
-            this.btnListado6.Text = "Listado estadístico";
-            this.btnListado6.UseVisualStyleBackColor = false;
-            this.btnListado6.Click += new System.EventHandler(this.btnListado6_Click);
+            this.btnGrado5.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnGrado5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnGrado5.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGrado5.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnGrado5.Location = new System.Drawing.Point(2, 99);
+            this.btnGrado5.Name = "btnGrado5";
+            this.btnGrado5.Size = new System.Drawing.Size(211, 42);
+            this.btnGrado5.TabIndex = 4;
+            this.btnGrado5.Text = "Administracion Grados";
+            this.btnGrado5.UseVisualStyleBackColor = false;
+            this.btnGrado5.Visible = false;
+            this.btnGrado5.Click += new System.EventHandler(this.btnGrado5_Click);
             // 
             // btnRol1
             // 
@@ -168,41 +154,44 @@
             this.btnRol1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnRol1.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRol1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnRol1.Location = new System.Drawing.Point(627, 64);
+            this.btnRol1.Location = new System.Drawing.Point(2, 3);
             this.btnRol1.Name = "btnRol1";
             this.btnRol1.Size = new System.Drawing.Size(211, 42);
             this.btnRol1.TabIndex = 7;
             this.btnRol1.Text = "Administración de roles de usuario";
             this.btnRol1.UseVisualStyleBackColor = false;
+            this.btnRol1.Visible = false;
             this.btnRol1.Click += new System.EventHandler(this.btnRol1_Click);
             // 
-            // btnUser2
+            // btnCliente2
             // 
-            this.btnUser2.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnUser2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnUser2.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUser2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnUser2.Location = new System.Drawing.Point(627, 138);
-            this.btnUser2.Name = "btnUser2";
-            this.btnUser2.Size = new System.Drawing.Size(211, 42);
-            this.btnUser2.TabIndex = 8;
-            this.btnUser2.Text = "Administración de usuarios";
-            this.btnUser2.UseVisualStyleBackColor = false;
-            this.btnUser2.Click += new System.EventHandler(this.btnUser2_Click);
+            this.btnCliente2.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnCliente2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCliente2.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCliente2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnCliente2.Location = new System.Drawing.Point(2, 99);
+            this.btnCliente2.Name = "btnCliente2";
+            this.btnCliente2.Size = new System.Drawing.Size(211, 42);
+            this.btnCliente2.TabIndex = 8;
+            this.btnCliente2.Text = "Clientes";
+            this.btnCliente2.UseVisualStyleBackColor = false;
+            this.btnCliente2.Visible = false;
+            this.btnCliente2.Click += new System.EventHandler(this.btnCliente2_Click);
             // 
-            // btnConsumibles9
+            // btnHistorial8
             // 
-            this.btnConsumibles9.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnConsumibles9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnConsumibles9.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConsumibles9.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnConsumibles9.Location = new System.Drawing.Point(12, 212);
-            this.btnConsumibles9.Name = "btnConsumibles9";
-            this.btnConsumibles9.Size = new System.Drawing.Size(211, 42);
-            this.btnConsumibles9.TabIndex = 3;
-            this.btnConsumibles9.Text = "Consumibles";
-            this.btnConsumibles9.UseVisualStyleBackColor = false;
-            this.btnConsumibles9.Click += new System.EventHandler(this.btnConsumibles9_Click);
+            this.btnHistorial8.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnHistorial8.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnHistorial8.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnHistorial8.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnHistorial8.Location = new System.Drawing.Point(2, 99);
+            this.btnHistorial8.Name = "btnHistorial8";
+            this.btnHistorial8.Size = new System.Drawing.Size(211, 42);
+            this.btnHistorial8.TabIndex = 3;
+            this.btnHistorial8.Text = "Historial";
+            this.btnHistorial8.UseVisualStyleBackColor = false;
+            this.btnHistorial8.Visible = false;
+            this.btnHistorial8.Click += new System.EventHandler(this.btnHistorial8_Click);
             // 
             // btnLogoff
             // 
@@ -211,7 +200,7 @@
             this.btnLogoff.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnLogoff.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogoff.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnLogoff.Location = new System.Drawing.Point(321, 212);
+            this.btnLogoff.Location = new System.Drawing.Point(2, 173);
             this.btnLogoff.Name = "btnLogoff";
             this.btnLogoff.Size = new System.Drawing.Size(211, 42);
             this.btnLogoff.TabIndex = 11;
@@ -219,53 +208,65 @@
             this.btnLogoff.UseVisualStyleBackColor = false;
             this.btnLogoff.Click += new System.EventHandler(this.btnLogoff_Click);
             // 
+            // btnListado11
+            // 
+            this.btnListado11.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnListado11.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnListado11.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnListado11.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnListado11.Location = new System.Drawing.Point(219, 3);
+            this.btnListado11.Name = "btnListado11";
+            this.btnListado11.Size = new System.Drawing.Size(211, 42);
+            this.btnListado11.TabIndex = 25;
+            this.btnListado11.Text = "Listado Estadistico";
+            this.btnListado11.UseVisualStyleBackColor = false;
+            this.btnListado11.Visible = false;
+            this.btnListado11.Click += new System.EventHandler(this.btnListado11_Click);
+            // 
             // FrmMenu
             // 
-            this.AcceptButton = this.btnReserva11;
+            this.AcceptButton = this.btnRendicion10;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.CancelButton = this.btnLogoff;
-            this.ClientSize = new System.Drawing.Size(854, 365);
+            this.ClientSize = new System.Drawing.Size(456, 217);
+            this.Controls.Add(this.btnListado11);
             this.Controls.Add(this.btnLogoff);
-            this.Controls.Add(this.btnConsumibles9);
-            this.Controls.Add(this.btnListado6);
+            this.Controls.Add(this.btnHistorial8);
+            this.Controls.Add(this.btnGrado5);
             this.Controls.Add(this.btnRol1);
-            this.Controls.Add(this.btnUser2);
-            this.Controls.Add(this.lblUsr);
-            this.Controls.Add(this.btnClientes7);
-            this.Controls.Add(this.btnHabitacion4);
-            this.Controls.Add(this.btnHotel3);
-            this.Controls.Add(this.btnFacturacion10);
-            this.Controls.Add(this.btnEstadia8);
-            this.Controls.Add(this.btnReserva11);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnCliente2);
+            this.Controls.Add(this.btnPublicacion6);
+            this.Controls.Add(this.btnRubro4);
+            this.Controls.Add(this.btnEmpresa3);
+            this.Controls.Add(this.btnCanje9);
+            this.Controls.Add(this.btnCompra7);
+            this.Controls.Add(this.btnRendicion10);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMenu";
-            this.Text = "Menu Principal - FRBA hotel";
+            this.Text = "Menu Principal - PalcoNet";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_FormClosing);
-            this.Load += new System.EventHandler(this.Form3_Load);
+            this.Load += new System.EventHandler(this.MenuMain_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnReserva11;
-        private System.Windows.Forms.Button btnEstadia8;
-        private System.Windows.Forms.Button btnFacturacion10;
-        private System.Windows.Forms.Button btnHotel3;
-        private System.Windows.Forms.Button btnHabitacion4;
-        private System.Windows.Forms.Button btnClientes7;
-        private System.Windows.Forms.Label lblUsr;
-        private System.Windows.Forms.Button btnListado6;
+        private System.Windows.Forms.Button btnRendicion10;
+        private System.Windows.Forms.Button btnCompra7;
+        private System.Windows.Forms.Button btnCanje9;
+        private System.Windows.Forms.Button btnEmpresa3;
+        private System.Windows.Forms.Button btnRubro4;
+        private System.Windows.Forms.Button btnPublicacion6;
+        private System.Windows.Forms.Button btnGrado5;
         private System.Windows.Forms.Button btnRol1;
-        private System.Windows.Forms.Button btnUser2;
-        private System.Windows.Forms.Button btnConsumibles9;
+        private System.Windows.Forms.Button btnCliente2;
+        private System.Windows.Forms.Button btnHistorial8;
         private System.Windows.Forms.Button btnLogoff;
+        private System.Windows.Forms.Button btnListado11;
     }
 }

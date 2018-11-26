@@ -1,4 +1,4 @@
-﻿namespace FrbaHotel.Login
+﻿namespace PalcoNet.Login
 {
     partial class frmLogin
     {
@@ -49,9 +49,9 @@
             this.label1.Font = new System.Drawing.Font("Lucida Sans Unicode", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(22, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(281, 25);
+            this.label1.Size = new System.Drawing.Size(260, 25);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Bienvenido a FRBA hotel";
+            this.label1.Text = "Bienvenido a PalcoNet";
             // 
             // label2
             // 
@@ -184,7 +184,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmLogin";
-            this.Text = "Login -FRBA Hotel";
+            this.Text = "Login -PalcoNet";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmLogin_FormClosing);
             this.Load += new System.EventHandler(this.frmLogin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

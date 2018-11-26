@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.AbmFactura
+namespace PalcoNet.AbmFactura
 {
     public partial class FrmFactura : Form
     {

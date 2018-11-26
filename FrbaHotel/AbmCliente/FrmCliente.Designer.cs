@@ -1,4 +1,4 @@
-﻿namespace FrbaHotel.AbmCliente
+﻿namespace PalcoNet.AbmCliente
 {
     partial class FrmCliente
     {

@@ -1,13 +1,11 @@
-﻿using FrbaHotel.AbmCliente;
-using FrbaHotel.AbmFactura;
-using FrbaHotel.AbmHabitacion;
-using FrbaHotel.AbmHotel;
-using FrbaHotel.AbmRol;
-using FrbaHotel.AbmUsuario;
-using FrbaHotel.ListadoEstadistico;
-using FrbaHotel.RegistrarConsumible;
-using FrbaHotel.RegistrarEstadia;
-using FrbaHotel.Utility;
+﻿using PalcoNet.AbmPublicacion;
+using PalcoNet.AbmFactura;
+//using PalcoNet.AbmHabitacion;
+
+using PalcoNet.AbmRol;
+using PalcoNet.AbmPublicacion;
+using PalcoNet.ListadoEstadistico;
+using PalcoNet.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.Login
+namespace PalcoNet.Login
 {
     public partial class FrmMenu : Form
     {
@@ -32,63 +30,67 @@ namespace FrbaHotel.Login
         private void cargar()
         {
             btnRol1.Visible = false;
-            btnUser2.Visible = false;
-            btnHotel3.Visible = false;
-            btnHabitacion4.Visible = false;
-            btnListado6.Visible = false;
-            btnClientes7.Visible = false;
-            btnEstadia8.Visible = false;
-            btnConsumibles9.Visible = false;
-            btnFacturacion10.Visible = false;
-            btnReserva11.Visible = false;
+            btnCliente2.Visible = false;
+            btnEmpresa3.Visible = false;
+            btnRubro4.Visible = false;
+            btnGrado5.Visible = false;
+            btnPublicacion6.Visible = false;
+            btnCompra7.Visible = false;
+            btnHistorial8.Visible = false;
+            btnCanje9.Visible = false;
+            btnRendicion10.Visible = false;
             // MessageBox.Show(Convert.ToString(CommonVars.idHotelSeleccionado));
-            lblUsr.Text = string.Concat("Usuario: ", CommonVars.userLogged, "Hotel: ", Utils.getNombreHotel(CommonVars.idHotelSeleccionado));
+            
 
             // Habilita botones segun funcionalidades
             if (Utils.checkAccesoABM("Rol") == 1)
             {
                 btnRol1.Visible = true;
             }
-            if (Utils.checkAccesoABM("USUARIO") == 1)
+            if (Utils.checkAccesoABM("Clientes") == 1)
             {
-                btnUser2.Visible = true;
+                btnCliente2.Visible = true;
             }
-            if (Utils.checkAccesoABM("HOTEL") == 1)
+            if (Utils.checkAccesoABM("Empresa") == 1)
             {
-                btnHotel3.Visible = true;
+                btnEmpresa3.Visible = true;
             }
-            if (Utils.checkAccesoABM("HABITACION") == 1)
+            if (Utils.checkAccesoABM("Rubro") == 1)
             {
-                btnHabitacion4.Visible = true;
+                btnRubro4.Visible = true;
             }
-            if (Utils.checkAccesoABM("LISTADO") == 1)
+            if (Utils.checkAccesoABM("Grado") == 1)
             {
-                btnListado6.Visible = true;
+                btnGrado5.Visible = true;
             }
-            if (Utils.checkAccesoABM("CLIENTE") == 1)
+            if (Utils.checkAccesoABM("Publicacion") == 1)
             {
-                btnClientes7.Visible = true;
+                btnPublicacion6.Visible = true;
             }
-            if (Utils.checkAccesoABM("ESTADIA") == 1)
+            if (Utils.checkAccesoABM("Compra") == 1)
             {
-                btnEstadia8.Visible = true;
+                btnCompra7.Visible = true;
             }
-            if (Utils.checkAccesoABM("CONSUMIBLE") == 1)
+            if (Utils.checkAccesoABM("Historial") == 1)
             {
-                btnConsumibles9.Visible = true;
+                btnHistorial8.Visible = true;
             }
-            if (Utils.checkAccesoABM("FACTURAR") == 1)
+            if (Utils.checkAccesoABM("Canje") == 1)
             {
-                btnFacturacion10.Visible = true;
+                btnCanje9.Visible = true;
             }
-            if (Utils.checkAccesoABM("RESERVA") == 1)
+            if (Utils.checkAccesoABM("Rendicion") == 1)
             {
-                btnReserva11.Visible = true;
+                btnRendicion10.Visible = true;
+            }
+            if (Utils.checkAccesoABM("Listado") == 1)
+            {
+                btnListado11.Visible = true;
             }
             this.Activate();
         }
 
-        private void Form3_Load(object sender, EventArgs e)
+        private void MenuMain_Load(object sender, EventArgs e)
         {
             using ( ini = new FrmInicio())
             {
@@ -109,7 +111,7 @@ namespace FrbaHotel.Login
         {
            // if (goodbuttonPressed == 0)
             {
-                logHelper.deslogueaUsuario(CommonVars.userLogged);
+               
                 Application.Exit();
             }
             
@@ -125,62 +127,65 @@ namespace FrbaHotel.Login
             fRol.ShowDialog();
         }
 
-        private void btnUser2_Click(object sender, EventArgs e)
+        private void btnCliente2_Click(object sender, EventArgs e)
         {
-            FrmUsuario frmUsr = new FrmUsuario();
-            frmUsr.ShowDialog();
+            //FrmUsuario frmUsr = new FrmUsuario();
+            //frmUsr.ShowDialog();
         }
 
-        private void btnHotel3_Click(object sender, EventArgs e)
+        private void btnEmpresa3_Click(object sender, EventArgs e)
         {
-            FrmHotel frmHot = new FrmHotel();
-            frmHot.ShowDialog();
+           // FrmHotel frmHot = new FrmHotel();
+           // frmHot.ShowDialog();
         }
 
-        private void btnHabitacion4_Click(object sender, EventArgs e)
+        private void btnRubro4_Click(object sender, EventArgs e)
         {
-            FrmHabitacion frmHab = new FrmHabitacion();
-            frmHab.ShowDialog();
+            //FrmGrado frmHab = new FrmGrado();
+            //frmHab.ShowDialog();
         }
 
-        private void btnListado6_Click(object sender, EventArgs e)
+        private void btnGrado5_Click(object sender, EventArgs e)
         {
             FrmListado frmLis = new FrmListado();
             frmLis.ShowDialog();
         }
 
-        private void btnClientes7_Click(object sender, EventArgs e)
+        private void btnPublicacion6_Click(object sender, EventArgs e)
         {
-            FrmCliente frmCli = new FrmCliente();
-            frmCli.ShowDialog();
+            //FrmUsuario frmCli = new FrmUsuario();
+           // frmCli.ShowDialog();
         }
-        private void btnEstadia8_Click(object sender, EventArgs e)
+        private void btnCompra7_Click(object sender, EventArgs e)
         {
-            FrmEstadia frmEstad = new FrmEstadia();
-            frmEstad.ShowDialog();
-        }
-
-        private void btnConsumibles9_Click(object sender, EventArgs e)
-        {
-            FrmConsumible frmCons = new FrmConsumible();
-            frmCons.ShowDialog();
+ 
         }
 
-        private void btnFacturacion10_Click(object sender, EventArgs e)
+        private void btnHistorial8_Click(object sender, EventArgs e)
+        {
+       
+        }
+
+        private void btnCanje9_Click(object sender, EventArgs e)
         {
             FrmFactura frmFact = new FrmFactura();
             frmFact.ShowDialog();
         }
 
-        private void btnReserva11_Click(object sender, EventArgs e)
+        private void btnRendicion10_Click(object sender, EventArgs e)
         {
-            FrmMenuReserva frmReser = new FrmMenuReserva();
-            frmReser.ShowDialog();
+           // FrmMenuReserva frmReser = new FrmMenuReserva();
+           // frmReser.ShowDialog();
+        }
+
+        private void btnListado11_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void btnLogoff_Click(object sender, EventArgs e)
         {
-            logHelper.deslogueaUsuario(CommonVars.userLogged);
+            
             this.Hide();
             using ( ini =new FrmInicio())
             {
@@ -194,6 +199,8 @@ namespace FrbaHotel.Login
             this.cargar();
             
         }
+
+
         
   
     }

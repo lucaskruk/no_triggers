@@ -1,5 +1,5 @@
 ﻿
-using FrbaHotel.Utility;
+using PalcoNet.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.Login
+namespace PalcoNet.Login
 {
     public partial class frmLogin : Form
     {
@@ -35,61 +35,48 @@ namespace FrbaHotel.Login
                 string uservar = txtUsuario.Text;
                 string passvar = txtPasswd.Text;
 
-                int asd = logHelper.validaUsuario(uservar, passvar);
-                if (asd == 1)
+                int loginOk = logHelper.login(uservar, passvar);
+                if (loginOk == 1)
                 {
                     //MessageBox.Show("Login OK");
-                    logHelper.reseteaContadorfallidos(uservar);
+                    
                     
                     CommonVars.userLogged = uservar;
-                    int idHotelUser = logHelper.getIDHotelUser(uservar);
-                    int multiRole = logHelper.checkMultirole(uservar);
-                    if (idHotelUser == 0 || multiRole==1)
-                    {
-                        //MessageBox.Show("Usuario multi hotel o multirol");
-                        this.Visible = false;
-
-                        using (var hotelFrm = new Frm_Sel_Hotel())
-                        {
-
-                            var result = hotelFrm.ShowDialog();
-                            if (result != DialogResult.OK)
-                            {
-                                Application.Exit();
-                            }
-                            else { this.DialogResult = DialogResult.OK; this.Close(); }
-                        }
-                    }
-                    else
-                    {
-                        if (logHelper.userTieneHotel(uservar) == 1)
-                        {
-                            //MessageBox.Show("Usuario tiene hotel");
-                            int rolOK = Utils.exeFunInt(string.Concat("fn_get_usuario_rol_habilitado ('", CommonVars.userLogged, "')"));
+                     int multiRole = Utils.exeFunInt(string.Concat("fnMultirole ('",CommonVars.userLogged,"');"));
+                     if (multiRole==1)
+                     {            this.Visible = false;
+                                  Frm_Sel_Rol fSRol = new Frm_Sel_Rol();
+                                  var result = fSRol.ShowDialog();
+                                  if (result == DialogResult.OK)
+                                    { // marco el rol seleccionado.
+                                        Utils.execSPnoReturn(String.Concat("setRolSelected '", CommonVars.userLogged, "',",fSRol.getID().ToString()));
+                                    }
+                     }
+                     
+                         //MessageBox.Show("Usuario tiene hotel");
+                            int rolOK = Utils.exeFunInt(string.Concat("fnUserRoleEnabled ('", CommonVars.userLogged, "')"));
                             if (rolOK == 1)
                             {
                                 this.Visible = false;
-                                CommonVars.idHotelSeleccionado = idHotelUser;
-                                logHelper.logueaUsuario(CommonVars.userLogged, CommonVars.idHotelSeleccionado);
+                                
+                                
                                 //FrmMenu frmMenu = new FrmMenu();
                                 //frmMenu.Show();
                                 this.DialogResult = DialogResult.OK;
                                 this.Close();
                             }
                             else { MessageBox.Show("No existen roles habilitados para ese usuario. Favor contactar administrador"); }
-                        }
-                        else { MessageBox.Show("No existe hotel habilitado para este usuario. Favor contactar administrador."); }
-                    }
+                     
                 }
                 else
                 {
                     MessageBox.Show("Login Erroneo");
-                    logHelper.aumentaContadorfallidos(uservar);
+                    
                     txtPasswd.Text = "";
                 }
             }
             else {
-                MessageBox.Show("Verifique Usuario y/o Contraseña");
+                MessageBox.Show("Verifique Usuario y/o Contraseña, no pueden estar vacios");
             }
            
            }

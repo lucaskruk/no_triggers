@@ -1,4 +1,4 @@
-﻿using FrbaHotel.Utility;
+﻿using PalcoNet.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.AbmCliente
+namespace PalcoNet.AbmCliente
 {
     public partial class FrmCliente : Form
     {

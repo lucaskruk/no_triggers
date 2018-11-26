@@ -1,4 +1,4 @@
-﻿namespace FrbaHotel.AbmFactura
+﻿namespace PalcoNet.AbmFactura
 {
     partial class FrmFactura
     {

@@ -1,4 +1,4 @@
-﻿using FrbaHotel.Utility;
+﻿using PalcoNet.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.AbmRol
+namespace PalcoNet.AbmRol
 {
     public partial class FrmRol : Form
     {
@@ -21,7 +21,7 @@ namespace FrbaHotel.AbmRol
         internal static DataTable getListadoRoles()
         {
             DataTable result = new DataTable();
-            string sql = "sp_rol_listado";
+            string sql = "spRolListado";
             result = Utils.sptoTable(sql);
             return result;
         }

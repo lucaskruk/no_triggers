@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.Utility
+namespace PalcoNet.Utility
 {
     public partial class FrmBuscador : Form
     {
@@ -343,7 +343,7 @@ namespace FrbaHotel.Utility
         private void btnBuscar_Click(object sender, EventArgs e)
         {
            
-            
+            //todo: Adaptar para usar el SP buscar
                 string query = string.Concat(this.getBuscar(), " where ", this.getWhereCampo1(), this.getWhereCampo2(), this.getWhereCampo3(), this.getWhereCampo5(), this.getWhereCampo6());
                 //MessageBox.Show(query);
                 DataTable lisRes = Utils.querytop100Table(query, this.camposaMostrar);

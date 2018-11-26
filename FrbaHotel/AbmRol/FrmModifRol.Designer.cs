@@ -1,4 +1,4 @@
-﻿namespace FrbaHotel.AbmRol
+﻿namespace PalcoNet.AbmRol
 {
     partial class FrmModifRol
     {
