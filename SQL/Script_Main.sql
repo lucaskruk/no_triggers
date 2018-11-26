@@ -1,1227 +1,1020 @@
-use GD1C2018
+USE [GD2C2018]
+GO
+---- ESQUEMA
+if not exists(SELECT * FROM sys.schemas WHERE name = 'elgalego')
+begin
+Exec('CREATE SCHEMA [elgalego] AUTHORIZATION [gdEspectaculos2018]')
+end
+GO
+----- TABLAS
+
+-----------------------------METADATA
+--MedioPago
+IF OBJECT_ID('[elgalego].MedioPago', 'U') IS NOT NULL   DROP TABLE [elgalego].MedioPago;
+CREATE TABLE elgalego.MedioPago
+(
+ID_MedioPago int identity(1,1) unique not null,
+Descripcion nvarchar(20),
+MarcaBorrado int,
+CONSTRAINT PK_ID_MedioPago PRIMARY KEY CLUSTERED (ID_MedioPago asc)
+)
+
+--tipodocumento
+IF OBJECT_ID('[elgalego].TipoDocumento', 'U') IS NOT NULL   DROP TABLE [elgalego].TipoDocumento;
+create table elgalego.TipoDocumento
+(ID_TipoDoc int identity(1,1) unique not null,
+TipoDocumento nvarchar(30) not null,
+MarcaBorrado int,
+CONSTRAINT PK_ID_TipoDocumento PRIMARY KEY CLUSTERED (ID_TipoDoc asc)
+)
+
+--tipoTarjeta
+IF OBJECT_ID('[elgalego].TipoTarjeta', 'U') IS NOT NULL   DROP TABLE [elgalego].TipoTarjeta;
+create table elgalego.TipoTarjeta
+(ID_TipoTarj int identity(1,1) unique not null,
+TipoTarjeta nvarchar(30) not null,
+MarcaBorrado int,
+CONSTRAINT PK_ID_TipoTarjeta PRIMARY KEY CLUSTERED (ID_TipoTarj asc)
+)
+
+--Estado
+IF OBJECT_ID('[elgalego].Estado', 'U') IS NOT NULL   DROP TABLE [elgalego].Estado;
+create table elgalego.Estado
+(ID_Estado int identity(1,1) unique not null,
+Estado nvarchar(30) not null,
+MarcaBorrado int,
+CONSTRAINT PK_ID_Estado PRIMARY KEY CLUSTERED (ID_Estado asc)
+)
+
+--RUBRO
+IF OBJECT_ID('[elgalego].Rubro', 'U') IS NOT NULL   DROP TABLE [elgalego].Rubro;
+CREATE TABLE elgalego.Rubro
+(
+ID_Rubro int identity(1,1) unique not null,
+RubroNombre nvarchar(30),
+RubroDescr nvarchar(50),
+MarcaBorrado int,
+CONSTRAINT PK_ID_Rubro PRIMARY KEY CLUSTERED (ID_Rubro asc)
+)
+--GRADO
+IF OBJECT_ID('[elgalego].Grado', 'U') IS NOT NULL   DROP TABLE [elgalego].Grado;
+CREATE TABLE elgalego.Grado
+(
+ID_Grado int identity(1,1) unique not null,
+GradoNombre nvarchar(30),
+Comision decimal (5,2), -- porcentaje comision
+MarcaBorrado int,
+CONSTRAINT PK_ID_Grado PRIMARY KEY CLUSTERED (ID_Grado asc)
+)
+--TIPOUBICACION
+IF OBJECT_ID('[elgalego].TipoUbicacion', 'U') IS NOT NULL   DROP TABLE [elgalego].TipoUbicacion;
+CREATE TABLE elgalego.TipoUbicacion
+(
+ID_TipoUbicacion int identity(1,1) unique not null,
+Nombre nvarchar(30),
+Codigo nvarchar(30),
+MarcaBorrado int,
+CONSTRAINT PK_ID_TipoUbicacion PRIMARY KEY CLUSTERED (ID_TipoUbicacion asc)
+)
+--PREMIO
+IF OBJECT_ID('[elgalego].Premio', 'U') IS NOT NULL   DROP TABLE [elgalego].Premio;
+CREATE TABLE elgalego.Premio
+(
+ID_Premio int identity(1,1) unique not null,
+ValorPuntos int,
+Descripcion nvarchar(50),
+Stock int,
+MarcaBorrado int,
+CONSTRAINT PK_ID_Premio PRIMARY KEY CLUSTERED (ID_Premio asc)
+)
+--ROL
+IF OBJECT_ID('[elgalego].Rol', 'U') IS NOT NULL   DROP TABLE [elgalego].Rol;
+CREATE TABLE elgalego.Rol
+(
+ID_Rol int identity(1,1) unique not null,
+RolNombre nvarchar(30),
+MarcaBorrado int,
+CONSTRAINT PK_ID_Rol PRIMARY KEY CLUSTERED (ID_Rol asc)
+)
+--FUNCIONALIDAD
+IF OBJECT_ID('[elgalego].Funcionalidad', 'U') IS NOT NULL   DROP TABLE [elgalego].Funcionalidad;
+CREATE TABLE elgalego.Funcionalidad
+(
+ID_Funcionalidad int identity(1,1) unique not null,
+FuncionalidadNombre nvarchar(30),
+MarcaBorrado int,
+CONSTRAINT PK_ID_Funcionalidad PRIMARY KEY CLUSTERED (ID_Funcionalidad asc)
+)
+--ROLFUNCIONALIDAD
+IF OBJECT_ID('[elgalego].RolFuncionalidad', 'U') IS NOT NULL   DROP TABLE [elgalego].RolFuncionalidad;
+CREATE TABLE elgalego.RolFuncionalidad
+(
+ID_RolFuncionalidad int identity(1,1) unique not null,
+ID_Rol int,
+ID_Funcionalidad int,
+CONSTRAINT PK_ID_RolFuncionalidad PRIMARY KEY CLUSTERED (ID_RolFuncionalidad asc)
+)
+
+--USUARIO
+IF OBJECT_ID('[elgalego].Usuario', 'U') IS NOT NULL   DROP TABLE [elgalego].Usuario;
+CREATE TABLE elgalego.Usuario
+(
+ID_Usuario int identity(1,1) unique not null,
+Username nvarchar(30),
+UserPass nvarchar(256),
+UltimoLogin datetime,
+ID_RolSel int,
+IntentosLogin int, 
+MarcaBorrado int,
+MarcaBloqueo int,
+CONSTRAINT PK_ID_Usuario PRIMARY KEY NONCLUSTERED (ID_Usuario asc)
+)
+--UsuarioRol
+IF OBJECT_ID('[elgalego].UsuarioRol', 'U') IS NOT NULL   DROP TABLE [elgalego].UsuarioRol;
+CREATE TABLE elgalego.UsuarioRol
+(
+ID_UsuarioRol int identity(1,1) unique not null,
+ID_Rol int,
+ID_Usuario int,
+CONSTRAINT PK_ID_UsuarioRol PRIMARY KEY CLUSTERED (ID_UsuarioRol asc)
+)
+
+--TARJETA
+IF OBJECT_ID('[elgalego].Tarjeta', 'U') IS NOT NULL   DROP TABLE [elgalego].Tarjeta;
+CREATE TABLE elgalego.Tarjeta
+(
+ID_Tarjeta int identity(1,1) unique not null,
+Nombre nvarchar(30),
+Apellido nvarchar(50),
+ID_TipoTarj int, 
+NroTarjeta bigint,
+FechaVenc date,
+MarcaBorrado int,
+CONSTRAINT PK_ID_Tarjeta PRIMARY KEY NONCLUSTERED (ID_Tarjeta asc)
+)
+--DOMICILIO
+IF OBJECT_ID('[elgalego].Domicilio', 'U') IS NOT NULL   DROP TABLE [elgalego].Domicilio;
+CREATE TABLE elgalego.Domicilio
+(
+ID_Domicilio int identity(1,1) unique not null,
+Calle nvarchar(50),
+NroDomi int,
+NroDpto nvarchar(5),
+NroPiso int,
+Ciudad nvarchar(50),
+CodPostal nvarchar(10),
+MarcaBorrado int,
+CONSTRAINT PK_ID_Domicilio PRIMARY KEY NONCLUSTERED (ID_Domicilio asc)
+)
+--EMPRESA
+IF OBJECT_ID('[elgalego].Empresa', 'U') IS NOT NULL   DROP TABLE [elgalego].Empresa;
+CREATE TABLE elgalego.Empresa
+(
+ID_Empresa int identity(1,1) unique not null,
+ID_Usuario int not null,
+ID_Domicilio int not null, 
+RazonSocial nvarchar(80),
+Mail nvarchar(80),
+Telefono nvarchar(15),
+CUIT nvarchar(50),
+FechaCreacion date,
+MarcaBorrado int,
+CONSTRAINT PK_ID_Empresa PRIMARY KEY NONCLUSTERED (ID_Empresa asc)
+)
+--CLIENTE
+IF OBJECT_ID('[elgalego].Cliente', 'U') IS NOT NULL   DROP TABLE [elgalego].Cliente;
+CREATE TABLE elgalego.Cliente
+(
+ID_Cliente int identity(1,1) unique not null,
+ID_Usuario int not null,
+--ID_Tarjeta int not null,
+ID_Domicilio int not null,
+Nombre nvarchar(60),
+Apellido nvarchar(80),
+ID_TipoDoc int,
+NroDoc nvarchar(10),
+CUIL nvarchar(13),
+Mail nvarchar(100),
+Telefono nvarchar(15),
+FechaNac date,
+FechaCreacion datetime,
+MarcaBorrado int,
+CONSTRAINT PK_ID_Cliente PRIMARY KEY NONCLUSTERED (ID_Cliente asc)
+)
+--PUBLICACION
+IF OBJECT_ID('[elgalego].Publicacion', 'U') IS NOT NULL   DROP TABLE [elgalego].Publicacion;
+CREATE TABLE elgalego.Publicacion
+(
+ID_Publicacion int identity(1,1) unique not null,
+ID_Rubro int not null,
+ID_Domicilio int not null,
+ID_Grado int not null,
+ID_Empresa int not null,
+ID_Estado int not null,
+Titulo nvarchar(60),
+Descripcion nvarchar(150),
+FechaPublicado datetime,
+FechaEvento datetime,
+Codigo nvarchar(50),
+MarcaBorrado int,
+CONSTRAINT PK_ID_Publicacion PRIMARY KEY NONCLUSTERED (ID_Publicacion asc)
+)
+--COMPRA
+IF OBJECT_ID('[elgalego].Compra', 'U') IS NOT NULL   DROP TABLE [elgalego].Compra;
+CREATE TABLE elgalego.Compra
+(
+ID_Compra int identity(1,1) unique not null,
+ID_Cliente int not null,
+ID_Ubicacion int not null,
+ID_Tarjeta int  null,
+FechaCompra datetime,
+PrecioCompra money,
+Cantidad int,
+PuntosAcumulados int,
+MarcaBorrado int,
+CONSTRAINT PK_ID_Compra PRIMARY KEY NONCLUSTERED (ID_Compra asc)
+)
+--CANJE
+IF OBJECT_ID('[elgalego].Canje', 'U') IS NOT NULL   DROP TABLE [elgalego].Canje;
+CREATE TABLE elgalego.Canje
+(
+ID_Canje int identity(1,1) unique not null,
+ID_Cliente int not null,
+ID_Premio int not null,
+FechaCanje datetime,
+ValorPuntos int,
+MarcaBorrado int,
+CONSTRAINT PK_ID_Canje PRIMARY KEY NONCLUSTERED (ID_Canje asc)
+)
+
+--UBICACION
+
+IF OBJECT_ID('[elgalego].Ubicacion', 'U') IS NOT NULL   DROP TABLE [elgalego].Ubicacion;
+CREATE TABLE elgalego.Ubicacion
+(
+ID_Ubicacion int identity(1,1) unique not null,
+ID_Publicacion int not null,
+ID_TipoUbicacion int not null,
+Vendida int,
+Fila nvarchar(3),
+Asiento int,
+SinNumerar int,
+MarcaBorrado int,
+Precio money
+CONSTRAINT PK_ID_Ubicacion PRIMARY KEY CLUSTERED (ID_Ubicacion asc)
+)
+--FACTURA
+IF OBJECT_ID('[elgalego].Factura', 'U') IS NOT NULL   DROP TABLE [elgalego].Factura;
+CREATE TABLE elgalego.Factura
+(
+ID_Factura int identity(1,1) unique not null,
+ID_Empresa int not null,
+FacturaNumero bigint,
+FacturaTipo nvarchar(20),
+FacturaFecha datetime,
+Monto money,
+ID_MedioPago nvarchar (25),
+MarcaAnulacion int,
+MarcaBorrado int,
+CONSTRAINT PK_ID_Factura PRIMARY KEY CLUSTERED (ID_Factura asc)
+)
+
+--ITEMFACTURA
+IF OBJECT_ID('[elgalego].ItemFactura', 'U') IS NOT NULL   DROP TABLE [elgalego].ItemFactura;
+CREATE TABLE elgalego.ItemFactura
+(
+ID_ItemFactura int identity(1,1) unique not null,
+ID_Compra int not null,
+ID_Factura int not null,
+Importe money,
+Cantidad int,
+Descripcion nvarchar(100),
+MarcaBorrado int,
+CONSTRAINT PK_ID_ItemFactura PRIMARY KEY CLUSTERED (ID_ItemFactura asc)
+)
+
+------------------------------------------- Funciones y SP necesarios para Login
+IF OBJECT_ID ('[elgalego].fn_encriptar') IS NOT NULL drop function [elgalego].fn_encriptar
 go
 
-------------------------------------------------------------------------------------------------------------------------
-------------------------------STORED PROCEDURES-------------------------------------------------------------------------
-/*******************PARA ROL*******************************************/
-/*Se decide que se creen los roles en estado ACTIVO*/
-
-GO
-create procedure [NO_TRIGGERS].sp_rol_crear 
-@Nombre_rol varchar (100)
-	AS
-		insert into 
-		[NO_TRIGGERS].rol values (@Nombre_rol, 1)
-
-	GO
---exec [NO_TRIGGERS].sp_rol_crear 'Rey de los minisupers'
-GO
-create procedure [no_triggers].sp_rol_dar_de_baja
-@Nombre_rol varchar (100)
-	AS
-		update [NO_TRIGGERS].rol set rol_estado=0
-		WHERE @Nombre_rol=rol_nombre
-	GO
-create procedure [no_triggers].sp_rol_modificar_estado
-@Nombre_rol varchar (100), @estado_modificado int
-	AS
-	update [NO_TRIGGERS].rol set rol_estado=@estado_modificado
-	WHERE @Nombre_rol=rol_nombre
-	GO
--- exec [NO_TRIGGERS].sp_rol_dar_de_baja 'Rey de los minisupers'
-
-GO
-create procedure [NO_TRIGGERS].sp_asignar_funcionalidad
-	@Rol_nombre varchar (100), @Funcionalidad int
-	AS
-	insert into [NO_TRIGGERS].rol_por_funcionalidad values ((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre),@Funcionalidad)
-	GO
-
-create procedure [NO_TRIGGERS].sp_desasignar_funcionalidad
-@Rol_nombre varchar (100), @Funcionalidad int
-	AS
-		delete [NO_TRIGGERS].rol_por_funcionalidad where id_funcionalidad=@Funcionalidad and id_rol=(select id_rol from [NO_TRIGGERS].rol where rol_nombre=@Rol_nombre)
-	GO
-
-create function [NO_TRIGGERS].fn_chequear_asignacion_rol 
-(@Rol_nombre varchar(100), @Funcionalidad int) returns bit
-	AS
-		begin
-			declare @Resultado bit
-		if( (select id_rol_por_funcionalidad from [NO_TRIGGERS].rol_por_funcionalidad rf, [NO_TRIGGERS].rol r, [NO_TRIGGERS].funcionalidad f
-				where r.rol_nombre=@Rol_nombre and f.id_funcionalidad=@Funcionalidad and rf.id_rol=r.id_rol and rf.id_funcionalidad=f.id_funcionalidad)is NOT NULL)
-			set @Resultado=1
-		else
-			set @Resultado=0
-	return @resultado
-end
-GO
--- select [NO_TRIGGERS].sp_chequear_asignacion_rol ('ADMINISTRADOR' ,1)
-
-create function [NO_TRIGGERS].fn_chequear_existencia_rol
-(@Rol_nombre varchar(100)) returns bit
-	AS 
-		begin
-	declare @Resultado bit
-	if((select id_rol from [NO_TRIGGERS].rol r where r.rol_nombre=@Rol_nombre)IS NOT NULL)
-		set @Resultado=1
-	else
-		set @Resultado=0
-	return @Resultado
-end
-GO
-
-create procedure [NO_TRIGGERS].sp_modificar_rol /*Se decide que todos los campos pueden ser modificados a la vez, por lo cual se verifica cuales campos quiere modificar el usuario*/
-@Nombre_rol_a_modificar varchar (100), @Nuevo_nombre varchar (100), @estado_nuevo int, @funcionalidad_nueva int
-	AS
-		if ( @Nuevo_nombre !='')
-		update [NO_TRIGGERS].rol set rol_nombre=@Nuevo_nombre where @Nombre_rol_a_modificar=rol_nombre
-		if (@estado_nuevo is not null)
-		update [NO_TRIGGERS].rol set rol_estado=@estado_nuevo where @Nombre_rol_a_modificar=rol_nombre
-
-		if(@funcionalidad_nueva is not null)---------agrega la funcionalidad
-			begin
-				if not exists (select 1 from [NO_TRIGGERS].Rol_por_funcionalidad rf join [NO_TRIGGERS].Rol r on rf.id_rol=r.id_rol where r.rol_nombre=@Nombre_rol_a_modificar)
-					begin
-						declare @rolid int 
-						select @rolid=id_rol from [NO_TRIGGERS].Rol where rol_nombre=@Nombre_rol_a_modificar
-						insert into [NO_TRIGGERS].Rol_por_funcionalidad (id_rol,id_funcionalidad) values (@rolid,@funcionalidad_nueva)
-					end
-			end
-GO
-
-create procedure [NO_TRIGGERS].sp_mostrar_roles
-	AS
-		select * from [NO_TRIGGERS].rol
-	GO
-
-/*******************PARA LOGIN*******************************************/
-/*create procedure [NO_TRIGGERS].sp_chequear_intentos_fallidos
-@Nombre_usuario nvarchar (100)
-AS
-declare @cantidad_intentos int, @habilitado bit
-set @cantidad_intentos= (select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].usuario us where us.usuario_nombre=@Nombre_usuario)
-if (@cantidad_intentos<3)
-set @habilitado=1
-else
-set @habilitado=0
-GO*/
-
-create function [NO_TRIGGERS].fn_encriptar (@contrasenia nvarchar(256))
+create function elgalego.fn_encriptar (@pass nvarchar(256))
 returns nvarchar(255)
 as begin
-    return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @contrasenia)), 3, 255))
+    return(SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', @pass)), 3, 255))
 end
 GO
 
-create procedure [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos (@usuario nvarchar(100))
+IF OBJECT_ID ('[elgalego].sp_creaUser') IS NOT NULL drop procedure [elgalego].sp_creaUser
+go
+create procedure elgalego.sp_creaUser(@user nvarchar(30), @passwd nvarchar(30))
+as
+begin
+if not exists (select * from elgalego.Usuario where Username=@user and UserPass=@passwd)
+	begin
+	insert into elgalego.Usuario (Username,UserPass) values (@user, elgalego.fn_encriptar(@passwd))
+	end
+end
+go
+-----------------------------------------------------------------------------------------------------------
+--- MIGRACION
+
+
+--- METADATOS
+
+if exists(select 1 from elgalego.tipoDocumento) truncate table elgalego.tipoDocumento
+insert into elgalego.tipoDocumento (TipoDocumento) values ('DNI'),('Pasaporte')
+
+if exists (select 1 from elgalego.Estado) truncate table elgalego.Estado
+insert into elgalego.Estado (Estado)
+select distinct Espectaculo_Estado from gd_esquema.Maestra
+insert into elgalego.Estado (estado) values ('Borrador'),('Pausada'),('Finalizada')
+
+if exists (select 1 from elgalego.MedioPago) truncate table elgalego.MedioPago
+insert into elgalego.MedioPago (Descripcion)
+select distinct
+    [Forma_Pago_Desc]--MedioPago.Descripcion
+  FROM [gd_esquema].[Maestra] where Forma_Pago_Desc is not null
+insert into elgalego.MedioPago (Descripcion) values ('Tarjeta de Credito'),('Tajeta de debito')
+
+if exists  (select 1 from elgalego.TipoUbicacion) truncate table elgalego.tipoUbicacion
+insert into elgalego.TipoUbicacion (Codigo, Nombre)
+select distinct
+      [Ubicacion_Tipo_Codigo]--TipoUbicacion.Codigo
+      ,[Ubicacion_Tipo_Descripcion]--TipoUbicacion.Nombre
+	  from gd_esquema.Maestra
+
+if exists  (select 1 from elgalego.Rubro) truncate table elgalego.Rubro
+insert into elgalego.Rubro (RubroNombre)
+	  select distinct
+      [Espectaculo_Rubro_Descripcion] --Rubro.RubroNombre
+	  from gd_esquema.Maestra
+insert into elgalego.Rubro (RubroNombre) values ('Comedia'),('Recital'),('Musical'),('Avant Premiere')
+
+if exists  (select 1 from elgalego.Grado) truncate table elgalego.Grado
+insert into elgalego.Grado (GradoNombre,Comision) values
+('Exposicion Alta', 11.5), ('Exposicion Media',7.25), ('Exposicion Baja',4.2)
+
+if exists  (select 1 from elgalego.Premio) truncate table elgalego.Premio
+insert into elgalego.Premio (Descripcion,Stock,ValorPuntos) values ('Peluche',100,500), ('Combo Gaseosa', 200, 250)
+
+if exists  (select 1 from elgalego.TipoTarjeta) truncate table elgalego.TipoTarjeta
+insert into elgalego.TipoTarjeta (TipoTarjeta) values ('Credito'), ('Debito')
+
+--- SEGURIDAD
+
+if exists(select 1 from elgalego.funcionalidad) truncate table elgalego.funcionalidad
+insert into elgalego.Funcionalidad (FuncionalidadNombre) values
+('Rol'),('Clientes'),('Empresa'),('Rubro'),('Grado'),('Publicacion'),('Compra'),('Historial'),('Canje'),('Rendicion'),('Listado')
+
+if exists(select 1 from elgalego.rol) truncate table elgalego.rol
+Insert into elgalego.Rol (RolNombre,MarcaBorrado) values ('Empresa',0),('Administrativo',0),('Cliente',0)
+
+if exists(select 1 from elgalego.rolFuncionalidad) truncate table elgalego.rolFuncionalidad
+if object_id('tempdb..#rolfun') is not null drop table #rolfun
+create table #rolfun (rol nvarchar(30), funcionalidad nvarchar(30))
+insert into #rolfun values ('Empresa','Grado'),('Empresa','Publicacion'),('Cliente','Compra'),('Cliente','Historial'),('Cliente','Canje')
+,('Administrativo','Rol'),('Administrativo','Clientes'),('Administrativo','Empresa'),('Administrativo','Rubro'),('Administrativo','Rendicion'),('Administrativo','Listado')
+--,('Administrativo','Grado'),('Administrativo','Publicacion'),('Administrativo','Compra'),('Administrativo','Historial'),('Administrativo','Canje')
+insert into elgalego.rolfuncionalidad (ID_Rol,ID_Funcionalidad)
+select id_rol, id_funcionalidad from #rolfun v join elgalego.rol r on v.rol=r.RolNombre join elgalego.Funcionalidad  f on v.funcionalidad=f.FuncionalidadNombre
+if object_id('tempdb..#rolfun') is not null drop table #rolfun
+
+if exists(select 1 from elgalego.Usuario) truncate table elgalego.usuario
+insert into elgalego.Usuario(Username,UserPass) values ('Admin',elgalego.fn_encriptar('w23e'))
+go
+
+set nocount on
+go
+if object_id('tempdb..#users') is not null drop table #users
+create table #users (username nvarchar(80), tipoUser nvarchar(60))
+insert into #users
+select distinct espec_empresa_razon_social username, 'Empresa' tipoUser from gd_esquema.Maestra
+go
+insert into #users
+select distinct
+      convert(nvarchar(20),[Cli_Dni]) username, 'Cliente' tipoUser--Cliente.NroDoc
+	  from gd_esquema.Maestra
+where Cli_Dni is not null
+
+declare @username nvarchar(80)
+declare em_Cur cursor for
+select username from #users
+open em_Cur
+fetch next from em_Cur into @username
+while @@FETCH_STATUS=0
+begin
+	exec elgalego.sp_creaUser @username, 'default'
+	fetch next from em_Cur into @username
+end
+close em_Cur
+deallocate em_Cur
+
+if exists(select 1 from elgalego.UsuarioRol) truncate table elgalego.UsuarioRol
+insert into #users values ('Admin', 'Empresa'), ('Admin', 'Administrativo'),('Admin', 'Cliente')
+insert into elgalego.UsuarioRol (ID_Usuario,ID_Rol)
+select id_usuario, id_rol from #users v join elgalego.usuario u on v.username=u.username join elgalego.Rol r on v.tipoUSer=r.RolNombre
+if object_id('tempdb..#users') is not null drop table #users
+
+go
+set nocount off
+go
+
+--- DIMENSIONALES
+
+if exists (select 1 from elgalego.Domicilio) truncate table elgalego.Domicilio
+insert into elgalego.Domicilio (calle, NroDomi, NroPiso, NroDpto, CodPostal)
+SELECT distinct
+	  [Espec_Empresa_Dom_Calle] --Domicilio.Calle
+      ,[Espec_Empresa_Nro_Calle] --Domicilio.NroDomi
+      ,[Espec_Empresa_Piso] --Domicilio.NroPiso
+      ,[Espec_Empresa_Depto] --Domicilio.NroDpto
+      ,[Espec_Empresa_Cod_Postal] --Domicilio.CodPostal
+	  FROM [gd_esquema].[Maestra]
+union
+Select distinct 
+	   [Cli_Dom_Calle]--Domicilio.Calle
+      ,[Cli_Nro_Calle]--Domicilio.NroDomi
+      ,[Cli_Piso]--Domicilio.Piso
+      ,[Cli_Depto]--Domicilio.Depto
+      ,[Cli_Cod_Postal]--Domicilio.CodPostal
+FROM [gd_esquema].[Maestra]
+where Cli_Dom_Calle is not null
+union
+Select 'Desconocido' as Calle, 1 as nrodomi, null as piso, null as dpto, 1 as codPostal
+
+--select * from elgalego.Domicilio
+
+if exists(select 1 from elgalego.Empresa) truncate table elgalego.empresa
+insert into elgalego.Empresa (id_usuario, RazonSocial, CUIT, FechaCreacion, Mail, ID_Domicilio) -- no existe telefono en el modelo
+select distinct 
+		u.id_usuario
+	   ,[Espec_Empresa_Razon_Social] --Empresa.RazonSocial
+      ,[Espec_Empresa_Cuit] -- Empresa.CUIT
+      ,[Espec_Empresa_Fecha_Creacion] --Empresa.FechaCreacion
+      ,[Espec_Empresa_Mail] --Empresa.Mail
+	  , dm.ID_Domicilio
+	  
+	  from gd_esquema.Maestra mr
+	  join elgalego.Domicilio dm on mr.Espec_Empresa_Dom_Calle=dm.Calle 
+		and mr.Espec_Empresa_Cod_Postal=dm.CodPostal 
+		and mr.Espec_Empresa_Nro_Calle=dm.NroDomi 
+		and mr.Espec_Empresa_Piso=dm.NroPiso
+		and mr.Espec_Empresa_Depto=dm.NroDpto
+	  join elgalego.Usuario u on mr.Espec_Empresa_Razon_Social=u.Username
+
+declare @domiDesconocido int 
+select @domiDesconocido=id_domicilio from elgalego.Domicilio where Calle='Desconocido'
+
+if exists(select 1 from elgalego.cliente) truncate table elgalego.cliente
+insert into elgalego.Cliente (ID_Usuario,ID_Domicilio,ID_TipoDoc,NroDoc,Apellido,Nombre,FechaNac,Mail, FechaCreacion) --- no habia cuil ni telefono.
+select distinct
+ u.ID_Usuario, isnull(d.ID_Domicilio,@domiDesconocido)
+ ,1
+ ,convert(nvarchar(20),Cli_Dni),Cli_Apeliido,Cli_Nombre,Cli_Fecha_Nac,Cli_Mail, getdate() as fechacreacion
+from gd_esquema.Maestra mr
+left join elgalego.Domicilio d on mr.Cli_Cod_Postal=d.CodPostal and mr.Cli_Dom_Calle=d.Calle and mr.Cli_Nro_Calle=d.NroDomi and mr.Cli_Piso=d.NroPiso and mr.Cli_Depto=d.NroDpto
+left join elgalego.Usuario u on convert(nvarchar(20),mr.Cli_Dni)=u.Username
+where u.ID_Usuario is not null
+
+go
+---- Tablas FACTICAS	
+if exists(select 1 from elgalego.Publicacion) truncate table elgalego.Publicacion
+insert into elgalego.Publicacion (ID_Rubro,ID_Domicilio,ID_Grado,ID_Empresa,ID_Estado,Codigo,Titulo,FechaPublicado,FechaEvento)
+SELECT distinct
+	  rr.ID_Rubro
+	  ,do.ID_Domicilio
+	  ,gg.ID_Grado
+	  ,ee.ID_Empresa
+	  ,es.ID_Estado
+      ,[Espectaculo_Cod] --Publicacion.Codigo
+      ,[Espectaculo_Descripcion] --Publicacion.Titulo
+      ,[Espectaculo_Fecha] --Publicacion.FechaPublicado
+      ,[Espectaculo_Fecha_Venc] --Publicacion.FechaEvento
+from gd_esquema.Maestra mm
+join elgalego.Domicilio do on do.Calle='Desconocido'
+left join elgalego.Rubro rr on mm.Espectaculo_Rubro_Descripcion=rr.RubroNombre --- un left join cambia el query plan y lo hace mas performante.
+join elgalego.Grado gg on gg.GradoNombre='Exposicion Media'
+join elgalego.Empresa ee on mm.Espec_Empresa_Cuit=ee.CUIT
+join elgalego.Estado es on mm.Espectaculo_Estado=es.Estado
+
+
+if exists(select 1 from elgalego.Ubicacion) truncate table elgalego.Ubicacion
+insert into elgalego.Ubicacion(ID_Publicacion, ID_TipoUbicacion, Fila, Asiento, SinNumerar,Precio)
+SELECT distinct
+      pp.ID_Publicacion
+	  ,tp.ID_TipoUbicacion
+	  ,[Ubicacion_Fila]--Ubicacion.Fila
+      ,[Ubicacion_Asiento]--Ubicacion.Asiento
+      ,[Ubicacion_Sin_numerar]--Ubicacion.SinNumerar
+	  ,Ubicacion_Precio
+FROM [gd_esquema].[Maestra] mm
+join  elgalego.Publicacion pp on mm.Espectaculo_Cod=pp.Codigo
+join elgalego.TipoUbicacion tp on mm.Ubicacion_Tipo_Codigo=tp.Codigo
+
+
+if exists(select 1 from elgalego.Compra) truncate table elgalego.Compra
+insert into elgalego.Compra (ID_Cliente, ID_Ubicacion, FechaCompra, PrecioCompra, Cantidad)
+SELECT distinct
+	   cc.ID_Cliente
+	  ,ub.ID_Ubicacion
+      ,[Compra_Fecha]--Compras.FechaCompra
+	  ,ub.Precio
+      ,[Compra_Cantidad]--Compras.Cantidad
+FROM [gd_esquema].[Maestra] mm
+join elgalego.cliente cc on convert(nvarchar(20),mm.Cli_Dni)=cc.NroDoc
+join elgalego.Publicacion pp on mm.Espectaculo_Cod=pp.Codigo
+join elgalego.TipoUbicacion tp on mm.Ubicacion_Tipo_Codigo=tp.Codigo
+join elgalego.Ubicacion ub on pp.id_publicacion=ub.ID_Publicacion and tp.ID_TipoUbicacion=ub.ID_TipoUbicacion and mm.Ubicacion_Fila=ub.Fila and mm.Ubicacion_Asiento=ub.Asiento
+
+
+if exists(select 1 from elgalego.Factura) truncate table elgalego.Factura
+insert into elgalego.Factura (ID_Empresa,ID_MedioPago,FacturaNumero,FacturaTipo,FacturaFecha,Monto)
+SELECT distinct
+	  ee.ID_Empresa
+	  ,mp.ID_MedioPago
+	  ,[Factura_Nro]--Facturas.FacturaNumero
+	  ,'Desconocido' as FacturaTipo
+      ,[Factura_Fecha]--Facturas.FacturaFecha
+      ,[Factura_Total]--Facturas.Monto
+FROM [gd_esquema].[Maestra] mm
+join elgalego.Empresa ee on mm.Espec_Empresa_Cuit=ee.CUIT
+join elgalego.MedioPago mp on mm.Forma_Pago_Desc=mp.Descripcion
+
+if exists(select 1 from elgalego.ItemFactura) truncate table elgalego.ItemFactura
+insert into elgalego.ItemFactura (ID_Compra,ID_Factura, Importe, Cantidad, Descripcion)
+SELECT distinct
+	   co.ID_Compra
+	   ,ff.ID_Factura       
+      ,[Item_Factura_Monto]--ItemFactura.Importe
+      ,[Item_Factura_Cantidad]--ItemFactura.Cantidad
+      ,[Item_Factura_Descripcion]--ItemFactura.Descripcion
+      
+  FROM [gd_esquema].[Maestra] mm
+  join elgalego.Factura ff on mm.Factura_Nro=ff.FacturaNumero
+join elgalego.cliente cc on convert(nvarchar(20),mm.Cli_Dni)=cc.NroDoc
+join elgalego.Publicacion pp on mm.Espectaculo_Cod=pp.Codigo
+join elgalego.TipoUbicacion tp on mm.Ubicacion_Tipo_Codigo=tp.Codigo
+join elgalego.Ubicacion ub on pp.id_publicacion=ub.ID_Publicacion and tp.ID_TipoUbicacion=ub.ID_TipoUbicacion and mm.Ubicacion_Fila=ub.Fila and mm.Ubicacion_Asiento=ub.Asiento
+join elgalego.Compra co on co.ID_Cliente=cc.ID_Cliente and co.ID_Ubicacion=ub.ID_Ubicacion   
+-- select count(1) from elgalego.compra
+go  
+
+--------------------------------- Stored procedures principales
+
+
+--- procedure buscar
+if object_id('elgalego.spBuscar') is not null drop procedure elgalego.spBuscar
+go
+create procedure elgalego.spBuscar
+(
+@nombreTabla nvarchar(50)
+, @nombreColum1 nvarchar(50)
+, @valorBuscado1 nvarchar(250)=null
+, @nombreColum2 nvarchar(50)=null
+, @valorBuscado2 nvarchar(250)=null
+, @nombreColum3 nvarchar(50)
+, @valorBuscado3 nvarchar(250)=null
+, @nombreColum4 nvarchar(50)
+, @valorBuscado4 nvarchar(250)=null
+, @nombreColum5 nvarchar(50)
+, @valorBuscado5 nvarchar(250)=null
+, @nombreColum6 nvarchar(50)
+, @valorBuscado6 nvarchar(250)=null
+)
+as
+begin
+
+declare @query nvarchar(max)
+
+if @valorBuscado1 is not null
+set @query='Select * from ' + @nombreTabla + ' where (' + @nombreColum1 + ' like ''%'+@valorbuscado1+'%'' )'
+else
+set @query='Select * from ' + @nombreTabla + ' where 1=1 '
+if @nombreColum2 is not null and @valorBuscado2 is not null			
+	set @query=@query+' and (' + @nombreColum2 + ' like ''%'+@valorbuscado2+'%'' )'
+if @nombreColum3 is not null and @valorBuscado3 is not null			
+	set @query=@query+' and (' + @nombreColum3 + ' like ''%'+@valorbuscado3+'%'' )' 
+if @nombreColum4 is not null and @valorBuscado4 is not null			
+	set @query=@query+' and (' + @nombreColum4 + ' like ''%'+@valorbuscado4+'%'' )' 
+if @nombreColum5 is not null and @valorBuscado5 is not null			
+	set @query=@query+' and (' + @nombreColum5 + ' like ''%'+@valorbuscado5+'%'' )' 
+if @nombreColum6 is not null and @valorBuscado6 is not null			
+	set @query=@query+' and (' + @nombreColum6 + ' like ''%'+@valorbuscado6+'%'' )' 
+
+
+execute sp_executesql @query
+
+end
+go
+--- Nota importante, el tipo de campos se va a definir una vez tenga armado el ABM
+--elgalego.spBuscar 'elgalego.cliente', 'nombre',null,'apellido',null,'mail','gmail',null,null,null,null,null,null
+
+
+----------------------- GET generico
+if object_id('elgalego.spgetvaltabla') is not null drop procedure elgalego.spgetvaltabla
+go
+create procedure elgalego.spgetValTabla 
+(@nombreTabla nvarchar(50), @nombreColID nvarchar(50), @nombreColBus nvarchar(50), @valorBuscado nvarchar(250))
+as
+begin
+declare @query nvarchar(max)
+set @query='Select isnull('+ @nombreColID +',0) from ' + @nombreTabla + ' where ' + @nombreColBus + ' like ''%'+@valorbuscado+'%'' '
+
+execute sp_executesql @query
+
+end
+go
+
+
+--- SET Generico
+if object_id('elgalego.spsetvaltabla') is not null drop procedure elgalego.spsetvaltabla
+go
+create procedure elgalego.spsetValTabla 
+(@nombreTabla nvarchar(50), @nombreColID nvarchar(50), @valorID nvarchar(10),  @nombreColupd nvarchar(50), @nuevoValor nvarchar(250))
+as
+begin
+declare @query nvarchar(max)
+set @query='update '+ @nombreTabla +' set ' + @nombreColupd + '= ' + @nuevoValor + ' where '+@nombreColID+'= ' +  @valorID
+
+execute sp_executesql @query
+
+end
+go
+
+
+---- Select generico
+if object_id('elgalego.spSelectTabla') is not null drop procedure elgalego.spSelectTabla
+go
+create procedure elgalego.spSelectTabla (@nombreTabla nvarchar(50))
+as
+begin
+declare @query nvarchar(max)
+set @query= 'select * from ' + @nombreTabla
+exec sp_executesql @query
+end
+
+go
+if object_id('elgalego.spSelTablaFiltrada') is not null drop procedure elgalego.spSelTablaFiltrada
+go
+create procedure elgalego.spSelTablaFiltrada (@nombreTabla nvarchar(50), @nomCampoFiltro nvarchar(50), @ValorFiltro nvarchar(250))
+as
+begin
+declare @query nvarchar(max)
+set @query= 'select * from ' + @nombreTabla + ' where ' +@nomCampoFiltro +' = ' + @ValorFiltro
+exec sp_executesql @query
+end
+
+go
+
+
+create procedure elgalego.spExisteValor (@nombreTabla nvarchar(50), @nomCampoFiltro nvarchar(50), @ValorFiltro nvarchar(250))
+as
+begin
+declare @query nvarchar(max), @counts int
+
+set @query= 'select @cnt=count(1) from ' + @nombreTabla + ' where ' +@nomCampoFiltro +' = ' + @ValorFiltro
+exec sp_executesql @query, N'@cnt int output', @cnt=@counts output
+
+if @counts=0 return 0 else return 1
+
+end
+
+go
+
+
+
+
+
+----------------------- LOGIN
+-- exec elgalego.sp_incrementar_intentos_fallidos 'UsuarioAdministrador2';
+IF OBJECT_ID ('elgalego.spLoginFailed','P') IS NOT NULL drop procedure elgalego.spLoginFailed
+go
+
+create procedure elgalego.spLoginFailed (@usuario nvarchar(100))
 as
 
-if((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where @usuario= usuario_username ) <3)
+if((select isnull(IntentosLogin,0) from elgalego.Usuario where @usuario= username ) <2)
 	begin
-	update [NO_TRIGGERS].Usuario
-set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1 where  @usuario=usuario_username
+	update elgalego.Usuario
+set IntentosLogin =  isnull(IntentosLogin+1,1) where  @usuario=username
 	end
 else
 	begin	
-	update [NO_TRIGGERS].Usuario
-	set usuario_cantidad_intentos_fallidos =  usuario_cantidad_intentos_fallidos+1,  usuario_habilitado = 0 where  @usuario=usuario_username
+	update elgalego.Usuario
+	set IntentosLogin =  IntentosLogin+1,  MarcaBloqueo = 1 where  @usuario=username
 end
 
 go
 
-create procedure [NO_TRIGGERS].sp_a_Cero_Intentos_fallidos (@usuario nvarchar(100))
+IF OBJECT_ID ('elgalego.spResetLoginCounter','P') IS NOT NULL drop procedure elgalego.spResetLoginCounter
+go
+create procedure elgalego.spResetLoginCounter (@usuario nvarchar(100))
 as
-update [NO_TRIGGERS].Usuario
-set usuario_cantidad_intentos_fallidos =  0
-where usuario_username = @usuario
+update elgalego.Usuario
+set IntentosLogin =  0
+where username = @usuario
 go
 
-create function [NO_TRIGGERS].fn_validar_password (@usuario nvarchar(100), @password nvarchar(256))
-returns bit
+
+
+IF OBJECT_ID ('elgalego.fnUserEnabled') IS NOT NULL drop function elgalego.fnUserEnabled
+go
+
+create function elgalego.fnUserEnabled (@usuario nvarchar(100))
+returns int
+as
+begin
+declare @result int
+select @result=case when isnull(MarcaBloqueo,0)=0 then 1 else 0 end from elgalego.Usuario where username=@usuario;
+return @result
+
+end
+
+go
+ -- select elgalego.fnuserenabled ('admin')
+
+IF OBJECT_ID ('elgalego.spLogin') IS NOT NULL drop procedure elgalego.spLogin
+go
+create procedure elgalego.spLogin (@usuario nvarchar(100), @password nvarchar(256))
+
 as begin
 declare @resultado bit, @password2 nvarchar(256)
-set @password2 = [NO_TRIGGERS].fn_encriptar(@password)
-if (((SELECT usuario_password FROM [NO_TRIGGERS].Usuario WHERE usuario_username=@usuario) = @password2) and ((select usuario_cantidad_intentos_fallidos from [NO_TRIGGERS].Usuario where usuario_username = @usuario)<=3)) and ((select usuario_habilitado from [NO_TRIGGERS].Usuario where usuario_username=@usuario)=1)
+set @password2 = elgalego.fn_encriptar(@password)
+if (((SELECT UserPass FROM elgalego.Usuario WHERE username=@usuario) = @password2) and ((select isnull(IntentosLogin,0) from elgalego.Usuario where username = @usuario)<=3)) and ((select isnull(MarcaBloqueo,0) from elgalego.Usuario where username=@usuario)=0)
 	begin	
-		--Ejecutar desde C# el borrar intentos fallidos
+		exec elgalego.spResetLoginCounter @usuario
 		set @resultado = 1
 	end
 ELSE
 	begin
-		--Ejecutar desde C# el sumar intentos fallidos
+		exec elgalego.spLoginFailed @usuario
 		set @resultado=0
 	end
 return @resultado
 END
 GO
 
---select [NO_TRIGGERS].fn_validar_password ('USER_GUEST2', 'user_guest')
---exec [NO_TRIGGERS].sp_Incrementar_Intentos_fallidos'USER_GUEST2'
 
-
-/***********************PARA USUARIO*************************************/
-GO
-create procedure [NO_TRIGGERS].sp_crear_usuario --se decide que el usuario quede habiliado al crearse--
-@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @password nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50), @rolasignado int, @hotel int --RECIBE EL HOTEL DEL ADMINISTRADOR
-AS
-BEGIN
-DECLARE @responseMessage nvarchar(250) 
-	SET NOCOUNT ON 
-	BEGIN TRY 
-		INSERT INTO [NO_TRIGGERS].Usuario VALUES (@nombreusuario, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@password), @email, @fechanacimiento, 0, @tipodocumento, @numero_documento, @numerotelefono,1, @rolasignado, NULL) --Sami dice: modificar lo de hotel ya que debe tomar el hotel del administrador que lo crea, o enviarselo desde c#
-		INSERT INTO [NO_TRIGGERS].usuario_por_hotel VALUES ((select id_usuario from [NO_TRIGGERS].usuario us where us.usuario_username=@nombreusuario),@hotel)
-		SET @responseMessage= 'Usuario creado con exito'
-	END TRY
-	BEGIN CATCH 
-		SET @responseMessage= ERROR_MESSAGE()
-	END CATCH
-END
-go
-/*
-insert into [NO_TRIGGERS].usuario 
-(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento
-,usuario_cantidad_intentos_fallidos,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado,id_rol,id_hotel)
-values
-('USER_GUEST3', 'User','Generico', [no_triggers].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2,1)
-*/
-
-create function [NO_TRIGGERS].fn_permitir_cambios_administrador(@usuarioAdministrador nvarchar(100), @usuarioAModificar nvarchar (100)) --verifica que el usuario que quiera modificar el administrador trabaje en el mismo hotel
-RETURNS bit
-AS
-BEGIN
-DECLARE @aprobador bit
-	IF(((select usxh.id_hotel from [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE us.usuario_username=@usuarioAdministrador and usxh.id_usuario=us.id_usuario)=
-	(SELECT usxh.id_hotel FROM [NO_TRIGGERS].Usuario_por_hotel usxh, [NO_TRIGGERS].Usuario us WHERE usxh.id_usuario=us.id_usuario and us.usuario_username=@usuarioAModificar))and((select r.rol_nombre from [NO_TRIGGERS].Usuario u, [NO_TRIGGERS].Rol r where r.id_rol = u.id_rol and u.usuario_username=@usuarioAdministrador)='Administrador'))
-		BEGIN
-			set @aprobador=1
-		END
-	ELSE
-		BEGIN
-		set @aprobador=0
-		END
-return @aprobador
-END
-GO
-
---SELECT [NO_TRIGGERS].fn_permitir_cambios_administrador('REYDELOSMINISUPERS','USER_GUEST3')
-
-create proc [NO_TRIGGERS].sp_Cambiar_Contrasenia
-@Usuario nvarchar(100), @NuevaContraseña nvarchar(256)
-as
-begin
-	update [NO_TRIGGERS].Usuario 
-	set usuario_password = [NO_TRIGGERS].fn_encriptar(@NuevaContraseña) where usuario_username = @Usuario
-end
+-- elgalego.splogin 'admin','w23e'
+IF OBJECT_ID ('elgalego.fnUserRoleEnabled') IS NOT NULL drop function elgalego.fnUserRoleEnabled
 go
 
---exec [NO_TRIGGERS].sp_Cambiar_Contraseña 'USER_GUEST2', 'pepita'
-
-create function [NO_TRIGGERS].fn_trow_Exception(@Mensaje nvarchar(100))
-returns nvarchar(100)
-as begin
-	return @mensaje
-end
-go
-
-create function [NO_TRIGGERS].fn_throw_respuesta(@resultado bit)
-returns nvarchar(100)
-as begin
+create function elgalego.fnUserRoleEnabled
+(@usern nvarchar(100)) returns int
+	AS 
+		begin
+	declare @Resultado int
+	if exists 
+	(select uh.id_rol from elgalego.UsuarioRol uh 
+	join elgalego.rol rl on uh.id_rol=rl.id_rol
+	join elgalego.Usuario u on uh.id_usuario=u.id_usuario
+	where u.username=@usern and isnull(rl.MarcaBorrado,0)=0
+	)
+	begin
+	select @Resultado=1
+	end else select @resultado=0
 	return @resultado
 end
-go
-
-create proc [NO_TRIGGERS].sp_Dar_Baja_Usuario
-@UsuarioAdministrador nvarchar(100), @UsuarioADarBAja nvarchar(100)
-as
-begin
-DECLARE @responseMessage nvarchar(250)  
-	if(([NO_TRIGGERS].fn_permitir_cambios_administrador(@UsuarioAdministrador,@UsuarioADarBAja)=1) and ((select r.rol_nombre from [NO_TRIGGERS].Usuario u, [NO_TRIGGERS].Rol r where r.id_rol = u.id_rol and u.usuario_username=@usuarioAdministrador)='Administrador'))
-	begin
-			begin try
-				update [NO_TRIGGERS].Usuario
-				set usuario_habilitado = 0 where @UsuarioADarBAja = usuario_username
-				select [NO_TRIGGERS].fn_trow_Exeption('Dado de Baja Exitosamente')
-			end try 
-			begin catch
-				select [NO_TRIGGERS].fn_trow_Exeption('Usuario Inexistente')
-			end catch
-	end
-	else
-		begin
-			select [NO_TRIGGERS].fn_trow_Exeption('No tenes permisos')
-		end 
-	end
-go
-
---exec [NO_TRIGGERS].sp_Dar_Baja_Usuario 'REYDELOSMINISUPERS', 'USER_GUEST3'
-
-create function [NO_TRIGGERS].fn_Devolve_Usuarios (@Usuario nvarchar(100))
-returns table
-as
-	RETURN (select * from [NO_TRIGGERS].Usuario us where us.usuario_username = @Usuario)
-go
-
---select * from [NO_TRIGGERS].fn_Devolve_Usuarios('REYDELOSMINISUPERS')
-
-create proc [NO_TRIGGERS].sp_modificarUsuarios 
-@UsuarioAMofificar nvarchar(100),@nombreusuario nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @email nvarchar(200), @fechanacimiento datetime, @tipodocumento int, @numero_documento nvarchar(50), @numerotelefono nvarchar(50),@rol int, @hotel int
-as
-declare @id int
-	set @id = (SElect id_usuario from [NO_TRIGGERS].Usuario where usuario_username = @UsuarioAMofificar)
-	update [NO_TRIGGERS].Usuario
-	set usuario_nombre = @nombre, usuario_apellido = @apellido, usuario_username = @nombreusuario, usuario_email = @email, usuario_fecha_nacimiento = @fechanacimiento, id_tipo_documento=(select t.id_tipo_documento from [NO_TRIGGERS].Tipo_documento t where t.tipo_de_documento_nombre = @tipodocumento), usuario_numero_documento = @numero_documento, usuario_telefono = @numerotelefono, id_rol = @rol
-	where usuario_username = @UsuarioAMofificar
-	update [NO_TRIGGERS].usuario_por_hotel
-	set id_hotel=@hotel
-	where id_usuario = @id
-go
-
-create function [NO_TRIGGERS].fn_hoteles_de_usuario (@Usuario nvarchar(100))
-returns int
-as	
-begin
-	declare @auxiliar int
-	 set @auxiliar =(SELECT count(id_hotel) FROM [NO_TRIGGERS].Usuario us, [NO_TRIGGERS].usuario_por_hotel uxh WHERE us.usuario_username=@Usuario and us.id_usuario=uxh.id_usuario)
-	 return @auxiliar
-end
-go
-
-create function [NO_TRIGGERS].fn_castear_DataTime(@fecha nvarchar(50))
-returns datetime
-as
-begin
-	return (select CONVERT(datetime,@fecha,121))
-end
-go
-
-
-/*************************PAIS- CIUDAD - DIRECCION*************************************************/
-go
-
-create procedure [NO_TRIGGERS].sp_add_pais
-@pais nvarchar(100), @nacionalidad nvarchar(100)
-as
-	if((select distinct count (id_pais) from [NO_TRIGGERS].Pais p where p.pais_nacionalidad=@nacionalidad and p.pais_nombre=@pais)<1)
-	insert into [NO_TRIGGERS].Pais values (@pais,@nacionalidad)
-go
-
---exec [NO_TRIGGERS].sp_add_pais 'israel','judio'
-
-create procedure [NO_TRIGGERS].sp_add_ciudad
-@ciudad nvarchar(100), @pais nvarchar(100), @nacionalidad nvarchar(100)
-as
-declare @auxiliar int
-exec [NO_TRIGGERS].sp_add_pais @pais, @nacionalidad
-	if((select distinct count (id_ciudad) from [NO_TRIGGERS].Ciudad c, [NO_TRIGGERS].Pais p where c.ciudad_nombre=@ciudad and p.pais_nombre=@pais and p.pais_nacionalidad=@nacionalidad and p.id_pais=c.id_pais)<1)
-	begin
-	set @auxiliar = (select id_pais from [NO_TRIGGERS].Pais p where p.pais_nacionalidad=@nacionalidad and p.pais_nombre=@pais)
-	insert into [NO_TRIGGERS].Ciudad values (@auxiliar,@ciudad)
-	end
 GO
 
---exec [NO_TRIGGERS].sp_add_ciudad 'jerusalen','israel','judio'
+IF OBJECT_ID ('elgalego.fnABMHabilitado') IS NOT NULL drop function elgalego.fnABMHabilitado
+go
 
-create procedure [NO_TRIGGERS].sp_add_direccion 
-@calle nvarchar(200), @altura int, @piso int, @departamento nvarchar(10), @ciudad nvarchar(200), @paisresidencia nvarchar(100), @NombreNacionalidadResidencia nvarchar(100)
-as
-declare @auxiliar int
-exec [NO_TRIGGERS].sp_add_ciudad @ciudad,@paisresidencia,@NombreNacionalidadResidencia
-	if((@departamento is not null) and (@piso is not null))
-		if((select count(id_direccion) from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@calle and d.direccion_altura=@altura and d.direccion_departamento=@departamento and d.direccion_piso=@piso and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)<=0)
+create function elgalego.fnABMHabilitado 
+(@user nvarchar(100), @funcionalidad nvarchar (100)) returns bit
+	AS
 		begin
-			set @auxiliar= (select ciu.id_ciudad from [NO_TRIGGERS].Ciudad ciu, [NO_TRIGGERS].Pais pai where ciu.ciudad_nombre=@ciudad and pai.pais_nacionalidad=@NombreNacionalidadResidencia and pai.pais_nombre=@paisresidencia and ciu.id_pais=pai.id_pais)	
-			insert into [NO_TRIGGERS].Direccion values (@calle,@altura,@piso, @departamento,@auxiliar)
-		end
-	if (@departamento IS NULL and @piso IS NULL)
-		if((select count(id_direccion) from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@calle and d.direccion_altura=@altura and d.direccion_departamento is null  and d.direccion_piso is null and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)<=0)	
-		begin
-			set @auxiliar= (select ciu.id_ciudad from [NO_TRIGGERS].Ciudad ciu, [NO_TRIGGERS].Pais pai where ciu.ciudad_nombre=@ciudad and pai.pais_nacionalidad=@NombreNacionalidadResidencia and pai.pais_nombre=@paisresidencia and ciu.id_pais=pai.id_pais)
-			insert into [NO_TRIGGERS].Direccion values (@calle,@altura,@piso, @departamento,@auxiliar)
-		end
-		
-go
-
-
-/********************CLIENTES***************************************************/
-
-
-create function [NO_TRIGGERS].fn_cliente_habilitado (@ClienteNombre nvarchar(100), @ClienteApellido nvarchar(100), @ClienteEmail nvarchar(200))
-returns bit
-
-as
-	begin
-		DECLARE @auxiliar bit
-		set @auxiliar = (SELECT cl.cliente_estado FROM [NO_TRIGGERS].Cliente cl WHERE cl.cliente_nombre=@ClienteNombre and cl.cliente_apellido=@ClienteApellido and cl.cliente_email=@ClienteEmail)
-		return @auxiliar
-	end
-go
-
-create procedure [NO_TRIGGERS].sp_modificar_estado @Cliente nvarchar(100),@ClienteApellido nvarchar(100), @ClienteEmail nvarchar(200), @Estado bit
-as
-	update [NO_TRIGGERS].Cliente 
-	set cliente_estado=@Estado 
-	where cliente_nombre=@Cliente and cliente_apellido=@ClienteApellido and cliente_email=@ClienteEmail
-go
-
-create procedure [NO_triggers].sp_add_cliente 
-@nombre nvarchar(100), @apellido nvarchar(100), @email nvarchar(100), @fechanacimiento datetime, @tipodocumento int, @numerodocumento nvarchar(50), @telefono nvarchar(50), @calle nvarchar(100), @altura int, @piso int, @departamento nvarchar(50), @ciudadNombre nvarchar (100), @paisResidencia nvarchar(100), @nacionalidadresidencia nvarchar(100), @paisnacimiento nvarchar(100), @nacionalidadnacimiento nvarchar(100)
-as
-begin
-	declare @id_direccion_auxiliar int , @id_pais_proveniencia int
-	exec [NO_TRIGGERS].sp_add_pais @paisnacimiento, @nacionalidadnacimiento
-	set @id_pais_proveniencia = (select id_pais from [NO_TRIGGERS].Pais p where p.pais_nacionalidad=@nacionalidadnacimiento and p.pais_nombre=@paisnacimiento)
-	exec [NO_TRIGGERS].sp_add_direccion @calle,@altura,@piso,@departamento,@ciudadNombre,@paisresidencia,@nacionalidadresidencia
-	if((@departamento is not null) and (@piso is not null))
-			set @id_direccion_auxiliar = (select id_direccion from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@calle and d.direccion_altura=@altura and d.direccion_departamento=@departamento and d.direccion_piso=@piso and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)
-	if((@departamento IS NULL) and (@piso IS NULL))
-			set @id_direccion_auxiliar= (select id_direccion from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@calle and d.direccion_altura=@altura and d.direccion_departamento is null  and d.direccion_piso is null and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)
-	if((select count (id_cliente) from [NO_TRIGGERS].Cliente cl where cl.cliente_nombre=@nombre and cl.cliente_apellido=@apellido and cl.cliente_email=@email and cl.cliente_fecha_nacimiento=@fechanacimiento and cl.cliente_numero_documento=@numerodocumento and cl.id_tipo_documento=@tipodocumento and cl.id_direccion=@id_direccion_auxiliar and cl.id_pais=@id_pais_proveniencia)<=0)
-			insert into [NO_TRIGGERS].cliente values (1,@nombre,@apellido,@email,NULL,@fechanacimiento,@tipodocumento,@numerodocumento,@telefono,@id_direccion_auxiliar,@id_pais_proveniencia)
-end
-go
-
-
-Create FUNCTION [NO_TRIGGERS].fn_buscar_cliente_para_modificar (@Nombre nvarchar(100), @Apellido nvarchar(100), @TipoDocumento int, @DocumentoNumero nvarchar(50), @email nvarchar(200))
-returns table 
-as 
-	return (select cliente_nombre, cliente_apellido, cliente_email, cliente_email_invalido, tipo_de_documento_nombre ,cliente_numero_documento, cliente_telefono, direccion_calle, direccion_altura, direccion_piso, direccion_departamento,ciudad_nombre, p.pais_nombre, p.pais_nacionalidad from [NO_TRIGGERS].Cliente cl, [NO_TRIGGERS].Direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p, [NO_TRIGGERS].Tipo_documento td 
-	WHERE (@nombre is null or cl.cliente_nombre = @Nombre) and (@apellido is null or cl.cliente_apellido=@Apellido) and (@documentoNumero is null or cl.cliente_numero_documento = @DocumentoNumero) AND (@email is null or cl.cliente_email=@email) AND (@tipodocumento is null or cl.id_tipo_documento=@tipodocumento) AND cl.id_direccion=d.id_direccion AND d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais and cl.id_tipo_documento = td.id_tipo_documento)
-go
-
-create procedure [NO_TRIGGERS].sp_modify_cliente @nombre nvarchar(100),@apellido nvarchar(100), @tipoDocumento int, @numerodocumento nvarchar(50), @email nvarchar(200), @nombrenuevo nvarchar(100), @apellidonuevo nvarchar(100), @emailnuevo nvarchar(100), @fechanacimientonuevo nvarchar(100), @tipodocumentonuevo int, @documentonuevo nvarchar(50), @telefononuevo nvarchar(50), @callenueva nvarchar(100), @alturanueva int, @pisonuevo int, @departamentonuevo int, @ciudadnueva nvarchar(100), @paisnuevo nvarchar(100), @nacionalidadnueva nvarchar(100)
-as
-declare @id_cliente_modificado int, @id_direccion_nuevo int
-	set @id_cliente_modificado = (select id_cliente from [NO_TRIGGERS].Cliente c WHERE c.cliente_nombre=@nombre and c.cliente_apellido=@apellido and c.id_tipo_documento=@tipoDocumento and c.cliente_numero_documento=@numerodocumento and c.cliente_email=@email)
-	exec [NO_TRIGGERS].sp_add_direccion @callenueva,@alturanueva,@pisonuevo,@departamentonuevo,@ciudadnueva,@paisnuevo,@nacionalidadnueva
-	if((@departamentonuevo is not null) and (@pisonuevo is not null))
-	set @id_direccion_nuevo =(select id_direccion from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@callenueva and d.direccion_altura=@alturanueva and d.direccion_departamento=@departamentonuevo and d.direccion_piso=@pisonuevo and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)
-	if((@departamentonuevo IS NULL) and (@pisonuevo IS NULL))
-	set @id_direccion_nuevo =(select id_direccion from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@callenueva and d.direccion_altura=@alturanueva and (d.direccion_departamento IS NULL) and (d.direccion_piso IS NULL) and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)
-update [NO_TRIGGERS].Cliente set cliente_nombre=@nombrenuevo, cliente_apellido=@apellidonuevo, cliente_email=@emailnuevo, id_tipo_documento=@tipodocumentonuevo, cliente_numero_documento=@documentonuevo, cliente_telefono=@telefononuevo, id_direccion=@id_direccion_nuevo where id_cliente=@id_cliente_modificado
-go
-
---exec [NO_TRIGGERS].sp_modify_cliente 'AARON','CASTILLO',2,'92973579','aaron_Castillo@gmail.com','AARON','CASTILLITO','ARITONCASTILLO@AES.COM',NULL,1,'123123','44444444','CALLEFALSA',1234,NULL,NULL,'SPRINGFIELD','ESTADOS UNIDOS', 'YANKEE'
-CREATE PROCEDURE [NO_TRIGGERS].sp_Dar_Baja_Cliente 
-@Nombre nvarchar(100), @Apellido nvarchar(100), @TipoDocumento int, @DocumentoNumero nvarchar(50), @email nvarchar(200)
-as 
-declare @id_cliente_modificado int
-set @id_cliente_modificado = (select id_cliente from [NO_TRIGGERS].Cliente c WHERE c.cliente_nombre=@nombre and c.cliente_apellido=@apellido and c.id_tipo_documento=@tipoDocumento and c.cliente_numero_documento=@DocumentoNumero and c.cliente_email=@email)
-update [NO_TRIGGERS].Cliente set cliente_estado = 0 where id_cliente=@id_cliente_modificado
-go
-
-CREATE PROCEDURE [NO_TRIGGERS].sp_Dar_Alta_Cliente 
-@Nombre nvarchar(100), @Apellido nvarchar(100), @TipoDocumento int, @DocumentoNumero nvarchar(50), @email nvarchar(200)
-as 
-declare @id_cliente_modificado int
-set @id_cliente_modificado = (select id_cliente from [NO_TRIGGERS].Cliente c WHERE c.cliente_nombre=@nombre and c.cliente_apellido=@apellido and c.id_tipo_documento=@tipoDocumento and c.cliente_numero_documento=@DocumentoNumero and c.cliente_email=@email)
-update [NO_TRIGGERS].Cliente set cliente_estado = 0 where id_cliente=@id_cliente_modificado
-go
-
-/*******************************************HOTEL********************************************************/
-Create PROCEDURE [NO_TRIGGERS].sp_crear_hotel @nombreAdministrador nvarchar(100), @email nvarchar(100), @telefono nvarchar(50), @calle nvarchar(100), @altura int, @ciudad nvarchar(100), @pais nvarchar(100), @nacionalidadpais nvarchar(100), @cantidadestrellas int
-as
-declare @id_direccion_agregar int
-	if((select id_rol from [NO_TRIGGERS].Usuario us where us.usuario_username=@nombreAdministrador and us.usuario_email=@email and us.usuario_telefono=@telefono)=3)
-	begin
-	exec [NO_TRIGGERS].sp_add_direccion @calle,@altura, NULL,NULL,@ciudad,@pais,@nacionalidadpais
-	set @id_direccion_agregar=(select id_direccion from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@calle and d.direccion_altura=@altura and( d.direccion_departamento is null ) and (d.direccion_piso is null) and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)
-	insert into [NO_TRIGGERS].Hotel values (@id_direccion_agregar,@cantidadestrellas,NULL,getdate(),1)
-	end
-
-go
-
---EXEC [NO_TRIGGERS].sp_crear_hotel 'UsuarioAdministrador2','samathaa@frbahotel.com','46220530','CALLEFALSA','123','CORDOBA', 'ESPANA', 'GALLEGO', 5
-
-create procedure [NO_TRIGGERS].sp_asignar_regimen @id_hotel int, @id_regimen int
-as
-if((select count(id_regimen_por_hotel) from [NO_TRIGGERS].Regimen_por_hotel rxh where rxh.id_hotel=@id_hotel and rxh.id_regimen=@id_regimen)<=0)
-insert into [NO_TRIGGERS].Regimen_por_hotel values (@id_regimen,@id_hotel)
-go
-
-create procedure [NO_TRIGGERS].sp_modifcar_hotel @id_hotel_a_modificar int,@calle nvarchar(100), @altura int, @ciudad nvarchar (100),@pais nvarchar(100), @nacionalidad nvarchar(100),@cantidadestrellas int, @recargaestrella int
-as
-declare @id_direccion_hotel int
-exec [NO_TRIGGERS].sp_add_direccion @calle,@altura, NULL,NULL,@ciudad,@pais,@nacionalidad
-set @id_direccion_hotel=(select id_direccion from [NO_TRIGGERS].direccion d, [NO_TRIGGERS].Ciudad c , [NO_TRIGGERS].Pais p WHERE d.direccion_calle=@calle and d.direccion_altura=@altura and( d.direccion_departamento is null ) and (d.direccion_piso is null) and d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais)
-update [NO_TRIGGERS].Hotel set hotel_cantidad_estrellas=@cantidadestrellas, hotel_recarga_estrella=@recargaestrella,id_direccion=@id_direccion_hotel where id_hotel=@id_hotel_a_modificar
-go
-
-Create FUNCTION [NO_TRIGGERS].fn_buscar_hotel_para_modificar ( @cantidadestrellas int, @ciudad nvarchar(100), @pais nvarchar(100))
-returns table 
-as 
-	return (select h.id_hotel, h.hotel_fecha_creacion, h.hotel_cantidad_estrellas, h.hotel_recarga_estrella, h.hotel_estado, d.direccion_calle, d.direccion_altura, c.ciudad_nombre, p.pais_nombre from [NO_TRIGGERS].Hotel h, [NO_TRIGGERS].Direccion d, [NO_TRIGGERS].Ciudad c, [NO_TRIGGERS].Pais p WHERE (@cantidadestrellas is null or h.hotel_cantidad_estrellas=@cantidadestrellas) AND h.id_direccion=d.id_direccion AND d.id_ciudad=c.id_ciudad and p.id_pais=c.id_pais and (p.pais_nombre=@pais or @pais is null) and (c.ciudad_nombre=@ciudad or @ciudad is null))
-go
-
-create function [no_triggers].fn_existencia_de_reservas_futuras (@idhotel int, @fechafin datetime) --probar!
-returns bit
-as
-begin
-declare @resultado bit
-	if(@fechafin>= cast(cast(getdate() as date) as datetime))
-		begin
-			if((select count(id_reserva) from [NO_TRIGGERS].Reserva r where r.reserva_fecha_inicio between cast(cast(getdate() as date) as datetime) AND @fechafin and r.id_hotel=@idhotel)=1 or (SELECT count(id_estadia) FROM[NO_TRIGGERS].Estadia est,[NO_TRIGGERS].Reserva r WHERE (DATEADD(day,est.estadia_cantidad_noches,est.estadia_fecha_inicio)) BETWEEN cast(cast(getdate() as date) as datetime) AND @fechafin and r.id_hotel=@idhotel and est.id_reserva=r.id_reserva and r.id_hotel=@idhotel)=1)
-				set @resultado =0 --no se podria realizar
-			else
-				set @resultado =1
-		end
+			declare @Resultado bit
+		if exists (select fr.id_funcionalidad from elgalego.RolFuncionalidad fr 
+				
+				
+				join elgalego.Usuario us on us.ID_RolSel=fr.ID_Rol
+				join elgalego.Funcionalidad f on fr.id_funcionalidad=f.id_funcionalidad
+				JOIN elgalego.Rol  RL ON fr.ID_Rol=RL.id_rol
+				where f.FuncionalidadNombre=@Funcionalidad and us.username=@user
+				AND isnull(RL.MarcaBorrado,0)=0)
+			set @Resultado=1
 		else
-			begin
-				set @resultado = 0 -- para el caso que sea una fecha pasada
-			end
-return @resultado
+			set @Resultado=0
+	return @resultado
 end
-go
---select [NO_TRIGGERS].fn_existencia_de_reservas_futuras(1,'20180610')
- 
-create procedure [NO_TRIGGERS].sp_dardebajahotel @idhotel int , @fechafin datetime
-as 
-begin
-	if (((select [NO_TRIGGERS].fn_existencia_de_reservas_futuras(@idhotel,@fechafin))!=0) and (select h.hotel_estado from [NO_TRIGGERS].hotel h where h.id_hotel=@idhotel)=1)
-	begin
-		update [NO_TRIGGERS].Hotel set hotel_estado=0 where id_hotel=@idhotel
-		insert into [NO_TRIGGERS].Baja_de_hotel values (getdate(),@fechafin,@idhotel)
-	end
+GO
+--select * from elgalego.funcionalidad
 
-end
+IF OBJECT_ID ('elgalego.fnMultirole') IS NOT NULL drop function elgalego.fnMultirole
 go
 
-
-
-Create procedure [NO_TRIGGERS].sp_dardealtahotel @idhotel int
+-- select elgalego.fn_chequear_usuario_si_multihotel('user_guest1')
+create function elgalego.fnMultirole (@usuario nvarchar(100))
+returns int
 as
 begin
-declare @idauxiliar int
-	if((select hotel_estado from [NO_TRIGGERS].Hotel where id_hotel=@idhotel)=0)
-	begin
-		update [NO_TRIGGERS].Hotel set hotel_estado=1 where id_hotel=@idhotel
-		set @idauxiliar = (select top 1 id_baja_de_hotel from [NO_TRIGGERS].Baja_de_hotel where id_hotel=@idhotel order by baja_hotel_fecha_inicio desc )
-		update [NO_TRIGGERS].Baja_de_hotel set baja_hotel_fecha_fin=getdate() where @idauxiliar=id_baja_de_hotel
-	end
-end
-go
+declare @result int, @count int
 
-/*********************************HABITACION******************************************************/
-Create procedure [NO_TRIGGERS].sp_create_habitacion 
-@idhotel int, @numeroHabitacion int, @piso int, @habitacionfrente nvarchar(10), @tipoHabitacion int, @descripcionhabitacion nvarchar(200) 
-as
-begin
-	if ((select count (habitacion_numero) from [NO_TRIGGERS].Habitacion h where h.id_hotel=@idhotel and h.habitacion_numero=@numeroHabitacion) <=0) --Me fijo que solo se pueda crear si no hay ninguna habitacion con el mismo numero
-	insert into [NO_TRIGGERS].Habitacion values (@numerohabitacion,@piso,@habitacionfrente,1,0,@descripcionhabitacion,@tipoHabitacion,@idhotel)
+select @count=count(1) from elgalego.UsuarioRol uh 
+join elgalego.Usuario us on uh.id_usuario=us.id_usuario
+join elgalego.Rol r on uh.id_rol=r.id_rol
+where us.username=@usuario and r.MarcaBorrado=0
+
+if (@count >1)  begin select @result=1 end else begin select @result=0 end
+
+return @result
 
 end
+
+go
+--select elgalego.fnMultirole('admin')
 go
 
-create procedure [NO_TRIGGERS].sp_modify_habitacion
-@idhotel int , @idhabitacion int , @numeronuevo int, @pisonuevo int, @ubicacionnueva nvarchar(10),@nuevadescripcion nvarchar(200)
+IF OBJECT_ID ('elgalego.setRolSelected') IS NOT NULL drop procedure elgalego.setRolSelected
+go
+create procedure elgalego.setRolSelected (@usuario nvarchar(100),@rol int)
+
 as 
 begin
-declare @bitauxiliar int
-set @bitauxiliar = (select count(id_habitacion) from [NO_TRIGGERS].Habitacion WHERE id_hotel=@idhotel and id_habitacion=@idhabitacion)
-	if( @bitauxiliar<=1)
+update Usuario
+set ID_RolSel=@rol
+where Username=@usuario
+end
+go
+---- rol
+
+IF OBJECT_ID ('elgalego.spRolListado','P') IS NOT NULL drop procedure elgalego.spRolListado 
+go
+create procedure elgalego.spRolListado 
+
+	AS
+select 
+rl.id_rol [ID], rolnombre [Rol Nombre],case when isnull(rl.MarcaBorrado,0)=0 then 1 else 0 end as [Rol Activo]
+,isnull(STUFF((SELECT ',' + FuncionalidadNombre
+              from elgalego.Funcionalidad f2, elgalego.RolFuncionalidad rf2
+              WHERE f2.id_funcionalidad = rf2.id_funcionalidad and rf.id_rol=rf2.id_rol order by FuncionalidadNombre
+              FOR XML PATH (''))
+             , 1, 1, ''),'') as [Lista Funcionalidades]
+from elgalego.Rol rl 
+left join elgalego.Rolfuncionalidad rf on rl.id_rol=rf.id_rol
+left join elgalego.Funcionalidad f on rf.id_funcionalidad=f.id_funcionalidad
+
+group by rl.id_rol,rf.id_rol, rolnombre, case when isnull(rl.MarcaBorrado,0)=0 then 1 else 0 end
+GO
+
+
+IF OBJECT_ID ('elgalego.sp_lista_fun_act','P') IS NOT NULL drop procedure elgalego.sp_lista_fun_act 
+go
+create procedure elgalego.sp_lista_fun_act (@id_rol int) 
+
+	AS
+select 
+f.id_funcionalidad,f.FuncionalidadNombre
+from elgalego.rolFuncionalidad rf 
+join elgalego.Funcionalidad f on rf.id_funcionalidad=f.id_funcionalidad
+where rf.id_rol=@id_rol and isnull(f.MarcaBorrado,0)=0
+	GO
+
+IF OBJECT_ID ('elgalego.sp_lista_fun_disp','P') IS NOT NULL drop procedure elgalego.sp_lista_fun_disp
+go
+create procedure elgalego.sp_lista_fun_disp (@id_rol int) 
+
+	AS
+select 
+f.id_funcionalidad,f.FuncionalidadNombre
+from elgalego.Funcionalidad f 
+where f.id_funcionalidad not in (select id_funcionalidad from elgalego.rolFuncionalidad rff where rff.id_rol=@id_rol)
+and isnull(f.MarcaBorrado,0)=0
+--and FuncionalidadNombre != 'USUARIO'-- REMOVIDO USUARIO DADO QUE NO DEBE SER ASIGNADO A NINGUN ROL
+	GO
+
+IF OBJECT_ID ('elgalego.fn_get_rol_nombre') IS NOT NULL drop function elgalego.fn_get_rol_nombre
+go
+
+create function elgalego.fn_get_rol_nombre
+(@id int) returns nvarchar(100)
+	AS 
 		begin
-			update [NO_TRIGGERS].Habitacion set habitacion_numero=@numeronuevo , habitacion_piso=@pisonuevo, habitacion_frente=@ubicacionnueva, habitacion_descripcion=@nuevadescripcion
-		end
+	declare @Resultado nvarchar(100)
+	select @Resultado=rolnombre from elgalego.Rol where id_rol=@id
+	return @resultado
 end
-go
-
-
---exec [NO_TRIGGERS].sp_modifcar_hotel 1, 'bolivia', 100, 'miami', 'EEUU', 'asd', 8, 20
---select top 1000 * from [NO_TRIGGERS].fn_buscar_cliente_para_modificar('AARON','Castillo',null,97645361,null)
---------------------------------------------------------------------------------------------------------------------------
-/*Creación de tablas */---------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------
---Tabla Pais
-IF OBJECT_ID('[NO_TRIGGERS].Pais', 'U') IS NOT NULL 
-  DROP TABLE [NO_TRIGGERS].Pais;
-
-CREATE TABLE [NO_TRIGGERS].Pais
-(id_pais int identity(1,1) NOT NULL,
-pais_nombre nvarchar(40),
-pais_nacionalidad nvarchar(80),
-CONSTRAINT pk_id_pais PRIMARY KEY CLUSTERED (id_pais asc)
-)
-
---Tabla Ciudad
-IF OBJECT_ID('[NO_TRIGGERS].Ciudad', 'U') IS NOT NULL 
-  DROP TABLE [NO_TRIGGERS].Ciudad;
-CREATE TABLE [NO_TRIGGERS].Ciudad
-(
-id_ciudad int identity(1,1) NOT NULL,
-id_pais int,
-ciudad_nombre nvarchar(80),
-CONSTRAINT pk_id_ciudad PRIMARY KEY CLUSTERED (id_ciudad asc) 
-)
-
---Tabla Direccion
-IF OBJECT_ID('[NO_TRIGGERS].Direccion', 'U') IS NOT NULL 
-  DROP TABLE [NO_TRIGGERS].Direccion;
-CREATE TABLE [NO_TRIGGERS].Direccion
-(id_direccion int identity(1,1) NOT NULL, 
-direccion_calle nvarchar(200),
-direccion_altura int,
-direccion_piso int,
-direccion_departamento nvarchar(4),
-id_ciudad int,
-CONSTRAINT pk_id_direccion PRIMARY KEY CLUSTERED (id_direccion asc)
-)
-
---Funcionalidad
-IF OBJECT_ID ('[NO_TRIGGERS].Funcionalidad' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Funcionalidad;
-CREATE TABLE [NO_TRIGGERS].Funcionalidad
-(
-id_funcionalidad int identity (1,1) NOT NULL,
-funcionalidad_descripcion nvarchar(100),
-CONSTRAINT pk_id_funcionalidad PRIMARY KEY CLUSTERED (id_funcionalidad)
-)
- 
---Tabla rol
-IF OBJECT_ID ('[NO_TRIGGERS].Rol' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Rol;
-CREATE TABLE [NO_TRIGGERS].Rol
-(
-id_rol int identity (1,1) NOT NULL,
-rol_nombre nvarchar(100),
-rol_estado bit, --si devuelve 0 es falso, si de vuelve 1 es true--
-CONSTRAINT pk_id_rol PRIMARY KEY CLUSTERED  (id_rol),
-)
-
--- Tabla Rol por funcionalidad
-IF OBJECT_ID ('[NO_TRIGGERS].Rol_por_funcionalidad', 'U') IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Rol_por_funcionalidad
-CREATE TABLE [NO_TRIGGERS].Rol_por_funcionalidad
-(
-id_rol_por_funcionalidad int identity (1,1) NOT NULL,
-id_rol int,
-id_funcionalidad int,
-CONSTRAINT pk_id_rol_por_funcionalidad PRIMARY KEY CLUSTERED (id_rol_por_funcionalidad)
-)
-
---Tabla hotel
-IF OBJECT_ID ('[NO_TRIGGERS].Hotel' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Hotel;
-CREATE TABLE [NO_TRIGGERS].Hotel
-(
-id_hotel int identity (1,1) NOT NULL,
-id_direccion int,
-hotel_cantidad_estrellas float,
-hotel_recarga_estrella float,
-hotel_fecha_creacion datetime,
-hotel_estado bit,
-CONSTRAINT pk_id_hotel PRIMARY KEY CLUSTERED  (id_hotel)
-)
-
---Talba Tipo Documento
-IF OBJECT_ID ('[NO_TRIGGERS].Tipo_documento', 'U') IS NOT NULL
-DROP TABLE [NO_TRIGGERS].Tipo_documento;
-CREATE TABLE [NO_TRIGGERS].Tipo_documento
-(
-id_tipo_documento int identity (1,1) NOT NULL,
-tipo_de_documento_nombre nvarchar(30),
-CONSTRAINT id_tipo_de_documento PRIMARY KEY CLUSTERED (id_tipo_documento)
-)
-
---Tabla Usuario
-IF OBJECT_ID ('[NO_TRIGGERS].Usuario' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Usuario;
-CREATE TABLE [NO_TRIGGERS].Usuario
-(
-id_usuario int identity (1,1) NOT NULL,
-usuario_username nvarchar (100),
-usuario_nombre nvarchar(200),
-usuario_apellido nvarchar(200),
-usuario_password nvarchar (256),
-usuario_email nvarchar(200),
-usuario_fecha_nacimiento datetime,
-usuario_cantidad_intentos_fallidos int, /*Se decide guardarlo en la BD para que el usuario no pueda cerrar el programa y volver a intentar ingresar*/
-id_tipo_documento int,
-usuario_numero_documento nvarchar(50),
-usuario_telefono nvarchar(50),
-usuario_habilitado bit,
-id_rol int
-CONSTRAINT pk_id_usuario PRIMARY KEY CLUSTERED (id_usuario)
-)
-
-CREATE TABLE [NO_TRIGGERS].usuario_por_hotel
-(
-id_usuario_por_hotel int identity (1,1) NOT NULL,
-id_usuario int,
-id_hotel int
-CONSTRAINT pk_id_usuario_por_hotel PRIMARY KEY CLUSTERED (id_usuario_por_hotel)
-)
---Tabla Cliente
-IF OBJECT_ID ('[NO_TRIGGERS].Cliente' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Cliente;
-CREATE TABLE [NO_TRIGGERS].Cliente
-(
-id_cliente int identity (1,1) NOT NULL,
-cliente_estado bit,
-cliente_nombre nvarchar(100),
-cliente_apellido nvarchar(200),
-cliente_email nvarchar (200),
-cliente_email_invalido bit,-- sirve para indicar los correos que estan duplicados
-cliente_fecha_nacimiento datetime,
-id_tipo_documento int,
-cliente_numero_documento nvarchar(50),
-cliente_telefono nvarchar (50),
-id_direccion int,
-id_pais int,
-CONSTRAINT pk_id_cliente PRIMARY KEY CLUSTERED (id_cliente)
-
-)
-
---Tabla Tipo De Habitacion
-IF OBJECT_ID ('[NO_TRIGGERS].TipoDeHabitacion' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].TipoDeHabitacion;
-CREATE TABLE [NO_TRIGGERS].TipoDeHabitacion
-(
-id_tipo_habitacion int identity (1,1) NOT NULL,
-tipo_habitacion_porcentual float,
-tipo_habitacion_codigo int
-CONSTRAINT pk_id_tipo_habitacion PRIMARY KEY CLUSTERED (id_tipo_habitacion)
-)
-
---Tabla Habitacion
-IF OBJECT_ID ('[NO_TRIGGERS].Habitacion' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Habitacion;
-CREATE TABLE [NO_TRIGGERS].Habitacion
-(
-id_habitacion int identity (1,1) NOT NULL,
-habitacion_numero int,
-habitacion_piso int,
-habitacion_frente nvarchar(10),
-habitacion_habilitada bit, --va a indicar con 0 que esta dada de baja y con 1 que esta habilitada
-habitacion_ocupada bit, --va a indicar con 0 que esta ocupada y con 1 que esta desocupada
-habitacion_detalle nvarchar(200),
-id_tipo_habitacion int,
-id_hotel int,
-CONSTRAINT pk_id_habitacion PRIMARY KEY CLUSTERED (id_habitacion)
-)
-
---Tabla estado_reserva
-IF OBJECT_ID ('[NO_TRIGGERS].Estado_reserva' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Estado_reserva;
-CREATE TABLE [NO_TRIGGERS].Estado_reserva
-(
-id_estado_reserva int identity (1,1) NOT NULL,
-estado_reserva_descripcion nvarchar(200),
-CONSTRAINT pk_id_estado_reserva PRIMARY KEY CLUSTERED (id_estado_reserva)
-)
-
---Tabla Regimen
-IF OBJECT_ID ('[NO_TRIGGERS].Regimen' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Regimen;
-CREATE TABLE [NO_TRIGGERS].Regimen
-(
-id_regimen int identity (1,1) NOT NULL,
-regimen_descripcion nvarchar(200),
-regimen_precio float,
-regimen_estado bit, --activo o no activo--
-CONSTRAINT pk_id_regimen PRIMARY KEY CLUSTERED (id_regimen)
-)
-
---Tabla Reserva
-IF OBJECT_ID ('[NO_TRIGGERS].Reserva' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Reserva;
-CREATE TABLE [NO_TRIGGERS].Reserva
-(
-id_reserva int identity (1,1) NOT NULL,
-reserva_fecha_inicio datetime,
-reserva_cantidad_noches int,
-reserva_numero_codigo int,
-id_reserva_cambiada_por_user int,
-id_hotel int,
-id_habitacion int,
-id_reserva_estado int,
-id_regimen int,
-CONSTRAINT pk_id_reserva PRIMARY KEY CLUSTERED (id_reserva)
-)
-
---Tabla Estadia
-IF OBJECT_ID ('[NO_TRIGGERS].Estadia' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Estadia;
-CREATE TABLE  [NO_TRIGGERS].Estadia
-(
-id_estadia int identity(1,1) NOT NULL,
-estadia_fecha_inicio datetime,
-estadia_cantidad_noches int,
-id_habitacion int,
-id_reserva int,
-id_cliente int,
-CONSTRAINT pk_id_estadia PRIMARY KEY CLUSTERED (id_estadia)
-)
-
---tabla regimen x hotel
-IF OBJECT_ID ('[NO_TRIGGERS].Regimen_por_hotel' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Regimen_por_hotel;
-CREATE TABLE [NO_TRIGGERS].Regimen_por_hotel
-(
-id_regimen_por_hotel int identity (1,1) NOT NULL,
-id_regimen int,
-id_hotel int,
-CONSTRAINT pk_id_regimen_por_hotel PRIMARY KEY CLUSTERED (id_regimen_por_hotel),
-)
-
---tabla consumibles x estadia
-IF OBJECT_ID ('[NO_TRIGGERS].Consumible_por_estadia' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Consumible_por_estadia;
-CREATE TABLE [NO_TRIGGERS].Consumible_por_estadia
-(
-id_consumible_por_estadia int identity (1,1) NOT NULL,
-id_consumible int,
-id_estadia int,
-CONSTRAINT pk_id_cosumible_por_estadia PRIMARY KEY CLUSTERED (id_consumible_por_estadia),
-)
-
---Tabla metodo de pago
-IF OBJECT_ID ('[NO_TRIGGERS].Metodo_de_pago' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Metodo_de_pago;
-CREATE TABLE [NO_TRIGGERS].Metodo_de_pago
-(
-id_metodo_de_pago int identity (1,1) NOT NULL,
-metodo_de_pago_nombre nvarchar(20),
-metodo_de_pago_detalles nvarchar (300),
-CONSTRAINT pk_id_metodo_pago PRIMARY KEY CLUSTERED (id_metodo_de_pago)
-)
-
---Tabla factura
-IF OBJECT_ID ('[NO_TRIGGERS].Factura' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Factura;
-CREATE TABLE [NO_TRIGGERS].Factura
-(
-id_factura int identity (1,1) NOT NULL,
-factura_numero int,
-factura_tipo char(1),
-factura_fecha datetime,
-factura_total float,
-id_cliente int,
-id_estadia int,
-id_hotel int,
-CONSTRAINT pk_id_factura PRIMARY KEY CLUSTERED (id_factura)
-)
-
---Tabla Consumible
-IF OBJECT_ID ('[NO_TRIGGERS].Consumible' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Consumible;
-CREATE TABLE [NO_TRIGGERS].Consumible
-(
-id_consumible int identity (1,1) NOT NULL,
-consumible_descripcion nvarchar(100),
-consumible_precio float,
-consumible_codigo int,
-CONSTRAINT pk_id_consumible PRIMARY KEY CLUSTERED (id_consumible)
-)
-
---Tabla Item Factura
-IF OBJECT_ID ('[NO_TRIGGERS].Item_factura' , 'U' ) IS NOT NULL
-	DROP TABLE [NO_TRIGGERS].Item_factura;
-CREATE TABLE [NO_TRIGGERS].Item_factura
-(
-id_item_factura int identity (1,1) NOT NULL,
-item_factura_cantidad int,
-item_factura_monto float,
-id_factura int,
-id_consumible int,
-CONSTRAINT pk_id_item_factura PRIMARY KEY CLUSTERED (id_item_factura)
-)
-
---Tabla Baja_de_hotel
-IF OBJECT_ID ('[NO_TRIGGERS].Baja_de_hotel','U') IS NOT NULL
-DROP TABLE [NO_TRIGGERS].Baja_de_hotel;
-CREATE TABLE [NO_TRIGGERS].Baja_de_hotel
-(
-id_baja_de_hotel int identity (1,1) NOT NULL,
-baja_hotel_fecha_inicio datetime,
-baja_hotel_fecha_fin datetime,
-baja_de_hotel_motivo nvarchar(300),
-id_hotel int,
-CONSTRAINT pk_baja_de_hotel PRIMARY KEY CLUSTERED (id_baja_de_hotel)
-)
-
---------------------------------------------------------------------------------------------------------------------------
--------------------------------- Migracion De datos-----------------------------------------------------------------------
--- Funcuionalidad
-insert into [NO_TRIGGERS].funcionalidad (funcionalidad_descripcion)
-values
-	('ABM ROL'),--1
-	('ABM USUARIO'),--2
-	('ABM CLIENTE'),--3
-	('ABM HOTEL'),--4
-	('ABM HABITACION'),--5
-	('ABM REGIMEN DE ESTADIA'),--6
-	('GENERAR/MODIFICAR RESERVA'),--7
-	('CANCELAR RESERVA'),--8
-	('REGISTRAR ESTADIA/CHECK-IN CHECK-OUT'),--9
-	('REGISTRAR CONSUMIBLE'),--10
-	('FACTURAR ESTADIA'),--11
-	('LISTADO ESTADISTICO'),--12
-	('LOGIN y SEGURIDAD')--13
-go
-
---Rol
-insert into [NO_TRIGGERS].rol (rol_nombre,rol_estado)
-values 
-    ('RECEPCIONISTA', 1),--1
-    ('GUEST', 1),--2
-    ('ADMINISTRADOR', 1)--3
-
-go
-
---Rol x Funcionalidad
-insert into [NO_TRIGGERS].rol_por_funcionalidad (id_rol,id_funcionalidad)
-values
-	(3,1),
-	(3,2),
-	(1,3),
-	(3,4),
-	(3,5),
-	(3,6),
-	(1,7),
-	(2,7),
-	(1,8),
-	(2,8),
-	(1,9),
-	(1,10), --verificar recepcion
-	(1,11),
-	(3,12),
-	(1,13),
-	(3,13)
-go
-
---estado reserva
-insert into [NO_TRIGGERS].estado_reserva (estado_reserva_descripcion)
-values
-	('RESERVA CORRECTA'),
-	('RESERVA MODIFICADA'),
-	('RESERVA CANCELADA POR RECEPCION'),
-	('RESERVA CANCELADA POR CLIENTE'),
-	('RESERVA CANCELADA POR NO-SHOW'),
-	('RESERVA EFECTIVIZADA')
-go
-
---metodo de pago
-insert into [NO_TRIGGERS].metodo_de_pago (metodo_de_pago_nombre,metodo_de_pago_detalles)
-values 
-	('TARJETA DE CREDITO','PAGO EN CUOTAS'),
-	('TARJETA DE DEBITO','EN ARS'),
-	('TARJETA DE CREDITO','UNICO PAGO EN ARS'),
-	('TARJETA DE DEBITO','EN USD'),
-	('EFECTIVO','EN ARS'),
-	('EFECTIVO', 'EN USD')
-go
--- Tipo de documento
-insert into [NO_TRIGGERS].tipo_documento (tipo_de_documento_nombre) values 
-('D.N.I.'),('Pasaporte')
-
---PAIS
-INSERT INTO [NO_TRIGGERS].[pais] ([pais_nombre],pais_nacionalidad) values
-	('Argentina','ARGENTINO'),('Brasil','BRASILERO'),('Uruguay','URUGUAYO'),('Indefinido','Indefinido');
---select * from [no_triggers].pais
-insert into [NO_TRIGGERS].usuario
-values
-('UsuarioAdministrador2','samantha','Billino',[NO_TRIGGERS].fn_encriptar('lala'),'samathaa@frbahotel.com',getdate(),0,1,'455','46220530',1,3),
-('USER_GUEST1', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),--agregar para todos los hoteles
-('USER_GUEST2', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST3', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST4', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST5', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'),null,getdate(),0,null,null,null,1,2),
-('USER_GUEST6', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST7', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST8', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST9', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST10', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST11', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST12', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST13', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST14', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2),
-('USER_GUEST15', 'User','Generico', [NO_TRIGGERS].fn_encriptar('user_guest'), null,getdate(),0,null,null,null,1,2)
 GO
 
-
---select * from [no_triggers].usuario
-
-INSERT INTO [NO_TRIGGERS].usuario_por_hotel
-VALUES 
-(1,1),
-(2,2),
-(3,3),
-(4,4),
-(5,5),
-(6,6),
-(7,7),
-(8,8),
-(9,9),
-(10,10),
-(11,11),
-(12,12),
-(13,13),
-(14,14),
-(15,15)
-
-INSERT INTO [NO_TRIGGERS].usuario_por_hotel
-VALUES
-(16,3)
-
---CIUDAD------------------------11
-insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
-select distinct 
-(select id_pais from [NO_TRIGGERS].pais where pais_nombre='Argentina'),
-Hotel_Ciudad from gd_esquema.Maestra
-insert into [no_triggers].ciudad (id_pais,ciudad_nombre)
-select id_pais, 'Indefinida' as ciudad_nombre from [NO_TRIGGERS].pais where pais_nombre='Indefinido'
---select * from [no_triggers].ciudad
-
---Direccion--------------------96958 (96943 + 15)
-insert into [NO_TRIGGERS].direccion (direccion_calle,direccion_altura,direccion_piso,direccion_departamento, id_ciudad)
-select distinct hotel_calle, hotel_nro_calle, null, null, cd.id_ciudad from gd_esquema.Maestra mr 
-join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
-union 
-select distinct 
-cliente_dom_calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto,  (select id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida')
-from gd_esquema.Maestra
-
---select * from [no_triggers].direccion
-
--- Hotel  ---- 15
-insert into [NO_TRIGGERS].hotel(id_direccion,hotel_cantidad_estrellas,hotel_recarga_estrella,hotel_fecha_creacion,hotel_estado)
-select distinct dr.id_direccion, mr.Hotel_CantEstrella,mr.Hotel_Recarga_Estrella, NULL,1 
-from gd_esquema.Maestra mr
-join [NO_TRIGGERS].ciudad cd on mr.Hotel_Ciudad=cd.ciudad_nombre
-join [NO_TRIGGERS].direccion dr on mr.Hotel_Calle=dr.direccion_calle and cd.id_ciudad=dr.id_ciudad and mr.Hotel_Nro_Calle=dr.direccion_altura
---select * from [no_triggers].hotel
-
--- Clientes ----------------------------- 96944
-declare @ciudad_indef int 
-select @ciudad_indef=id_ciudad from [NO_TRIGGERS].ciudad where ciudad_nombre='Indefinida'
-insert into [NO_TRIGGERS].cliente
-(cliente_estado
-,cliente_nombre
-,cliente_apellido
-,cliente_email
-,cliente_fecha_nacimiento
-,id_tipo_documento
-,cliente_numero_documento
-,cliente_telefono
-,ID_direccion
-,ID_pais)
-select distinct 1 as cliente_estado,
-Cliente_Nombre, Cliente_Apellido
-,Cliente_Mail,Cliente_Fecha_Nac
-,(select id_tipo_documento from [NO_TRIGGERS].tipo_documento where tipo_de_documento_nombre='Pasaporte')
-,Cliente_Pasaporte_Nro
-,null as cliente_telefono
-,dr.id_direccion
-,ps.id_pais
-from gd_esquema.Maestra mr
-join [NO_TRIGGERS].direccion dr on mr.Cliente_Dom_Calle=dr.direccion_calle and mr.Cliente_Nro_Calle=dr.direccion_altura and mr.Cliente_Depto=dr.direccion_departamento
-and mr.Cliente_Piso=dr.direccion_piso and dr.id_ciudad=@ciudad_indef
-join [NO_TRIGGERS].pais ps on mr.Cliente_Nacionalidad=ps.pais_nacionalidad
---identifico mails invalidos
-select cliente_email into #bad_emails from [NO_TRIGGERS].cliente
-group by cliente_email
-having count(1)>1
-update cl 
-set cliente_email_invalido=1
-from [NO_TRIGGERS].cliente cl 
-join #bad_emails be on cl.cliente_email=be.cliente_email
-drop table #bad_emails
---select * from [NO_TRIGGERS].cliente
-
---Tipo de Habitacion ------- 5
-insert into [NO_TRIGGERS].tipoDeHabitacion (tipo_habitacion_porcentual,tipo_habitacion_codigo)
-select distinct 
-	Habitacion_Tipo_Porcentual,
-	Habitacion_Tipo_Codigo
-from gd_esquema.Maestra
---select * from [NO_TRIGGERS].tipoDeHabitacion
+IF OBJECT_ID ('elgalego.fn_get_rol_estado') IS NOT NULL drop function elgalego.fn_get_rol_estado
 go
 
---Habitacion -----------------------------  332
-insert into [NO_TRIGGERS].habitacion (habitacion_numero,habitacion_piso,habitacion_frente,Id_tipo_habitacion,habitacion_detalle,id_hotel)
-select distinct 
-	Habitacion_Numero,
-	Habitacion_Piso,
-	Habitacion_Frente,
-	th.id_tipo_habitacion,
-	Habitacion_Tipo_Descripcion,
-	hl.id_hotel
-from gd_esquema.Maestra m
-	join [NO_TRIGGERS].tipoDeHabitacion th on m.Habitacion_Tipo_Codigo=th.tipo_habitacion_codigo
-	join [NO_TRIGGERS].ciudad cd on m.Hotel_Ciudad=cd.ciudad_nombre
-	join [NO_TRIGGERS].direccion dr on m.Hotel_Calle=dr.direccion_calle and m.Hotel_Nro_Calle=dr.direccion_altura and cd.id_ciudad=dr.id_ciudad
-	JOIN [NO_TRIGGERS].hotel hl on hl.id_direccion=dr.id_direccion
-
---Regimen--------------4
-insert into [NO_TRIGGERS].regimen (regimen_descripcion,regimen_precio,regimen_estado)
-select distinct 
-	Regimen_Descripcion, 
-	Regimen_Precio, 
-	1 
-	from gd_esquema.Maestra
-
---Reserva ---------------------------96944
-declare @reservaCorrecta int 
-select @reservaCorrecta=id_estado_reserva from [NO_TRIGGERS].estado_reserva where estado_reserva_descripcion = 'RESERVA CORRECTA'
- 
-insert into [NO_TRIGGERS].reserva (reserva_fecha_inicio,reserva_cantidad_noches,reserva_numero_codigo,ID_reserva_cambiada_por_user,ID_hotel,ID_habitacion,ID_reserva_estado,ID_regimen)
-select distinct
-	Reserva_Fecha_Inicio,
-	Reserva_Cant_Noches,
-	Reserva_Codigo,
-	NULL,
-	h.id_hotel,
-	hab.id_habitacion,
-	@reservaCorrecta,
-	r.id_regimen
-	from gd_esquema.Maestra m
-join [NO_TRIGGERS].ciudad cd on m.Hotel_Ciudad=cd.ciudad_nombre
-join [NO_TRIGGERS].direccion d on d.direccion_calle = m.Hotel_Calle and d.direccion_altura = m.Hotel_Nro_Calle and d.direccion_piso is null and d.id_ciudad=cd.id_ciudad
-join [NO_TRIGGERS].hotel h on h.id_direccion = d.id_direccion
-join [NO_TRIGGERS].habitacion hab on m.Habitacion_Frente = hab.habitacion_frente and m.Habitacion_Piso = hab.habitacion_piso and m.Habitacion_Numero = hab.habitacion_numero and h.id_hotel = hab.Id_hotel
-join [NO_TRIGGERS].regimen r on r.regimen_descripcion = m.Regimen_Descripcion and r.regimen_precio = m.Regimen_Precio
-
---Estadia -------------------------86300
-insert into [NO_TRIGGERS].estadia (estadia_cantidad_noches,estadia_fecha_inicio,id_cliente,id_habitacion,id_reserva)
-select distinct
-	m.Estadia_Cant_Noches,
-	m.Estadia_Fecha_Inicio,
-	c.id_cliente,
-	hab.id_habitacion,
-	r.id_regimen
-from gd_esquema.Maestra m
-join [NO_TRIGGERS].cliente c on m.Cliente_Mail = c.cliente_email and m.Cliente_Apellido = c.cliente_apellido and m.Cliente_Nombre = c.cliente_nombre and c.cliente_numero_documento=m.Cliente_Pasaporte_Nro
-join [NO_TRIGGERS].regimen r on r.regimen_descripcion = m.Regimen_Descripcion and r.regimen_precio = m.Regimen_Precio
-join [NO_TRIGGERS].direccion dr on m.Hotel_Calle = dr.direccion_calle and m.Hotel_Nro_Calle=dr.direccion_altura
-join [NO_TRIGGERS].hotel  h on dr.id_direccion=h.id_direccion
-join [NO_TRIGGERS].habitacion hab on m.Habitacion_Piso = hab.habitacion_piso and m.Habitacion_Frente =  hab.habitacion_frente and m.Habitacion_Numero = hab.habitacion_numero 
-and hab.Id_hotel=h.id_hotel
-where m.Estadia_Cant_Noches is not null
-
---max 96944
-
-
-/*select * from [NO_TRIGGERS].estadia e
-where e.estadia_cantidad_noches is not null*/
-
---Consumible ------4
-insert into [NO_TRIGGERS].consumible (consumible_descripcion,consumible_precio,consumible_codigo)
-select distinct 
-	m.Consumible_Descripcion,
-	m.Consumible_Precio,
-	m.Consumible_Codigo
-from gd_esquema.Maestra m
-where Consumible_Codigo is not null
-
---Consumible_por_estadia------------------¿? No le encuentro proposito, y no me da con el total de items facturados, creo que item factura cumple la funcion de esta tabla
-insert into [NO_TRIGGERS].consumible_por_estadia
-		SELECT cons.id_consumible,est.id_estadia
-		FROM [NO_TRIGGERS].consumible cons,[NO_TRIGGERS].estadia est, gd_esquema.Maestra m, [NO_TRIGGERS].Reserva res
-		WHERE (m.Consumible_Codigo=cons.consumible_codigo) and (est.id_reserva = res.id_reserva) and (m.Factura_Nro IS NOT NULL) and (m.Reserva_Codigo = res.reserva_numero_codigo)
+create function elgalego.fn_get_rol_estado
+(@id int) returns int
+	AS 
+		begin
+	declare @Resultado int
+	select @Resultado=case when MarcaBorrado=0 then 1 else 0 end from elgalego.Rol where id_rol=@id
+	return @resultado
+end
 GO
 
---Factura ------------------86300
-insert into [NO_TRIGGERS].factura (factura_fecha,factura_numero,factura_tipo,factura_total,id_cliente,id_estadia,id_hotel)
-select distinct
- m.Factura_Fecha,
- m.Factura_Nro,
- null as factura_tipo,
- m.Factura_Total,
- c.id_cliente,
- e.id_estadia,
- h.id_hotel
-from gd_esquema.Maestra m
-join [NO_TRIGGERS].cliente c on m.Cliente_Apellido = c.cliente_apellido and m.Cliente_Mail = c.cliente_email and m.Cliente_Fecha_Nac = c.cliente_fecha_nacimiento and m.Cliente_Pasaporte_Nro = c.cliente_numero_documento
-join [NO_TRIGGERS].estadia e on e.id_cliente = c.id_cliente and m.Estadia_Cant_Noches = e.estadia_cantidad_noches and m.Estadia_Fecha_Inicio = e.estadia_fecha_inicio 
-join [NO_TRIGGERS].direccion d on d.direccion_altura = m.Hotel_Nro_Calle and d.direccion_calle = m.Hotel_Calle and d.direccion_piso is null
-join [NO_TRIGGERS].hotel h on h.id_direccion = d.id_direccion
-where m.Factura_Nro is not null
+IF OBJECT_ID ('elgalego.fn_next_id_rol') IS NOT NULL drop function elgalego.fn_next_id_rol
+go
+
+create function elgalego.fn_next_id_rol () returns int
+	AS 
+		begin
+	declare @Resultado int
+	select @Resultado=max(id_rol) from elgalego.Rol
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('elgalego.fn_nombre_rol_unico') IS NOT NULL drop function elgalego.fn_nombre_rol_unico
+go
+
+create function elgalego.fn_nombre_rol_unico (@nombre nvarchar (100)) returns int
+	AS 
+		begin
+	declare @Resultado int
+	if exists (select 1 from elgalego.rol where rolnombre=@nombre) begin
+
+	select @Resultado=0
+	end else select @Resultado=1
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('elgalego.fn_nombre_rol_unico_upd') IS NOT NULL drop function elgalego.fn_nombre_rol_unico_upd
+go
+
+create function elgalego.fn_nombre_rol_unico_upd (@nombre nvarchar (100), @idrol int) returns int
+	AS 
+		begin
+	declare @Resultado int
+	if exists (select 1 from elgalego.rol where rolnombre=@nombre and id_rol <> @idrol) begin
+	select @Resultado=0
+	end else select @Resultado=1
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('elgalego.sp_set_rol_nombre','P') IS NOT NULL drop procedure elgalego.sp_set_rol_nombre
+go
+create procedure elgalego.sp_set_rol_nombre 
+@id int, @Nombre_rol varchar (100)
+	AS
+		update elgalego.Rol
+		set rolnombre=@Nombre_rol
+		where id_rol=@id
+	GO
+
+IF OBJECT_ID ('elgalego.sp_set_rol_estado','P') IS NOT NULL drop procedure elgalego.sp_set_rol_estado 
+go
+create procedure elgalego.sp_set_rol_estado
+@id_rol int, @estado_modificado int
+	AS
+	update elgalego.rol set MarcaBorrado=case when @estado_modificado=1 then 0 else 1 end
+	WHERE @id_rol=id_rol
+	GO
+--exec elgalego.sp_rol_set_estado 1,1
+GO
+
+IF OBJECT_ID ('elgalego.sp_rol_crear','P') IS NOT NULL drop procedure elgalego.sp_rol_crear 
+go
+
+create procedure elgalego.sp_rol_crear 
+@Nombre_rol varchar (100)
+	AS
+		if not exists (select 1 from elgalego.rol where RolNombre=@Nombre_rol)
+		insert into elgalego.rol (rolnombre,MarcaBorrado) values (@Nombre_rol, 0)
+		
+	GO
+
+IF OBJECT_ID ('elgalego.sp_agrega_funcionalidad','P') IS NOT NULL drop procedure elgalego.sp_agrega_funcionalidad 
+go
+--select * from elgalego.rol
+create procedure elgalego.sp_agrega_funcionalidad
+	@Rol_id int, @Funcionalidad int
+	AS
+	if not exists (select 1 from elgalego.rolFuncionalidad where id_rol=@Rol_id and id_funcionalidad=@Funcionalidad)
+	begin
+	insert into elgalego.rolFuncionalidad values (@Rol_id,@Funcionalidad)
+	end
+	GO
+
+IF OBJECT_ID ('elgalego.sp_quita_funcionalidad','P') IS NOT NULL drop procedure elgalego.sp_quita_funcionalidad 
+go
+
+create procedure elgalego.sp_quita_funcionalidad
+@Rol_id int, @Funcionalidad int
+	AS
+		delete elgalego.rolFuncionalidad where id_funcionalidad=@Funcionalidad and id_rol=@Rol_id
+	GO
 
 
---Item factura ---286003 
-insert into [NO_TRIGGERS].item_factura (item_factura_cantidad,item_factura_monto,id_consumible,id_factura)
-select distinct
-	m.Item_Factura_Cantidad,
-	m.Item_Factura_Monto,
-	c.id_consumible,
-	f.id_factura
-from gd_esquema.Maestra m 
-join [NO_TRIGGERS].factura f on m.Factura_Fecha = f.factura_fecha and m.Factura_Nro = f.factura_numero and m.Factura_Total = f.factura_total
-join [NO_TRIGGERS].estadia e on e.id_estadia = f.id_estadia and m.Estadia_Cant_Noches = e.estadia_cantidad_noches and m.Estadia_Fecha_Inicio = e.estadia_fecha_inicio
-left join [NO_TRIGGERS].consumible c on m.Consumible_Codigo = c.consumible_codigo and m.Consumible_Descripcion = c.consumible_descripcion and m.Consumible_Precio = c.consumible_precio 
+-----------------------------------------------------------VISTAS
 
+if OBJECT_ID('elgalego.vwUserRolesActivos') is not null drop view elgalego.vwUserRolesActivos
+go
+create view elgalego.vwUserRolesActivos
+as
+select h.id_rol, h.RolNombre,u.Username from elgalego.rol h
+join elgalego.usuariorol uh on h.id_rol=uh.id_rol
+join elgalego.Usuario u on uh.id_usuario=u.id_usuario
+where  isnull(h.MarcaBorrado,0)=0
+go
 
-
-
-
---Regimen por hotel--
-
-insert into [NO_TRIGGERS].regimen_por_hotel
-Select distinct reg.id_regimen, hot.id_hotel
-FROM [NO_TRIGGERS].regimen reg, [NO_TRIGGERS].hotel hot, gd_esquema.Maestra m, [NO_TRIGGERS].direccion dir
-where (m.Regimen_Descripcion=reg.regimen_descripcion and m.Regimen_Precio=reg.regimen_precio) and (m.Hotel_Calle=dir.direccion_calle and m.Hotel_Nro_Calle=dir.direccion_altura) and (hot.hotel_cantidad_estrellas=m.Hotel_CantEstrella and hot.hotel_recarga_estrella=m.Hotel_Recarga_Estrella)
-
-------------------------------------------------------------------------------------------------------------------------
---Relaciones------------------------------------------------------------------------------------------------------------
-Alter table [no_triggers].ciudad add
-constraint fk_id_ciudad_pais foreign key (id_pais) references [no_triggers].pais(id_pais)
-
-Alter table [no_triggers].direccion 
-add constraint fk_id_ciudad_direccion foreign key (id_ciudad) references [no_triggers].ciudad(id_ciudad)
-
-Alter table [no_triggers].rol_por_funcionalidad add
-constraint fk_id_rol foreign key (id_rol) references [no_triggers].rol(id_rol)
-,constraint fk_id_funcionalidad foreign key (id_funcionalidad) references [no_triggers].funcionalidad(id_funcionalidad) ----------revisar puede que falten
-
-Alter table [no_triggers].hotel add
-constraint fk_id_hotel_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion)
-
-Alter table [no_triggers].usuario add
-constraint fk_id_usuario_rol foreign key (id_rol) references [no_triggers].rol(id_rol),
-constraint fk_id_usuario_tipo_documento foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento),
-constraint uk_usuario_username unique (usuario_username)
-
-ALTER TABLE [NO_TRIGGERS].usuario_por_hotel add
-constraint fk_id_usuarioPorHotel foreign key (id_usuario) references [no_triggers].usuario (id_usuario),
-constraint fk_id_hotelPor_usuario foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
-
-Alter table [no_triggers].cliente add
-constraint fk_id_cliente_direccion foreign key (id_direccion) references [no_triggers].direccion(id_direccion),
-constraint fk_id_cliente_pais foreign key (id_pais) references [no_triggers].pais(id_pais),
-constraint fk_id_cliente_tipo_doc foreign key (id_tipo_documento) references [no_triggers].tipo_documento(id_tipo_documento)
-
-Alter table [no_triggers].habitacion add
-constraint fk_id_habitacion_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
-constraint fk_id_tipo_de_habitacion foreign key (id_tipo_habitacion) references [no_triggers].tipoDeHabitacion(id_tipo_habitacion)
-
-Alter table[no_triggers].reserva add
-constraint fk_id_reserva_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
-constraint fk_id_reserva_habitacion foreign key (id_habitacion) references [no_triggers].habitacion(id_habitacion),
-constraint fk_id_reserva_en_estado foreign key (id_reserva_estado) references [no_triggers].estado_reserva(id_estado_reserva),
-constraint fk_id_reserva_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
-constraint fk_id_reserva_cambiada_por_user foreign key (id_reserva_cambiada_por_user) references [no_triggers].usuario(id_usuario)
-
-Alter table [no_triggers].estadia add
-constraint fk_id_estadia_habitacion foreign key (id_habitacion) references [no_triggers].habitacion(id_habitacion),
-constraint fk_id_estadia_reserva foreign key (id_reserva) references [no_triggers].reserva(id_reserva),
-constraint fk_id_estadia_cliente foreign key (id_cliente) references [no_triggers].cliente(id_cliente)
-
-Alter table [no_triggers].regimen_por_hotel add
-constraint fk_id_regimen foreign key (id_regimen) references [no_triggers].regimen(id_regimen),
-constraint fk_id_hotelporRegimen foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
-
-Alter table [no_triggers].factura add 
-constraint fk_id_factura_estadia foreign key (id_estadia) references [no_triggers].estadia(id_estadia),
-constraint fk_id_factura_hotel foreign key (id_hotel) references [no_triggers].hotel(id_hotel),
-constraint fk_id_factura_cliente foreign key (id_cliente) references [no_triggers].cliente(id_cliente)
-
-Alter table [no_triggers].item_factura add
-constraint fk_id_numero_factura foreign key (id_factura) references [no_triggers].factura(id_factura),
-constraint fk_id_item_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
-
-Alter table [no_triggers].baja_de_hotel add
-constraint fk_id_hotel_de_Baja foreign key (id_hotel) references [no_triggers].hotel(id_hotel)
-
-Alter table [no_triggers].consumible_por_estadia add
-constraint fk_estadia_por_consumible foreign key (id_estadia) references [no_triggers].estadia(id_estadia),
-constraint fk_consumiblePor_consumible foreign key (id_consumible) references [no_triggers].consumible(id_consumible)
+--elgalego.spSelTablaFiltrada 'elgalego.vwUserRolesActivos','username','''admin'''
