@@ -126,7 +126,6 @@ UltimoLogin datetime,
 ID_RolSel int,
 IntentosLogin int, 
 MarcaBorrado int,
-MarcaBloqueo int,
 CONSTRAINT PK_ID_Usuario PRIMARY KEY NONCLUSTERED (ID_Usuario asc)
 )
 --UsuarioRol
@@ -187,7 +186,7 @@ CREATE TABLE elgalego.Cliente
 (
 ID_Cliente int identity(1,1) unique not null,
 ID_Usuario int not null,
---ID_Tarjeta int not null,
+ID_Tarjeta int  null,
 ID_Domicilio int not null,
 Nombre nvarchar(60),
 Apellido nvarchar(80),
@@ -309,7 +308,7 @@ go
 create procedure elgalego.sp_creaUser(@user nvarchar(30), @passwd nvarchar(30))
 as
 begin
-if not exists (select * from elgalego.Usuario where Username=@user and UserPass=@passwd)
+if not exists (select * from elgalego.Usuario where Username=@user)
 	begin
 	insert into elgalego.Usuario (Username,UserPass) values (@user, elgalego.fn_encriptar(@passwd))
 	end
@@ -364,17 +363,18 @@ insert into elgalego.TipoTarjeta (TipoTarjeta) values ('Credito'), ('Debito')
 
 if exists(select 1 from elgalego.funcionalidad) truncate table elgalego.funcionalidad
 insert into elgalego.Funcionalidad (FuncionalidadNombre) values
-('Rol'),('Clientes'),('Empresa'),('Rubro'),('Grado'),('Publicacion'),('Compra'),('Historial'),('Canje'),('Rendicion'),('Listado')
+('Rol'),('Clientes'),('Empresa'),('Rubro'),('Grado'),('Publicacion'),('Compra'),('Historial'),('Canje'),('Rendicion'),('Listado'),('Usuario')
 
 if exists(select 1 from elgalego.rol) truncate table elgalego.rol
 Insert into elgalego.Rol (RolNombre,MarcaBorrado) values ('Empresa',0),('Administrativo',0),('Cliente',0)
+
 
 if exists(select 1 from elgalego.rolFuncionalidad) truncate table elgalego.rolFuncionalidad
 if object_id('tempdb..#rolfun') is not null drop table #rolfun
 create table #rolfun (rol nvarchar(30), funcionalidad nvarchar(30))
 insert into #rolfun values ('Empresa','Grado'),('Empresa','Publicacion'),('Cliente','Compra'),('Cliente','Historial'),('Cliente','Canje')
 ,('Administrativo','Rol'),('Administrativo','Clientes'),('Administrativo','Empresa'),('Administrativo','Rubro'),('Administrativo','Rendicion'),('Administrativo','Listado')
---,('Administrativo','Grado'),('Administrativo','Publicacion'),('Administrativo','Compra'),('Administrativo','Historial'),('Administrativo','Canje')
+,('Administrativo','Usuario')--,('Administrativo','Publicacion'),('Administrativo','Compra'),('Administrativo','Historial'),('Administrativo','Canje')
 insert into elgalego.rolfuncionalidad (ID_Rol,ID_Funcionalidad)
 select id_rol, id_funcionalidad from #rolfun v join elgalego.rol r on v.rol=r.RolNombre join elgalego.Funcionalidad  f on v.funcionalidad=f.FuncionalidadNombre
 if object_id('tempdb..#rolfun') is not null drop table #rolfun
@@ -477,6 +477,28 @@ left join elgalego.Usuario u on convert(nvarchar(20),mr.Cli_Dni)=u.Username
 where u.ID_Usuario is not null
 
 go
+
+update u
+set
+u.ID_RolSel=r.ID_Rol
+from elgalego.usuario u 
+join elgalego.empresa e on u.id_usuario=e.id_usuario
+join elgalego.rol r on r.rolNombre='Empresa'
+
+update u
+set
+u.ID_RolSel=r.ID_Rol
+from elgalego.usuario u 
+join elgalego.cliente e on u.id_usuario=e.id_usuario
+join elgalego.rol r on r.rolNombre='Cliente'
+
+update u 
+set ID_RolSel=r.ID_Rol
+from elgalego.usuario u 
+join elgalego.rol r on r.rolNombre='Administrativo' and u.Username='Admin'
+
+go
+
 ---- Tablas FACTICAS	
 if exists(select 1 from elgalego.Publicacion) truncate table elgalego.Publicacion
 insert into elgalego.Publicacion (ID_Rubro,ID_Domicilio,ID_Grado,ID_Empresa,ID_Estado,Codigo,Titulo,FechaPublicado,FechaEvento)
@@ -617,14 +639,20 @@ create procedure elgalego.spgetValTabla
 (@nombreTabla nvarchar(50), @nombreColID nvarchar(50), @nombreColBus nvarchar(50), @valorBuscado nvarchar(250))
 as
 begin
-declare @query nvarchar(max)
-set @query='Select isnull('+ @nombreColID +',0) from ' + @nombreTabla + ' where ' + @nombreColBus + ' like ''%'+@valorbuscado+'%'' '
+declare @query nvarchar(max), @result nvarchar(100)
 
-execute sp_executesql @query
+set @query=N'Select @result='+ @nombreColBus +' from ' + @nombreTabla + ' where ' + @nombreColID + ' = '+ @valorbuscado 
+--select @query
+execute sp_executesql @query, N'@result NVARCHAR(100) output', @result=@result output
+
+select @result
 
 end
 go
 
+
+
+-- elgalego.spgetvaltabla 'elgalego.usuario', 'id_usuario', 'username', '1'
 
 --- SET Generico
 if object_id('elgalego.spsetvaltabla') is not null drop procedure elgalego.spsetvaltabla
@@ -641,6 +669,19 @@ execute sp_executesql @query
 end
 go
 
+if object_id('elgalego.spBorrar') is not null drop procedure elgalego.spBorrar
+go
+create procedure elgalego.spBorrar 
+(@nombreTabla nvarchar(50), @nombreColID nvarchar(50), @valorID nvarchar(10))
+as
+begin
+declare @query nvarchar(max)
+set @query='update '+ @nombreTabla +' set MarcaBorrado = 1 where '+@nombreColID+'= ' +  @valorID
+
+execute sp_executesql @query
+
+end
+go
 
 ---- Select generico
 if object_id('elgalego.spSelectTabla') is not null drop procedure elgalego.spSelectTabla
@@ -666,21 +707,40 @@ end
 
 go
 
+if object_id('elgalego.spExisteValor') is not null drop procedure elgalego.spExisteValor
+go
 
 create procedure elgalego.spExisteValor (@nombreTabla nvarchar(50), @nomCampoFiltro nvarchar(50), @ValorFiltro nvarchar(250))
 as
 begin
 declare @query nvarchar(max), @counts int
 
-set @query= 'select @cnt=count(1) from ' + @nombreTabla + ' where ' +@nomCampoFiltro +' = ' + @ValorFiltro
+set @query= 'select @cnt=count(1) from ' + @nombreTabla + ' where convert(nvarchar(max),' +@nomCampoFiltro +') = ''' + @ValorFiltro+''''
 exec sp_executesql @query, N'@cnt int output', @cnt=@counts output
 
 if @counts=0 return 0 else return 1
 
 end
-
+-- elgalego.spExisteValor 'elgalego.empresa', 'razonsocial', 'asa'
 go
 
+if object_id('elgalego.spExisteOtroValor') is not null drop procedure elgalego.spExisteOtroValor
+go
+
+create procedure elgalego.spExisteOtroValor (@nombreTabla nvarchar(50), @nomCampoFiltro nvarchar(50), @ValorFiltro nvarchar(250),@campoID nvarchar(50),@ID_Actual nvarchar(10))
+as
+begin
+declare @query nvarchar(max), @counts int
+
+set @query= 'select @cnt=count(1) from ' + @nombreTabla + ' where convert(nvarchar(max),' +@nomCampoFiltro +') = ''' + @ValorFiltro+''''
+set @query=@query + ' and ' + @campoID + ' != ' + @ID_Actual
+exec sp_executesql @query, N'@cnt int output', @cnt=@counts output
+
+if @counts=0 return 0 else return 1
+--print convert(nvarchar(10),@counts)
+end
+-- elgalego.spExisteOtroValor 'elgalego.empresa', 'razonsocial', 'master','ID_empresa','1'
+go
 
 
 
@@ -701,7 +761,7 @@ set IntentosLogin =  isnull(IntentosLogin+1,1) where  @usuario=username
 else
 	begin	
 	update elgalego.Usuario
-	set IntentosLogin =  IntentosLogin+1,  MarcaBloqueo = 1 where  @usuario=username
+	set IntentosLogin =  IntentosLogin+1,  MarcaBorrado = 1 where  @usuario=username
 end
 
 go
@@ -725,7 +785,7 @@ returns int
 as
 begin
 declare @result int
-select @result=case when isnull(MarcaBloqueo,0)=0 then 1 else 0 end from elgalego.Usuario where username=@usuario;
+select @result=case when isnull(MarcaBorrado,0)=0 then 1 else 0 end from elgalego.Usuario where username=@usuario;
 return @result
 
 end
@@ -738,9 +798,9 @@ go
 create procedure elgalego.spLogin (@usuario nvarchar(100), @password nvarchar(256))
 
 as begin
-declare @resultado bit, @password2 nvarchar(256)
+declare @resultado int, @password2 nvarchar(256)
 set @password2 = elgalego.fn_encriptar(@password)
-if (((SELECT UserPass FROM elgalego.Usuario WHERE username=@usuario) = @password2) and ((select isnull(IntentosLogin,0) from elgalego.Usuario where username = @usuario)<=3)) and ((select isnull(MarcaBloqueo,0) from elgalego.Usuario where username=@usuario)=0)
+if (((SELECT UserPass FROM elgalego.Usuario WHERE username=@usuario) = @password2) and ((select isnull(IntentosLogin,0) from elgalego.Usuario where username = @usuario)<=3)) and ((select isnull(MarcaBorrado,0) from elgalego.Usuario where username=@usuario)=0)
 	begin	
 		exec elgalego.spResetLoginCounter @usuario
 		set @resultado = 1
@@ -799,12 +859,13 @@ create function elgalego.fnABMHabilitado
 	return @resultado
 end
 GO
---select * from elgalego.funcionalidad
+
+--select elgalego.fnABMHabilitado('razon social nº:5','listado')
 
 IF OBJECT_ID ('elgalego.fnMultirole') IS NOT NULL drop function elgalego.fnMultirole
 go
 
--- select elgalego.fn_chequear_usuario_si_multihotel('user_guest1')
+-- select elgalego.fnMultirole('admin')
 create function elgalego.fnMultirole (@usuario nvarchar(100))
 returns int
 as
@@ -823,8 +884,32 @@ return @result
 end
 
 go
---select elgalego.fnMultirole('admin')
+
+
+IF OBJECT_ID ('elgalego.fnIsAdmin') IS NOT NULL drop function elgalego.fnIsAdmin
 go
+
+-- select elgalego.fn_chequear_usuario_si_multihotel('user_guest1')
+create function elgalego.fnIsAdmin (@usuario nvarchar(100))
+returns int
+as
+begin
+declare @result int, @count int
+if exists (select 1 from elgalego.UsuarioRol uh 
+join elgalego.Usuario us on uh.id_usuario=us.id_usuario
+join elgalego.Rol r on uh.id_rol=r.id_rol
+where us.username=@usuario and r.MarcaBorrado=0 and RolNombre='Administrativo' )  begin select @result=1 end else begin select @result=0 end
+
+return @result
+
+end
+
+go
+
+
+
+
+
 
 IF OBJECT_ID ('elgalego.setRolSelected') IS NOT NULL drop procedure elgalego.setRolSelected
 go
@@ -1002,10 +1087,392 @@ create procedure elgalego.sp_quita_funcionalidad
 @Rol_id int, @Funcionalidad int
 	AS
 		delete elgalego.rolFuncionalidad where id_funcionalidad=@Funcionalidad and id_rol=@Rol_id
+
+	
+
 	GO
 
+----------------------Usuario----------------------
+IF OBJECT_ID ('elgalego.sp_quita_rol','P') IS NOT NULL drop procedure elgalego.sp_quita_rol
+go
 
------------------------------------------------------------VISTAS
+create procedure elgalego.sp_quita_rol
+@user_id int, @rol_id int
+	AS
+		declare @count int
+				
+		delete elgalego.UsuarioRol where id_usuario=@user_id and id_rol=@Rol_id
+		
+		select @count=count(1) from UsuarioRol where id_usuario=@user_id
+
+		if @count = 1
+		begin
+		update u
+		set u.ID_RolSel=ur.ID_Rol
+		from elgalego.Usuario u
+		join elgalego.UsuarioRol ur on u.ID_Usuario=ur.ID_Usuario
+		end
+GO
+
+IF OBJECT_ID ('elgalego.sp_agrega_urole','P') IS NOT NULL drop procedure elgalego.sp_agrega_urole
+go
+--select * from elgalego.rol
+create procedure elgalego.sp_agrega_urole
+	@user_id int, @rol_id int
+	AS
+	if not exists (select 1 from elgalego.UsuarioRol where id_rol=@Rol_id and id_usuario=@user_id)
+	begin
+	insert into elgalego.usuariorol (id_rol,id_usuario) values (@Rol_id,@user_id)
+	end
+GO
+
+IF OBJECT_ID ('elgalego.fn_username_unico') IS NOT NULL drop function elgalego.fn_username_unico
+go
+
+create function elgalego.fn_username_unico (@username nvarchar (100), @userid int) returns int
+	AS 
+		begin
+	declare @Resultado int
+	if exists (select 1 from elgalego.usuario where username=@username and id_usuario<>@userid) begin
+	
+	select @Resultado=0
+	end else select @Resultado=1
+	return @resultado
+end
+GO
+
+IF OBJECT_ID ('elgalego.fnGetUserID') IS NOT NULL drop function elgalego.fnGetUserID
+go
+
+create function elgalego.fnGetUserID (@username nvarchar (100)) returns int
+	AS 
+		begin
+	declare @Resultado int
+	select @Resultado=id_usuario from elgalego.Usuario where username=@username
+	
+	return @resultado
+end
+GO
+
+
+IF OBJECT_ID ('elgalego.fnTipoUser') IS NOT NULL drop function elgalego.fnTipoUser
+go
+
+create function elgalego.fnTipoUser (@userid int) returns int
+	AS 
+	-- devuelve 0 si no es ninguno, 1 si es cliente, 2 si es empresa	
+	begin
+	
+	declare @Resultado int
+	select @Resultado=0	
+	
+
+	if exists (select 1 from elgalego.empresa where id_usuario=@userid) 	
+	select @Resultado=2
+	if exists (select 1 from elgalego.cliente where id_usuario=@userid) 	
+	begin
+	select @Resultado=1
+	end
+	
+	return @resultado
+end
+GO
+--select elgalego.fnTipoUser(100);
+
+IF OBJECT_ID ('elgalego.sp_lis_usu_roles') IS NOT NULL drop procedure elgalego.sp_lis_usu_roles
+go
+create procedure elgalego.sp_lis_usu_roles
+@idUser int
+as
+	select r.id_rol, rolnombre, case when isnull(r.MarcaBorrado,0)= 0 then 1 else 0 end as rol_activo
+	from elgalego.Rol r
+	join elgalego.usuariorol ur on r.id_rol=ur.id_rol
+	where ur.id_usuario=@idUser
+go
+
+
+IF OBJECT_ID ('elgalego.sp_lis_u_roles_libres') IS NOT NULL drop procedure elgalego.sp_lis_u_roles_libres
+go
+create procedure elgalego.sp_lis_u_roles_libres
+@idUser int
+as
+	select r.id_rol, rolnombre	from elgalego.Rol r
+	where id_rol not in (select id_rol from elgalego.usuariorol ur	where ur.id_usuario=@idUser) and isnull(r.MarcaBorrado,0)=0
+go
+
+IF OBJECT_ID ('elgalego.sp_user_Set_pass') IS NOT NULL drop procedure elgalego.sp_user_Set_pass
+go
+
+create proc elgalego.sp_user_Set_pass
+@userID int, @pass nvarchar(256)
+as
+begin
+	update elgalego.Usuario 
+	set UserPass = elgalego.fn_encriptar(@pass) where id_usuario = @userID
+end
+go
+IF OBJECT_ID ('elgalego.sp_set_user_estado') IS NOT NULL drop procedure elgalego.sp_set_user_estado
+go
+create proc elgalego.sp_set_user_estado
+@idUser int,@estado int
+as
+				update elgalego.Usuario
+				set MarcaBorrado = case when @estado=1 then 0 else 1 end where id_usuario=@idUser
+go
+
+------- Empresa
+
+IF OBJECT_ID ('elgalego.spSetEmpresaEstado') IS NOT NULL drop procedure elgalego.spSetEmpresaEstado
+go
+create proc elgalego.spSetEmpresaEstado
+@idUser int,@estado int
+as
+				update elgalego.Empresa
+				set MarcaBorrado = case when @estado=1 then 0 else 1 end where ID_Empresa=@idUser
+go
+
+IF OBJECT_ID ('elgalego.spCreaEmpresa') IS NOT NULL drop procedure elgalego.spCreaEmpresa
+go
+create proc elgalego.spCreaEmpresa
+@username nvarchar(60)
+,@passwd nvarchar(256)
+,@RazonSoc nvarchar(160)
+,@Mail nvarchar(160)
+,@tel nvarchar(30)
+,@cuit nvarchar(100)
+,@FechaCreacion nvarchar(12)
+,@Calle nvarchar(100)
+,@NroDom nvarchar(10)
+,@NroPiso nvarchar(5)
+,@NroDpto nvarchar(5)
+,@Ciudad nvarchar(100)
+,@CP nvarchar(20)
+as
+begin
+
+	-- creo el usuario asociado a la  nueva empresa
+	
+	exec elgalego.sp_creaUser @username, @passwd
+	-- cargo el domicilio, o si existe, tomo el id en una variable
+	declare @idDomi int, @idUser int
+
+	select @idUser=id_usuario from elgalego.Usuario where username=@username
+
+	select @idDomi=isnull(id_domicilio,0) from elgalego.Domicilio
+	where calle=@Calle and NroDomi=@NroDom and NroDpto=@NroDpto and NroPiso=@NroPiso and Ciudad=@Ciudad and CodPostal=@CP
+	and isnull(marcaBorrado,0)=0
+
+	if isnull(@idDomi,0)=0
+	begin
+		insert into elgalego.Domicilio (calle, NroDomi, NroDpto, NroPiso, Ciudad, CodPostal, MarcaBorrado) values
+		(@calle, @NroDom, @NroDpto, @NroPiso, @Ciudad, @cp, 0)
+	end
+
+	select @idDomi=isnull(id_domicilio,0) from elgalego.Domicilio
+	where calle=@Calle and NroDomi=@NroDom and NroDpto=@NroDpto and NroPiso=@NroPiso and Ciudad=@Ciudad and CodPostal=@CP
+	and isnull(marcaBorrado,0)=0
+	
+	-- creo la empresa
+	--select @idUser, @idDomi, @RazonSoc, @Mail, @tel, @cuit, convert(datetime, @FechaCreacion, 103), 0
+	if not exists (select 1 from elgalego.empresa where ID_Usuario=@idUser)
+	begin
+		insert into elgalego.Empresa (ID_Usuario, ID_Domicilio, RazonSocial, Mail, Telefono, CUIT, FechaCreacion, MarcaBorrado) values
+		(@idUser, @idDomi, @RazonSoc, @Mail, @tel, @cuit, convert(datetime, @FechaCreacion, 103), 0)
+	end
+
+	-- le agrego al usuario creado el rol de empresa
+	insert into elgalego.UsuarioRol (ID_Usuario,ID_Rol)
+	select @idUser, id_rol
+	from elgalego.Rol where RolNombre='Empresa'
+
+	update u
+	set ID_RolSel=ID_Rol
+	from elgalego.Usuario u 
+	join elgalego.rol r on r.RolNombre='Empresa' and u.ID_Usuario=@idUser
+end
+go
+
+IF OBJECT_ID ('elgalego.spModEmpresa') IS NOT NULL drop procedure elgalego.spModEmpresa
+go
+create proc elgalego.spModEmpresa
+@ID_Empresa nvarchar(10)
+,@Mail nvarchar(160)
+,@tel nvarchar(30)
+,@cuit nvarchar(100)
+,@Calle nvarchar(100)
+,@NroDom nvarchar(10)
+,@NroPiso nvarchar(5)
+,@NroDpto nvarchar(5)
+,@Ciudad nvarchar(100)
+,@CP nvarchar(20)
+,@MarcaBorrado nvarchar(5)
+as
+begin
+
+	
+	--- actualizo datos domicilio
+	
+	update d
+	set
+	d.Calle=@calle,
+	d.NroDomi=@NroDom,
+	d.NroDpto=@NroDpto,
+	d.NroPiso=@NroPiso,
+	d.Ciudad=@Ciudad,
+	d.CodPostal=@CP
+	from elgalego.Domicilio d
+	join elgalego.Empresa e on e.ID_Domicilio=d.ID_Domicilio
+	where e.ID_Empresa=@ID_Empresa	
+---- actualizo datos empresa
+	update e 
+	set 
+	e.Mail=@Mail
+	,e.Telefono=@tel
+	,e.CUIT=@cuit
+	,e.MarcaBorrado=@MarcaBorrado
+	from elgalego.Empresa e 
+	where ID_Empresa=@ID_Empresa
+		
+
+
+end
+go
+	
+-- exec elgalego.spModEmpresa 'Razon Social Nº:5', 'larulea@gmail.com', '42569839', '11-11111111-1', 'avenida pepito', '14185', '12', 'g', 'peron' ,'9898', '0'
+
+----- cliente
+
+IF OBJECT_ID ('elgalego.spSetClienteBorrado') IS NOT NULL drop procedure elgalego.spSetClienteBorrado
+go
+create proc elgalego.spSetClienteBorrado
+@idUser int
+as
+				update elgalego.Empresa
+				set MarcaBorrado = 1  where ID_Empresa=@idUser
+go
+
+
+IF OBJECT_ID ('elgalego.spCreaCliente') IS NOT NULL drop procedure elgalego.spCreaCliente
+go
+create proc elgalego.spCreaCliente
+@username nvarchar(60)
+,@passwd nvarchar(256)
+,@Nombre nvarchar(160)
+,@Apellido nvarchar(100)
+,@ID_tipoDoc nvarchar(5)
+,@NDOC nvarchar(10)
+,@Mail nvarchar(160)
+,@tel nvarchar(30)
+,@cuil nvarchar(100)
+,@FechaCreacion nvarchar(12)
+,@FechaNac nvarchar(12)
+,@Calle nvarchar(100)
+,@NroDom nvarchar(10)
+,@NroPiso nvarchar(5)
+,@NroDpto nvarchar(5)
+,@Ciudad nvarchar(100)
+,@CP nvarchar(20)
+,@ntar nvarchar(60)
+,@atar nvarchar(100)
+,@id_ttar nvarchar(5)
+,@nrotar nvarchar(20)
+,@fvtar nvarchar(10)
+
+as
+begin
+
+	-- creo el usuario asociado a la  nueva empresa
+	
+	exec elgalego.sp_creaUser @username, @passwd
+	-- cargo el domicilio, o si existe, tomo el id en una variable
+	declare @idDomi int, @idUser int
+
+	select @idUser=id_usuario from elgalego.Usuario where username=@username
+
+	select @idDomi=isnull(id_domicilio,0) from elgalego.Domicilio
+	where calle=@Calle and NroDomi=@NroDom and NroDpto=@NroDpto and NroPiso=@NroPiso and Ciudad=@Ciudad and CodPostal=@CP
+	and isnull(marcaBorrado,0)=0
+
+	if isnull(@idDomi,0)=0
+	begin
+		insert into elgalego.Domicilio (calle, NroDomi, NroDpto, NroPiso, Ciudad, CodPostal, MarcaBorrado) values
+		(@calle, @NroDom, @NroDpto, @NroPiso, @Ciudad, @cp, 0)
+	end
+
+	select @idDomi=isnull(id_domicilio,0) from elgalego.Domicilio
+	where calle=@Calle and NroDomi=@NroDom and NroDpto=@NroDpto and NroPiso=@NroPiso and Ciudad=@Ciudad and CodPostal=@CP
+	and isnull(marcaBorrado,0)=0
+	
+
+	--- inserto los datos de la tarjeta si no existen
+
+
+	-- creo el cliente
+	
+	if not exists (select 1 from elgalego.empresa where ID_Usuario=@idUser)
+	begin
+		insert into elgalego.Empresa (ID_Usuario, ID_Domicilio, RazonSocial, Mail, Telefono, CUIT, FechaCreacion, MarcaBorrado) values
+		(@idUser, @idDomi, @zonSoc, @Mail, @tel, @cuit, convert(datetime, @FechaCreacion, 103), 0)
+	end
+
+	-- le agrego al usuario creado el rol de empresa
+	insert into elgalego.UsuarioRol (ID_Usuario,ID_Rol)
+	select @idUser, id_rol
+	from elgalego.Rol where RolNombre='Empresa'
+
+	update u
+	set ID_RolSel=ID_Rol
+	from elgalego.Usuario u 
+	join elgalego.rol r on r.RolNombre='Empresa' and u.ID_Usuario=@idUser
+end
+go
+
+IF OBJECT_ID ('elgalego.spModCliente') IS NOT NULL drop procedure elgalego.spModCliente
+go
+create proc elgalego.spModCliente
+@ID_Empresa nvarchar(10)
+,@Mail nvarchar(160)
+,@tel nvarchar(30)
+,@cuit nvarchar(100)
+,@Calle nvarchar(100)
+,@NroDom nvarchar(10)
+,@NroPiso nvarchar(5)
+,@NroDpto nvarchar(5)
+,@Ciudad nvarchar(100)
+,@CP nvarchar(20)
+,@MarcaBorrado nvarchar(5)
+as
+begin
+
+	
+	--- actualizo datos domicilio
+	
+	update d
+	set
+	d.Calle=@calle,
+	d.NroDomi=@NroDom,
+	d.NroDpto=@NroDpto,
+	d.NroPiso=@NroPiso,
+	d.Ciudad=@Ciudad,
+	d.CodPostal=@CP
+	from elgalego.Domicilio d
+	join elgalego.Empresa e on e.ID_Domicilio=d.ID_Domicilio
+	where e.ID_Empresa=@ID_Empresa	
+---- actualizo datos empresa
+	update e 
+	set 
+	e.Mail=@Mail
+	,e.Telefono=@tel
+	,e.CUIT=@cuit
+	,e.MarcaBorrado=@MarcaBorrado
+	from elgalego.Empresa e 
+	where ID_Empresa=@ID_Empresa
+		
+
+
+end
+go
+-----------------------------------------------------------VISTAS-----------------------------------------------------------
 
 if OBJECT_ID('elgalego.vwUserRolesActivos') is not null drop view elgalego.vwUserRolesActivos
 go
@@ -1017,4 +1484,72 @@ join elgalego.Usuario u on uh.id_usuario=u.id_usuario
 where  isnull(h.MarcaBorrado,0)=0
 go
 
---elgalego.spSelTablaFiltrada 'elgalego.vwUserRolesActivos','username','''admin'''
+if OBJECT_ID('elgalego.vwGradoPublicacion') is not null drop view elgalego.vwGradoPublicacion
+go
+create view elgalego.vwGradoPublicacion
+as
+select r.RubroNombre, p.Titulo ,e.Estado, g.GradoNombre, p.FechaEvento ,p.FechaPublicado 
+from elgalego.Publicacion p
+join elgalego.Rubro r on p.ID_Rubro=r.ID_Rubro
+join elgalego.Grado g on p.ID_Grado=g.ID_Grado
+join elgalego.Estado e on p.ID_Estado=e.id_Estado
+where e.Estado='Publicada'
+go
+
+if OBJECT_ID('elgalego.vwEmpresa') is not null drop view elgalego.vwEmpresa
+go
+create view elgalego.vwEmpresa
+as
+select ID_Empresa, e.ID_Usuario, e.ID_Domicilio, isnull(u.Username,'') Username, RazonSocial, isnull(Mail,'') Mail, isnull(Telefono,'') Telefono, isnull(CUIT,'') CUIT, FechaCreacion, isnull(e.MarcaBorrado,0) MarcaBorrado 
+,isnull(d.Calle,'') Calle ,isnull(d.NroDomi,0) NroDomi, isnull(d.NroPiso,0) NroPiso,isnull(d.NroDpto,0) NroDpto, isnull(d.Ciudad,'') Ciudad, isnull(d.codpostal,'') CP
+from elgalego.Empresa e
+left join elgalego.Usuario u on e.ID_Usuario=u.ID_Usuario
+left join elgalego.Domicilio d on e.ID_Domicilio=d.ID_Domicilio
+
+go
+
+if OBJECT_ID('elgalego.vwCliente') is not null drop view elgalego.vwCliente
+go
+
+create view elgalego.vwCliente
+as
+select 
+ID_Cliente
+, e.ID_Usuario
+, e.ID_Domicilio
+,E.ID_Tarjeta
+, isnull(u.Username,'') Username
+, e.Nombre
+,E.Apellido
+,E.ID_TipoDoc
+,TD.TipoDocumento
+,E.NroDoc
+, isnull(Mail,'') Mail
+, isnull(Telefono,'') Telefono
+, isnull(CUIL,'') CUIL
+, convert(nvarchar(15),FechaCreacion,103) FechaCreacion
+,convert(nvarchar(15),E.FechaNac,103) FechaNac
+, isnull(e.MarcaBorrado,0) MarcaBorrado 
+,isnull(d.Calle,'') Calle 
+,isnull(d.NroDomi,0) NroDomi
+, isnull(d.NroPiso,0) NroPiso
+,isnull(d.NroDpto,0) NroDpto
+, isnull(d.Ciudad,'') Ciudad
+, isnull(d.codpostal,'') CP
+, ISNULL(T.NOMBRE,'') AS NOMBRETARJETA
+, ISNULL (T.APELLIDO,'') AS APELLIDOTARJETA
+, ISNULL (T.ID_TIPOTARJ,0) AS ID_TIPOTARJ
+, ISNULL (T.NROTARJETA,0) AS NROTARJETA
+, ISNULL(CONVERT (NVARCHAR,T.FechaVenc,103),'') AS FECHAVENCTARJ
+from elgalego.Cliente e
+left join elgalego.Usuario u on e.ID_Usuario=u.ID_Usuario
+left join elgalego.Domicilio d on e.ID_Domicilio=d.ID_Domicilio
+left join elgalego.TipoDocumento td on e.ID_TipoDoc=td.ID_TipoDoc
+left join elgalego.Tarjeta t on e.ID_Tarjeta=T.ID_Tarjeta
+LEFT JOIN elgalego.TipoTarjeta TT ON T.ID_TipoTarj=TT.ID_TipoTarj
+
+go
+
+--elgalego.spSelectTabla 'elgalego.vwcliente'
+-- select elgalego.fnuserenabled ('admin')
+
