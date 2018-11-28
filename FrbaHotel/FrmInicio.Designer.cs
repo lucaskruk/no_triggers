@@ -43,7 +43,7 @@
             this.Registro.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Registro.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Registro.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.Registro.Location = new System.Drawing.Point(345, 182);
+            this.Registro.Location = new System.Drawing.Point(347, 120);
             this.Registro.Name = "Registro";
             this.Registro.Size = new System.Drawing.Size(243, 51);
             this.Registro.TabIndex = 6;
@@ -66,7 +66,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("MS Reference Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label1.Location = new System.Drawing.Point(189, 110);
+            this.label1.Location = new System.Drawing.Point(191, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(264, 16);
             this.label1.TabIndex = 10;
@@ -78,7 +78,7 @@
             this.Ingresar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Ingresar.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Ingresar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.Ingresar.Location = new System.Drawing.Point(55, 182);
+            this.Ingresar.Location = new System.Drawing.Point(57, 120);
             this.Ingresar.Name = "Ingresar";
             this.Ingresar.Size = new System.Drawing.Size(243, 51);
             this.Ingresar.TabIndex = 11;
@@ -89,7 +89,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(87, 148);
+            this.label3.Location = new System.Drawing.Point(89, 86);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(171, 13);
             this.label3.TabIndex = 12;
@@ -98,7 +98,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(350, 148);
+            this.label4.Location = new System.Drawing.Point(352, 86);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(234, 13);
             this.label4.TabIndex = 13;
@@ -109,7 +109,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(637, 261);
+            this.ClientSize = new System.Drawing.Size(637, 181);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.Ingresar);
@@ -118,7 +118,7 @@
             this.Controls.Add(this.Registro);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmInicio";
-            this.Text = "FRBA hotel";
+            this.Text = "PalcoNet";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PantallaPrincipal_FormClosing);
             this.Load += new System.EventHandler(this.PantallaPrincipal_Load);
             this.ResumeLayout(false);

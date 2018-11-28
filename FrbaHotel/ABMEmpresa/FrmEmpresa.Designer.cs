@@ -43,6 +43,7 @@
             this.btnAlta.TabIndex = 0;
             this.btnAlta.Text = "Alta";
             this.btnAlta.UseVisualStyleBackColor = true;
+            this.btnAlta.Click += new System.EventHandler(this.btnAlta_Click);
             // 
             // btnModif
             // 
@@ -72,8 +73,9 @@
             this.btnAtras.TabIndex = 3;
             this.btnAtras.Text = "Atras";
             this.btnAtras.UseVisualStyleBackColor = true;
+            this.btnAtras.Click += new System.EventHandler(this.btnAtras_Click);
             // 
-            // FrmCliente
+            // FrmEmpresa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -83,8 +85,8 @@
             this.Controls.Add(this.btnModif);
             this.Controls.Add(this.btnAlta);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "FrmCliente";
-            this.Text = "Administracion de Clientes";
+            this.Name = "FrmEmpresa";
+            this.Text = "Administracion de Empresas";
             this.ResumeLayout(false);
 
         }

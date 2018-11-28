@@ -213,11 +213,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rendicion\Rendicion.cs">
+    <Compile Include="ABMRendicion\FrmRendicion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Rendicion\Rendicion.Designer.cs">
-      <DependentUpon>Rendicion.cs</DependentUpon>
+    <Compile Include="ABMRendicion\FrmRendicion.Designer.cs">
+      <DependentUpon>FrmRendicion.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\FrmBuscador.cs">
       <SubType>Form</SubType>
@@ -303,8 +303,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Rendicion\Rendicion.resx">
-      <DependentUpon>Rendicion.cs</DependentUpon>
+    <EmbeddedResource Include="ABMRendicion\FrmRendicion.resx">
+      <DependentUpon>FrmRendicion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Utility\FrmBuscador.resx">
       <DependentUpon>FrmBuscador.cs</DependentUpon>

@@ -36,23 +36,23 @@
             this.lblDir = new System.Windows.Forms.Label();
             this.lblCiudad = new System.Windows.Forms.Label();
             this.lblNac = new System.Windows.Forms.Label();
-            this.txbNombre = new System.Windows.Forms.TextBox();
+            this.txbRazonSocial = new System.Windows.Forms.TextBox();
             this.txbMail = new System.Windows.Forms.TextBox();
             this.txbTel = new System.Windows.Forms.TextBox();
-            this.txbDir = new System.Windows.Forms.TextBox();
+            this.txbCalle = new System.Windows.Forms.TextBox();
             this.txbCiudad = new System.Windows.Forms.TextBox();
-            this.txbNacion = new System.Windows.Forms.TextBox();
+            this.txbCP = new System.Windows.Forms.TextBox();
             this.btnAceptar = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.chkActive = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txbDpto = new System.Windows.Forms.TextBox();
+            this.txbPiso = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txbCUIT = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.lblNro = new System.Windows.Forms.Label();
+            this.txbAltura = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lblID
@@ -67,15 +67,18 @@
             // lblNombre
             // 
             this.lblNombre.AutoSize = true;
-            this.lblNombre.Location = new System.Drawing.Point(16, 46);
+            this.lblNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNombre.ForeColor = System.Drawing.Color.Red;
+            this.lblNombre.Location = new System.Drawing.Point(4, 46);
             this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(70, 13);
+            this.lblNombre.Size = new System.Drawing.Size(82, 13);
             this.lblNombre.TabIndex = 1;
             this.lblNombre.Text = "RazonSocial:";
             // 
             // lblMail
             // 
             this.lblMail.AutoSize = true;
+            this.lblMail.ForeColor = System.Drawing.Color.Red;
             this.lblMail.Location = new System.Drawing.Point(44, 72);
             this.lblMail.Name = "lblMail";
             this.lblMail.Size = new System.Drawing.Size(39, 13);
@@ -94,6 +97,7 @@
             // lblDir
             // 
             this.lblDir.AutoSize = true;
+            this.lblDir.ForeColor = System.Drawing.Color.Red;
             this.lblDir.Location = new System.Drawing.Point(47, 130);
             this.lblDir.Name = "lblDir";
             this.lblDir.Size = new System.Drawing.Size(33, 13);
@@ -103,6 +107,7 @@
             // lblCiudad
             // 
             this.lblCiudad.AutoSize = true;
+            this.lblCiudad.ForeColor = System.Drawing.Color.Red;
             this.lblCiudad.Location = new System.Drawing.Point(27, 198);
             this.lblCiudad.Name = "lblCiudad";
             this.lblCiudad.Size = new System.Drawing.Size(56, 13);
@@ -112,18 +117,19 @@
             // lblNac
             // 
             this.lblNac.AutoSize = true;
+            this.lblNac.ForeColor = System.Drawing.Color.Red;
             this.lblNac.Location = new System.Drawing.Point(204, 178);
             this.lblNac.Name = "lblNac";
             this.lblNac.Size = new System.Drawing.Size(24, 13);
             this.lblNac.TabIndex = 10;
             this.lblNac.Text = "CP:";
             // 
-            // txbNombre
+            // txbRazonSocial
             // 
-            this.txbNombre.Location = new System.Drawing.Point(92, 43);
-            this.txbNombre.Name = "txbNombre";
-            this.txbNombre.Size = new System.Drawing.Size(245, 20);
-            this.txbNombre.TabIndex = 1;
+            this.txbRazonSocial.Location = new System.Drawing.Point(92, 43);
+            this.txbRazonSocial.Name = "txbRazonSocial";
+            this.txbRazonSocial.Size = new System.Drawing.Size(245, 20);
+            this.txbRazonSocial.TabIndex = 1;
             // 
             // txbMail
             // 
@@ -139,12 +145,12 @@
             this.txbTel.Size = new System.Drawing.Size(84, 20);
             this.txbTel.TabIndex = 6;
             // 
-            // txbDir
+            // txbCalle
             // 
-            this.txbDir.Location = new System.Drawing.Point(92, 123);
-            this.txbDir.Name = "txbDir";
-            this.txbDir.Size = new System.Drawing.Size(245, 20);
-            this.txbDir.TabIndex = 8;
+            this.txbCalle.Location = new System.Drawing.Point(92, 123);
+            this.txbCalle.Name = "txbCalle";
+            this.txbCalle.Size = new System.Drawing.Size(245, 20);
+            this.txbCalle.TabIndex = 8;
             // 
             // txbCiudad
             // 
@@ -153,12 +159,12 @@
             this.txbCiudad.Size = new System.Drawing.Size(100, 20);
             this.txbCiudad.TabIndex = 9;
             // 
-            // txbNacion
+            // txbCP
             // 
-            this.txbNacion.Location = new System.Drawing.Point(237, 175);
-            this.txbNacion.Name = "txbNacion";
-            this.txbNacion.Size = new System.Drawing.Size(100, 20);
-            this.txbNacion.TabIndex = 10;
+            this.txbCP.Location = new System.Drawing.Point(237, 175);
+            this.txbCP.Name = "txbCP";
+            this.txbCP.Size = new System.Drawing.Size(100, 20);
+            this.txbCP.TabIndex = 10;
             // 
             // btnAceptar
             // 
@@ -168,6 +174,7 @@
             this.btnAceptar.TabIndex = 13;
             this.btnAceptar.Text = "Aceptar";
             this.btnAceptar.UseVisualStyleBackColor = true;
+            this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
             // btnCancel
             // 
@@ -178,6 +185,7 @@
             this.btnCancel.TabIndex = 14;
             this.btnCancel.Text = "Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // chkActive
             // 
@@ -189,19 +197,19 @@
             this.chkActive.Text = "Activo";
             this.chkActive.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txbDpto
             // 
-            this.textBox1.Location = new System.Drawing.Point(92, 172);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 16;
+            this.txbDpto.Location = new System.Drawing.Point(92, 172);
+            this.txbDpto.Name = "txbDpto";
+            this.txbDpto.Size = new System.Drawing.Size(100, 20);
+            this.txbDpto.TabIndex = 16;
             // 
-            // textBox2
+            // txbPiso
             // 
-            this.textBox2.Location = new System.Drawing.Point(237, 149);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 17;
+            this.txbPiso.Location = new System.Drawing.Point(237, 149);
+            this.txbPiso.Name = "txbPiso";
+            this.txbPiso.Size = new System.Drawing.Size(100, 20);
+            this.txbPiso.TabIndex = 17;
             // 
             // label1
             // 
@@ -221,37 +229,39 @@
             this.label2.TabIndex = 19;
             this.label2.Text = "Dpto:";
             // 
-            // textBox3
+            // txbCUIT
             // 
-            this.textBox3.Location = new System.Drawing.Point(237, 95);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 20;
+            this.txbCUIT.Location = new System.Drawing.Point(237, 95);
+            this.txbCUIT.Name = "txbCUIT";
+            this.txbCUIT.Size = new System.Drawing.Size(100, 20);
+            this.txbCUIT.TabIndex = 20;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.Red;
             this.label4.Location = new System.Drawing.Point(197, 98);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(35, 13);
             this.label4.TabIndex = 21;
             this.label4.Text = "CUIT:";
             // 
-            // label5
+            // lblNro
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(50, 154);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(30, 13);
-            this.label5.TabIndex = 22;
-            this.label5.Text = "Piso:";
+            this.lblNro.AutoSize = true;
+            this.lblNro.ForeColor = System.Drawing.Color.Red;
+            this.lblNro.Location = new System.Drawing.Point(44, 152);
+            this.lblNro.Name = "lblNro";
+            this.lblNro.Size = new System.Drawing.Size(37, 13);
+            this.lblNro.TabIndex = 22;
+            this.lblNro.Text = "Altura:";
             // 
-            // textBox4
+            // txbAltura
             // 
-            this.textBox4.Location = new System.Drawing.Point(92, 149);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 23;
+            this.txbAltura.Location = new System.Drawing.Point(92, 149);
+            this.txbAltura.Name = "txbAltura";
+            this.txbAltura.Size = new System.Drawing.Size(100, 20);
+            this.txbAltura.TabIndex = 23;
             // 
             // FrmModEmp
             // 
@@ -260,23 +270,23 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(356, 286);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.txbAltura);
+            this.Controls.Add(this.lblNro);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.txbCUIT);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txbPiso);
+            this.Controls.Add(this.txbDpto);
             this.Controls.Add(this.chkActive);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAceptar);
-            this.Controls.Add(this.txbNacion);
+            this.Controls.Add(this.txbCP);
             this.Controls.Add(this.txbCiudad);
-            this.Controls.Add(this.txbDir);
+            this.Controls.Add(this.txbCalle);
             this.Controls.Add(this.txbTel);
             this.Controls.Add(this.txbMail);
-            this.Controls.Add(this.txbNombre);
+            this.Controls.Add(this.txbRazonSocial);
             this.Controls.Add(this.lblNac);
             this.Controls.Add(this.lblCiudad);
             this.Controls.Add(this.lblDir);
@@ -302,22 +312,22 @@
         private System.Windows.Forms.Label lblDir;
         private System.Windows.Forms.Label lblCiudad;
         private System.Windows.Forms.Label lblNac;
-        private System.Windows.Forms.TextBox txbNombre;
+        private System.Windows.Forms.TextBox txbRazonSocial;
         private System.Windows.Forms.TextBox txbMail;
         private System.Windows.Forms.TextBox txbTel;
-        private System.Windows.Forms.TextBox txbDir;
+        private System.Windows.Forms.TextBox txbCalle;
         private System.Windows.Forms.TextBox txbCiudad;
-        private System.Windows.Forms.TextBox txbNacion;
+        private System.Windows.Forms.TextBox txbCP;
         private System.Windows.Forms.Button btnAceptar;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.CheckBox chkActive;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txbDpto;
+        private System.Windows.Forms.TextBox txbPiso;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txbCUIT;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label lblNro;
+        private System.Windows.Forms.TextBox txbAltura;
     }
 }

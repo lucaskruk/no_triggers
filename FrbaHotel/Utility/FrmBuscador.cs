@@ -234,8 +234,11 @@ namespace PalcoNet.Utility
 
             if (this.campo6 != null && this.campo6 != "")
             {
-                resultado = string.Concat(resultado, this.campo6, " like ('%", txbFil6.Text, "%')");
-                
+                if (txbFil6.Text != "")
+                {
+                    resultado = string.Concat(resultado, this.campo6, " = '", txbFil6.Text, "'");
+                }
+                else { resultado = " 1=1"; }
                 
                 
             }
@@ -357,7 +360,9 @@ namespace PalcoNet.Utility
 
         private void FrmBuscador_Load(object sender, EventArgs e)
         {
+            
             inicializar();
+            
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

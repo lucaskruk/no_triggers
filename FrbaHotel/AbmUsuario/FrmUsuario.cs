@@ -13,46 +13,62 @@ namespace PalcoNet.AbmUsuario
 {
     public partial class FrmUsuario : Form
     {
-        int idCliente=0;
+        
         public FrmUsuario()
         {
             InitializeComponent();
         }
 
-        private void llamarBuscador()
+        private int llamarBuscador()
         
         {
             using (var frmCsearch = new FrmBuscador())
             {
-                frmCsearch.setBuscar("cliente");
-                frmCsearch.setCampos("id_cliente,cliente_estado,cliente_nombre,cliente_apellido,cliente_email,cliente_fecha_nacimiento,id_tipo_documento,cliente_numero_documento,cliente_telefono,id_direccion,id_pais");
-                frmCsearch.setCampo1("cliente_nombre", "Nombre:");
-                frmCsearch.setCampo2("cliente_apellido", "Apellido: ");
-                frmCsearch.setSPcomboB("select * from [no_triggers].tipo_documento", "Tipo Doc.: ", "id_tipo_documento", "tipo_de_documento_nombre");
-                frmCsearch.setCampo6("cliente_numero_documento", "Nro. Doc.: ");
-                frmCsearch.setCampo5("cliente_email", "E-Mail: ");
+                frmCsearch.setBuscar("usuario");
+                frmCsearch.setCampos("id_usuario,username");
+                frmCsearch.setCampo1("username", "Usuario: ");
                 var result = frmCsearch.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    this.idCliente = frmCsearch.getID();
+                    return frmCsearch.getID();
                 }
+                else return 0;
             }
         }
 
 
         private void btnModif_Click(object sender, EventArgs e)
         {
-            llamarBuscador();    
+            FrmModUser frmMUser = new FrmModUser();
+            frmMUser.toggleAltaOff();
+            frmMUser.setIdUser(llamarBuscador());
+            if (frmMUser.getIdUser() != 0)
+            {
+                frmMUser.ShowDialog();
+            }
         }
 
         private void btnBaja_Click(object sender, EventArgs e)
         {
-            llamarBuscador(); 
+            Utils.execSPnoReturn(String.Concat("sp_set_user_estado ", Convert.ToString(llamarBuscador()),",0")); 
         }
 
         private void FrmUsuario_Load(object sender, EventArgs e)
         {
 
+        }
+
+
+        private void btnAtras_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnAlta_Click_1(object sender, EventArgs e)
+        {
+            FrmModUser frmMUser = new FrmModUser();
+            frmMUser.toggleAltaOn();
+            frmMUser.ShowDialog();
         }
     }
 }

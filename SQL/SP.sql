@@ -572,17 +572,9 @@ create procedure [NO_TRIGGERS].sp_quita_rol
 @user_id int, @rol_id int
 	AS
 		delete [NO_TRIGGERS].usuario_roles where id_usuario=@user_id and id_rol=@Rol_id
-	GO
-IF OBJECT_ID ('[NO_TRIGGERS].sp_quita_hotel','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_quita_hotel
-go
+GO
 
-create procedure [NO_TRIGGERS].sp_quita_hotel
-@user_id int, @hotel_id int
-	AS
-		delete [NO_TRIGGERS].usuario_por_hotel where id_usuario=@user_id and id_hotel=@hotel_id
-	GO
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_agrega_urole','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_agrega_urole
+IF OBJECT_ID ('[NO_TRIGGERS].sp_agrega_rol','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_agrega_urole
 go
 --select * from [no_triggers].rol
 create procedure [NO_TRIGGERS].sp_agrega_urole
@@ -592,19 +584,7 @@ create procedure [NO_TRIGGERS].sp_agrega_urole
 	begin
 	insert into [NO_TRIGGERS].usuario_roles (id_rol,id_usuario) values (@Rol_id,@user_id)
 	end
-	GO
-
-IF OBJECT_ID ('[NO_TRIGGERS].sp_agrega_uhotel','P') IS NOT NULL drop procedure [NO_TRIGGERS].sp_agrega_uhotel
-go
---select * from [no_triggers].rol
-create procedure [NO_TRIGGERS].sp_agrega_uhotel
-	@user_id int, @hotel_id int
-	AS
-	if not exists (select 1 from [NO_TRIGGERS].usuario_por_hotel where id_hotel=@hotel_id and id_usuario=@user_id)
-	begin
-	insert into [NO_TRIGGERS].usuario_por_hotel(id_hotel,id_usuario) values (@hotel_id,@user_id)
-	end
-	GO
+GO
 
 
 
@@ -639,15 +619,6 @@ as
 go
 
 
-IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_tipo_DNI') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_tipo_DNI
-go
-create procedure [NO_TRIGGERS].sp_lis_tipo_DNI
-
-as
-	select id_tipo_documento,tipo_de_documento_nombre
-	from [NO_TRIGGERS].Tipo_documento
-go
-
 IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_usu_roles') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_usu_roles
 go
 create procedure [NO_TRIGGERS].sp_lis_usu_roles
@@ -658,19 +629,7 @@ as
 	join [NO_TRIGGERS].usuario_roles ur on r.id_rol=ur.id_rol
 	where ur.id_usuario=@idUser
 go
---exec [no_triggers].sp_lis_usu_roles 1
 
-IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_usu_id_hotel') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_usu_id_hotel
-go
-create procedure [NO_TRIGGERS].sp_lis_usu_id_hotel (@idUser int)
-as 
-begin
-select h.id_hotel,hotel_nombre, hotel_estado  from [NO_TRIGGERS].hotel h
-join [NO_TRIGGERS].usuario_por_hotel uh on h.id_hotel=uh.id_hotel
-where uh.id_usuario=@idUser
-end
-go
---exec [no_triggers].sp_lis_usu_id_hotel 1
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_u_roles_libres') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_u_roles_libres
 go
@@ -680,20 +639,10 @@ as
 	select r.id_rol, rol_nombre	from [NO_TRIGGERS].Rol r
 	where id_rol not in (select id_rol from [NO_TRIGGERS].usuario_roles ur	where ur.id_usuario=@idUser) and rol_estado=1
 go
---exec [no_triggers].sp_lis_u_roles_libres 2
 
-IF OBJECT_ID ('[NO_TRIGGERS].sp_lis_u_hotel_libres') IS NOT NULL drop procedure [NO_TRIGGERS].sp_lis_u_hotel_libres
-go
-create procedure [NO_TRIGGERS].sp_lis_u_hotel_libres (@idUser int)
-as 
-begin
-select h.id_hotel,hotel_nombre, hotel_estado  from [NO_TRIGGERS].hotel h
-where id_hotel not in (select id_hotel from [NO_TRIGGERS].usuario_por_hotel uh where uh.id_usuario=@idUser) and hotel_estado=1
-end
-go
--- exec [NO_TRIGGERS].sp_lis_u_hotel_libres 2
 --getters and setters de variables: username, nombre, apellido, contraseña (solo set), email, fechaNAC,tipoDoc,nroDoc
 --Setters:
+
 IF OBJECT_ID ('[NO_TRIGGERS].sp_set_usuario_datos') IS NOT NULL drop procedure [NO_TRIGGERS].sp_set_usuario_datos
 go
 create procedure [NO_TRIGGERS].sp_set_usuario_datos (@idUser int, @usern nvarchar(100), @nombre nvarchar(100), @apell nvarchar(100), @email nvarchar(100), @fechanac nvarchar(100), @tipoD int, @ndoc int, @ntel int)
@@ -714,22 +663,7 @@ where u.id_usuario=@idUser
 end
 go
 
-IF OBJECT_ID ('[NO_TRIGGERS].sp_crear_usuario') IS NOT NULL drop procedure [NO_TRIGGERS].sp_crear_usuario
-go
 
-create procedure [NO_TRIGGERS].sp_crear_usuario --se decide que el usuario quede habilitado al crearse--
-@uname nvarchar(100), @nombre nvarchar(200), @apellido nvarchar(100), @pass nvarchar(100), @email nvarchar(200), @fechanac nvarchar(20), @tipodoc int, @n_doc nvarchar(50), @ntel nvarchar(50)
-AS
-BEGIN
-DECLARE @responseMessage nvarchar(250) 
-	SET NOCOUNT ON 
-
-		INSERT INTO [NO_TRIGGERS].Usuario 
-		(usuario_username,usuario_nombre,usuario_apellido,usuario_password,usuario_email,usuario_fecha_nacimiento,usuario_cantidad_intentos_fallidos
-		,id_tipo_documento,usuario_numero_documento,usuario_telefono,usuario_habilitado	)
-		VALUES (@uname, @nombre, @apellido, [NO_TRIGGERS].fn_encriptar(@pass), @email, CONVERT(date,@fechanac,103), 0,@tipodoc, @n_doc, @ntel,1)
-END
-go
 
 
 IF OBJECT_ID ('[NO_TRIGGERS].sp_user_Set_pass') IS NOT NULL drop procedure [NO_TRIGGERS].sp_user_Set_pass

@@ -43,6 +43,18 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.rbCliente = new System.Windows.Forms.RadioButton();
             this.rbEmpresa = new System.Windows.Forms.RadioButton();
+            this.gBxAdmin = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.btnQuitaRol = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cbxQuitaRol = new System.Windows.Forms.ComboBox();
+            this.lbxQuitaRol = new System.Windows.Forms.ListBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.btnAgregaRol = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbxAgregaRol = new System.Windows.Forms.ComboBox();
+            this.lbxAgregaRol = new System.Windows.Forms.ListBox();
+            this.gBxAdmin.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblID
@@ -79,13 +91,12 @@
             // chkActive
             // 
             this.chkActive.AutoSize = true;
-            this.chkActive.Location = new System.Drawing.Point(19, 132);
+            this.chkActive.Location = new System.Drawing.Point(15, 19);
             this.chkActive.Name = "chkActive";
-            this.chkActive.Size = new System.Drawing.Size(73, 17);
+            this.chkActive.Size = new System.Drawing.Size(95, 17);
             this.chkActive.TabIndex = 11;
-            this.chkActive.Text = "Habilitado";
+            this.chkActive.Text = "Usuario Activo";
             this.chkActive.UseVisualStyleBackColor = true;
-            this.chkActive.CheckedChanged += new System.EventHandler(this.chkActive_CheckedChanged);
             // 
             // btnAceptar
             // 
@@ -164,6 +175,7 @@
             this.btnClear.TabIndex = 20;
             this.btnClear.Text = "Limpiar";
             this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Visible = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // rbCliente
@@ -188,6 +200,115 @@
             this.rbEmpresa.Text = "Empresa";
             this.rbEmpresa.UseVisualStyleBackColor = true;
             // 
+            // gBxAdmin
+            // 
+            this.gBxAdmin.Controls.Add(this.button3);
+            this.gBxAdmin.Controls.Add(this.btnQuitaRol);
+            this.gBxAdmin.Controls.Add(this.label2);
+            this.gBxAdmin.Controls.Add(this.cbxQuitaRol);
+            this.gBxAdmin.Controls.Add(this.lbxQuitaRol);
+            this.gBxAdmin.Controls.Add(this.button2);
+            this.gBxAdmin.Controls.Add(this.btnAgregaRol);
+            this.gBxAdmin.Controls.Add(this.label1);
+            this.gBxAdmin.Controls.Add(this.cbxAgregaRol);
+            this.gBxAdmin.Controls.Add(this.lbxAgregaRol);
+            this.gBxAdmin.Controls.Add(this.chkActive);
+            this.gBxAdmin.Location = new System.Drawing.Point(347, 9);
+            this.gBxAdmin.Name = "gBxAdmin";
+            this.gBxAdmin.Size = new System.Drawing.Size(288, 239);
+            this.gBxAdmin.TabIndex = 42;
+            this.gBxAdmin.TabStop = false;
+            this.gBxAdmin.Text = "Opciones Administrativas";
+            this.gBxAdmin.Visible = false;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(152, 112);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 22;
+            this.button3.Text = "Vaciar Lista";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // btnQuitaRol
+            // 
+            this.btnQuitaRol.Location = new System.Drawing.Point(152, 83);
+            this.btnQuitaRol.Name = "btnQuitaRol";
+            this.btnQuitaRol.Size = new System.Drawing.Size(75, 23);
+            this.btnQuitaRol.TabIndex = 21;
+            this.btnQuitaRol.Text = "Enlistar";
+            this.btnQuitaRol.UseVisualStyleBackColor = true;
+            this.btnQuitaRol.Click += new System.EventHandler(this.btnQuitaRol_Click_1);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(149, 45);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 13);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Quitar Roles";
+            // 
+            // cbxQuitaRol
+            // 
+            this.cbxQuitaRol.FormattingEnabled = true;
+            this.cbxQuitaRol.Location = new System.Drawing.Point(149, 64);
+            this.cbxQuitaRol.Name = "cbxQuitaRol";
+            this.cbxQuitaRol.Size = new System.Drawing.Size(121, 21);
+            this.cbxQuitaRol.TabIndex = 19;
+            // 
+            // lbxQuitaRol
+            // 
+            this.lbxQuitaRol.FormattingEnabled = true;
+            this.lbxQuitaRol.Location = new System.Drawing.Point(152, 141);
+            this.lbxQuitaRol.Name = "lbxQuitaRol";
+            this.lbxQuitaRol.Size = new System.Drawing.Size(120, 95);
+            this.lbxQuitaRol.TabIndex = 18;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(18, 112);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 17;
+            this.button2.Text = "Vaciar Lista";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // btnAgregaRol
+            // 
+            this.btnAgregaRol.Location = new System.Drawing.Point(18, 83);
+            this.btnAgregaRol.Name = "btnAgregaRol";
+            this.btnAgregaRol.Size = new System.Drawing.Size(75, 23);
+            this.btnAgregaRol.TabIndex = 16;
+            this.btnAgregaRol.Text = "Enlistar";
+            this.btnAgregaRol.UseVisualStyleBackColor = true;
+            this.btnAgregaRol.Click += new System.EventHandler(this.btnAgregaRol_Click_1);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(15, 45);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(74, 13);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "Agregar Roles";
+            // 
+            // cbxAgregaRol
+            // 
+            this.cbxAgregaRol.FormattingEnabled = true;
+            this.cbxAgregaRol.Location = new System.Drawing.Point(15, 64);
+            this.cbxAgregaRol.Name = "cbxAgregaRol";
+            this.cbxAgregaRol.Size = new System.Drawing.Size(121, 21);
+            this.cbxAgregaRol.TabIndex = 14;
+            // 
+            // lbxAgregaRol
+            // 
+            this.lbxAgregaRol.FormattingEnabled = true;
+            this.lbxAgregaRol.Location = new System.Drawing.Point(18, 141);
+            this.lbxAgregaRol.Name = "lbxAgregaRol";
+            this.lbxAgregaRol.Size = new System.Drawing.Size(120, 95);
+            this.lbxAgregaRol.TabIndex = 13;
+            // 
             // FrmModUser
             // 
             this.AcceptButton = this.btnAceptar;
@@ -196,7 +317,8 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(355, 253);
+            this.ClientSize = new System.Drawing.Size(639, 253);
+            this.Controls.Add(this.gBxAdmin);
             this.Controls.Add(this.rbEmpresa);
             this.Controls.Add(this.rbCliente);
             this.Controls.Add(this.btnClear);
@@ -207,7 +329,6 @@
             this.Controls.Add(this.txbUname);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAceptar);
-            this.Controls.Add(this.chkActive);
             this.Controls.Add(this.lblPass);
             this.Controls.Add(this.lblUsername);
             this.Controls.Add(this.lblID);
@@ -215,6 +336,8 @@
             this.Name = "FrmModUser";
             this.Text = "Alta/Modificacion Usuario";
             this.Load += new System.EventHandler(this.FrmModUser_Load);
+            this.gBxAdmin.ResumeLayout(false);
+            this.gBxAdmin.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -236,5 +359,16 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.RadioButton rbCliente;
         private System.Windows.Forms.RadioButton rbEmpresa;
+        private System.Windows.Forms.GroupBox gBxAdmin;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnAgregaRol;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbxAgregaRol;
+        private System.Windows.Forms.ListBox lbxAgregaRol;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnQuitaRol;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbxQuitaRol;
+        private System.Windows.Forms.ListBox lbxQuitaRol;
     }
 }

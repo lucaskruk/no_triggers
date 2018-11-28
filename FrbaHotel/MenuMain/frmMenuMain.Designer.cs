@@ -41,6 +41,9 @@
             this.btnHistorial8 = new System.Windows.Forms.Button();
             this.btnLogoff = new System.Windows.Forms.Button();
             this.btnListado11 = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnUsuario = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnRendicion10
@@ -49,7 +52,7 @@
             this.btnRendicion10.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnRendicion10.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRendicion10.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnRendicion10.Location = new System.Drawing.Point(2, 51);
+            this.btnRendicion10.Location = new System.Drawing.Point(3, 3);
             this.btnRendicion10.Name = "btnRendicion10";
             this.btnRendicion10.Size = new System.Drawing.Size(211, 42);
             this.btnRendicion10.TabIndex = 6;
@@ -64,7 +67,7 @@
             this.btnCompra7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCompra7.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCompra7.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnCompra7.Location = new System.Drawing.Point(2, 3);
+            this.btnCompra7.Location = new System.Drawing.Point(220, 51);
             this.btnCompra7.Name = "btnCompra7";
             this.btnCompra7.Size = new System.Drawing.Size(211, 42);
             this.btnCompra7.TabIndex = 2;
@@ -79,7 +82,7 @@
             this.btnCanje9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCanje9.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCanje9.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnCanje9.Location = new System.Drawing.Point(2, 51);
+            this.btnCanje9.Location = new System.Drawing.Point(220, 99);
             this.btnCanje9.Name = "btnCanje9";
             this.btnCanje9.Size = new System.Drawing.Size(211, 42);
             this.btnCanje9.TabIndex = 5;
@@ -94,11 +97,11 @@
             this.btnEmpresa3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnEmpresa3.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEmpresa3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnEmpresa3.Location = new System.Drawing.Point(219, 51);
+            this.btnEmpresa3.Location = new System.Drawing.Point(3, 99);
             this.btnEmpresa3.Name = "btnEmpresa3";
             this.btnEmpresa3.Size = new System.Drawing.Size(211, 42);
             this.btnEmpresa3.TabIndex = 9;
-            this.btnEmpresa3.Text = "Empresas de Espectaculos";
+            this.btnEmpresa3.Text = "Empresas";
             this.btnEmpresa3.UseVisualStyleBackColor = false;
             this.btnEmpresa3.Visible = false;
             this.btnEmpresa3.Click += new System.EventHandler(this.btnEmpresa3_Click);
@@ -109,7 +112,7 @@
             this.btnRubro4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnRubro4.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRubro4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnRubro4.Location = new System.Drawing.Point(219, 99);
+            this.btnRubro4.Location = new System.Drawing.Point(3, 243);
             this.btnRubro4.Name = "btnRubro4";
             this.btnRubro4.Size = new System.Drawing.Size(211, 42);
             this.btnRubro4.TabIndex = 10;
@@ -124,7 +127,7 @@
             this.btnPublicacion6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPublicacion6.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPublicacion6.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnPublicacion6.Location = new System.Drawing.Point(2, 51);
+            this.btnPublicacion6.Location = new System.Drawing.Point(220, 195);
             this.btnPublicacion6.Name = "btnPublicacion6";
             this.btnPublicacion6.Size = new System.Drawing.Size(211, 42);
             this.btnPublicacion6.TabIndex = 1;
@@ -139,7 +142,7 @@
             this.btnGrado5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnGrado5.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGrado5.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnGrado5.Location = new System.Drawing.Point(2, 99);
+            this.btnGrado5.Location = new System.Drawing.Point(3, 195);
             this.btnGrado5.Name = "btnGrado5";
             this.btnGrado5.Size = new System.Drawing.Size(211, 42);
             this.btnGrado5.TabIndex = 4;
@@ -154,11 +157,11 @@
             this.btnRol1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnRol1.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRol1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnRol1.Location = new System.Drawing.Point(2, 3);
+            this.btnRol1.Location = new System.Drawing.Point(3, 291);
             this.btnRol1.Name = "btnRol1";
             this.btnRol1.Size = new System.Drawing.Size(211, 42);
             this.btnRol1.TabIndex = 7;
-            this.btnRol1.Text = "Administración de roles de usuario";
+            this.btnRol1.Text = "Administración de Roles";
             this.btnRol1.UseVisualStyleBackColor = false;
             this.btnRol1.Visible = false;
             this.btnRol1.Click += new System.EventHandler(this.btnRol1_Click);
@@ -169,7 +172,7 @@
             this.btnCliente2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnCliente2.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCliente2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnCliente2.Location = new System.Drawing.Point(2, 99);
+            this.btnCliente2.Location = new System.Drawing.Point(3, 51);
             this.btnCliente2.Name = "btnCliente2";
             this.btnCliente2.Size = new System.Drawing.Size(211, 42);
             this.btnCliente2.TabIndex = 8;
@@ -184,7 +187,7 @@
             this.btnHistorial8.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnHistorial8.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHistorial8.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnHistorial8.Location = new System.Drawing.Point(2, 99);
+            this.btnHistorial8.Location = new System.Drawing.Point(220, 147);
             this.btnHistorial8.Name = "btnHistorial8";
             this.btnHistorial8.Size = new System.Drawing.Size(211, 42);
             this.btnHistorial8.TabIndex = 3;
@@ -200,7 +203,7 @@
             this.btnLogoff.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnLogoff.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogoff.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnLogoff.Location = new System.Drawing.Point(2, 173);
+            this.btnLogoff.Location = new System.Drawing.Point(220, 243);
             this.btnLogoff.Name = "btnLogoff";
             this.btnLogoff.Size = new System.Drawing.Size(211, 42);
             this.btnLogoff.TabIndex = 11;
@@ -214,7 +217,7 @@
             this.btnListado11.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnListado11.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnListado11.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnListado11.Location = new System.Drawing.Point(219, 3);
+            this.btnListado11.Location = new System.Drawing.Point(3, 147);
             this.btnListado11.Name = "btnListado11";
             this.btnListado11.Size = new System.Drawing.Size(211, 42);
             this.btnListado11.TabIndex = 25;
@@ -222,6 +225,48 @@
             this.btnListado11.UseVisualStyleBackColor = false;
             this.btnListado11.Visible = false;
             this.btnListado11.Click += new System.EventHandler(this.btnListado11_Click);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel1.Controls.Add(this.btnRendicion10);
+            this.flowLayoutPanel1.Controls.Add(this.btnCliente2);
+            this.flowLayoutPanel1.Controls.Add(this.btnEmpresa3);
+            this.flowLayoutPanel1.Controls.Add(this.btnListado11);
+            this.flowLayoutPanel1.Controls.Add(this.btnGrado5);
+            this.flowLayoutPanel1.Controls.Add(this.btnRubro4);
+            this.flowLayoutPanel1.Controls.Add(this.btnRol1);
+            this.flowLayoutPanel1.Controls.Add(this.btnUsuario);
+            this.flowLayoutPanel1.Controls.Add(this.btnCompra7);
+            this.flowLayoutPanel1.Controls.Add(this.btnCanje9);
+            this.flowLayoutPanel1.Controls.Add(this.btnHistorial8);
+            this.flowLayoutPanel1.Controls.Add(this.btnPublicacion6);
+            this.flowLayoutPanel1.Controls.Add(this.btnLogoff);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.MaximumSize = new System.Drawing.Size(440, 600);
+            this.flowLayoutPanel1.MinimumSize = new System.Drawing.Size(213, 150);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(440, 364);
+            this.flowLayoutPanel1.TabIndex = 26;
+            this.flowLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
+            // 
+            // btnUsuario
+            // 
+            this.btnUsuario.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnUsuario.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnUsuario.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUsuario.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnUsuario.Location = new System.Drawing.Point(220, 3);
+            this.btnUsuario.Name = "btnUsuario";
+            this.btnUsuario.Size = new System.Drawing.Size(211, 42);
+            this.btnUsuario.TabIndex = 27;
+            this.btnUsuario.Text = "Administración de Usuarios";
+            this.btnUsuario.UseVisualStyleBackColor = false;
+            this.btnUsuario.Visible = false;
+            this.btnUsuario.Click += new System.EventHandler(this.btnUsuario_Click);
             // 
             // FrmMenu
             // 
@@ -232,25 +277,16 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.CancelButton = this.btnLogoff;
-            this.ClientSize = new System.Drawing.Size(456, 217);
-            this.Controls.Add(this.btnListado11);
-            this.Controls.Add(this.btnLogoff);
-            this.Controls.Add(this.btnHistorial8);
-            this.Controls.Add(this.btnGrado5);
-            this.Controls.Add(this.btnRol1);
-            this.Controls.Add(this.btnCliente2);
-            this.Controls.Add(this.btnPublicacion6);
-            this.Controls.Add(this.btnRubro4);
-            this.Controls.Add(this.btnEmpresa3);
-            this.Controls.Add(this.btnCanje9);
-            this.Controls.Add(this.btnCompra7);
-            this.Controls.Add(this.btnRendicion10);
+            this.ClientSize = new System.Drawing.Size(440, 364);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMenu";
             this.Text = "Menu Principal - PalcoNet";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_FormClosing);
             this.Load += new System.EventHandler(this.MenuMain_Load);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -268,5 +304,7 @@
         private System.Windows.Forms.Button btnHistorial8;
         private System.Windows.Forms.Button btnLogoff;
         private System.Windows.Forms.Button btnListado11;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button btnUsuario;
     }
 }

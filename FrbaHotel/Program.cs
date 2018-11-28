@@ -19,7 +19,7 @@ namespace PalcoNet
         [STAThread]
         static void Main()
         {
-            if (DateTime.TryParseExact(CommonVars.fecha, "dd-MM-yyyy", null, DateTimeStyles.None, out CommonVars.todayDate))
+            if (DateTime.TryParseExact(CommonVars.fecha, "dd/MM/yyyy", null, DateTimeStyles.None, out CommonVars.todayDate))
             {}
             else {
                 MessageBox.Show("Fecha en el App.Config mal ingresada");

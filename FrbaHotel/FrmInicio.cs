@@ -1,4 +1,5 @@
-﻿using PalcoNet.Login;
+﻿using PalcoNet.AbmUsuario;
+using PalcoNet.Login;
 using PalcoNet.Utility;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,11 @@ namespace PalcoNet
 
         private void Registro_Click(object sender, EventArgs e)
         {
-            
+            this.Hide();
+            FrmModUser frmMUser = new FrmModUser();
+            frmMUser.toggleAltaOn();
+            frmMUser.ShowDialog();
+            this.Show();
         }
   
         private void PantallaPrincipal_Load(object sender, EventArgs e)

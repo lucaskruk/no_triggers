@@ -3,7 +3,7 @@ using PalcoNet.AbmFactura;
 //using PalcoNet.AbmHabitacion;
 
 using PalcoNet.AbmRol;
-using PalcoNet.AbmPublicacion;
+
 using PalcoNet.ListadoEstadistico;
 using PalcoNet.Utility;
 using System;
@@ -15,6 +15,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PalcoNet.AbmUsuario;
+using PalcoNet.AbmEmpresa;
+using PalcoNet.AbmCliente;
+using PalcoNet.ABMGrado;
+using ABMComprar;
+using Historial;
+using PalcoNet.ABMPremio;
+using PalcoNet.ABMRendicion;
+
 
 namespace PalcoNet.Login
 {
@@ -39,10 +48,17 @@ namespace PalcoNet.Login
             btnHistorial8.Visible = false;
             btnCanje9.Visible = false;
             btnRendicion10.Visible = false;
+            btnListado11.Visible = false;
+            btnUsuario.Visible = false;
             // MessageBox.Show(Convert.ToString(CommonVars.idHotelSeleccionado));
             
 
             // Habilita botones segun funcionalidades
+            if (Utils.checkAccesoABM("Usuario") == 1)
+            {
+                btnUsuario.Visible = true;
+            }
+
             if (Utils.checkAccesoABM("Rol") == 1)
             {
                 btnRol1.Visible = true;
@@ -119,7 +135,11 @@ namespace PalcoNet.Login
             // Autosave and clear up ressources
         }
 
-
+        private void btnUsuario_Click(object sender, EventArgs e)
+        {
+            FrmUsuario frmUser = new FrmUsuario();
+            frmUser.ShowDialog();
+        }
 
         private void btnRol1_Click(object sender, EventArgs e)
         {
@@ -129,63 +149,65 @@ namespace PalcoNet.Login
 
         private void btnCliente2_Click(object sender, EventArgs e)
         {
-            //FrmUsuario frmUsr = new FrmUsuario();
-            //frmUsr.ShowDialog();
+            FrmCliente frmCli= new FrmCliente();
+            frmCli.ShowDialog();
         }
 
         private void btnEmpresa3_Click(object sender, EventArgs e)
         {
-           // FrmHotel frmHot = new FrmHotel();
-           // frmHot.ShowDialog();
+            FrmEmpresa frmEmp = new FrmEmpresa();
+            frmEmp.ShowDialog();
         }
 
         private void btnRubro4_Click(object sender, EventArgs e)
         {
-            //FrmGrado frmHab = new FrmGrado();
-            //frmHab.ShowDialog();
+
         }
 
         private void btnGrado5_Click(object sender, EventArgs e)
+        {
+            FrmModGrado frmGrad = new FrmModGrado();
+            frmGrad.ShowDialog();
+        }
+
+        private void btnPublicacion6_Click(object sender, EventArgs e)
+        {
+            FrmPubli frmPub = new FrmPubli();
+            frmPub.ShowDialog();
+        }
+        private void btnCompra7_Click(object sender, EventArgs e)
+        {
+            FrmComprar frmBuy = new FrmComprar();
+            frmBuy.ShowDialog();
+        }
+
+        private void btnHistorial8_Click(object sender, EventArgs e)
+        {
+            FrmHistorial frmHis = new FrmHistorial();
+            frmHis.ShowDialog();
+        }
+
+        private void btnCanje9_Click(object sender, EventArgs e)
+        {
+            FrmCanje frmCan = new FrmCanje();
+            frmCan.ShowDialog();
+        }
+
+        private void btnRendicion10_Click(object sender, EventArgs e)
+        {
+            FrmRendicion frmRend = new FrmRendicion();
+            frmRend.ShowDialog();
+        }
+
+        private void btnListado11_Click(object sender, EventArgs e)
         {
             FrmListado frmLis = new FrmListado();
             frmLis.ShowDialog();
         }
 
-        private void btnPublicacion6_Click(object sender, EventArgs e)
-        {
-            //FrmUsuario frmCli = new FrmUsuario();
-           // frmCli.ShowDialog();
-        }
-        private void btnCompra7_Click(object sender, EventArgs e)
-        {
- 
-        }
-
-        private void btnHistorial8_Click(object sender, EventArgs e)
-        {
-       
-        }
-
-        private void btnCanje9_Click(object sender, EventArgs e)
-        {
-            FrmFactura frmFact = new FrmFactura();
-            frmFact.ShowDialog();
-        }
-
-        private void btnRendicion10_Click(object sender, EventArgs e)
-        {
-           // FrmMenuReserva frmReser = new FrmMenuReserva();
-           // frmReser.ShowDialog();
-        }
-
-        private void btnListado11_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnLogoff_Click(object sender, EventArgs e)
         {
-            
+            CommonVars.userLogged = "";
             this.Hide();
             using ( ini =new FrmInicio())
             {
@@ -199,6 +221,13 @@ namespace PalcoNet.Login
             this.cargar();
             
         }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
 
 
         

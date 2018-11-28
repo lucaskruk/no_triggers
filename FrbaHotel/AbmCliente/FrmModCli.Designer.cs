@@ -47,28 +47,28 @@
             this.cbxtDoc = new System.Windows.Forms.ComboBox();
             this.txbMail = new System.Windows.Forms.TextBox();
             this.txbTel = new System.Windows.Forms.TextBox();
-            this.txbDir = new System.Windows.Forms.TextBox();
+            this.txbCalle = new System.Windows.Forms.TextBox();
             this.txbCiudad = new System.Windows.Forms.TextBox();
-            this.txbNacion = new System.Windows.Forms.TextBox();
+            this.txbCP = new System.Windows.Forms.TextBox();
             this.btnAceptar = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.chkActive = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txbDpto = new System.Windows.Forms.TextBox();
+            this.txbPiso = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txbCUIL = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.lbAltura = new System.Windows.Forms.Label();
+            this.txbAltura = new System.Windows.Forms.TextBox();
+            this.cbxTipoTar = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.txbNroTar = new System.Windows.Forms.TextBox();
+            this.dtFVTar = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.txbApeTar = new System.Windows.Forms.TextBox();
+            this.txbNomTar = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -87,6 +87,7 @@
             // lblNombre
             // 
             this.lblNombre.AutoSize = true;
+            this.lblNombre.ForeColor = System.Drawing.Color.Red;
             this.lblNombre.Location = new System.Drawing.Point(36, 46);
             this.lblNombre.Name = "lblNombre";
             this.lblNombre.Size = new System.Drawing.Size(47, 13);
@@ -96,6 +97,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.Red;
             this.label3.Location = new System.Drawing.Point(36, 72);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(47, 13);
@@ -105,6 +107,7 @@
             // lbltDoc
             // 
             this.lbltDoc.AutoSize = true;
+            this.lbltDoc.ForeColor = System.Drawing.Color.Red;
             this.lbltDoc.Location = new System.Drawing.Point(26, 98);
             this.lbltDoc.Name = "lbltDoc";
             this.lbltDoc.Size = new System.Drawing.Size(57, 13);
@@ -114,6 +117,7 @@
             // lblnDoc
             // 
             this.lblnDoc.AutoSize = true;
+            this.lblnDoc.ForeColor = System.Drawing.Color.Red;
             this.lblnDoc.Location = new System.Drawing.Point(177, 98);
             this.lblnDoc.Name = "lblnDoc";
             this.lblnDoc.Size = new System.Drawing.Size(48, 13);
@@ -123,6 +127,7 @@
             // lblMail
             // 
             this.lblMail.AutoSize = true;
+            this.lblMail.ForeColor = System.Drawing.Color.Red;
             this.lblMail.Location = new System.Drawing.Point(44, 152);
             this.lblMail.Name = "lblMail";
             this.lblMail.Size = new System.Drawing.Size(39, 13);
@@ -141,6 +146,7 @@
             // lblDir
             // 
             this.lblDir.AutoSize = true;
+            this.lblDir.ForeColor = System.Drawing.Color.Red;
             this.lblDir.Location = new System.Drawing.Point(50, 182);
             this.lblDir.Name = "lblDir";
             this.lblDir.Size = new System.Drawing.Size(33, 13);
@@ -150,6 +156,7 @@
             // lblCiudad
             // 
             this.lblCiudad.AutoSize = true;
+            this.lblCiudad.ForeColor = System.Drawing.Color.Red;
             this.lblCiudad.Location = new System.Drawing.Point(30, 250);
             this.lblCiudad.Name = "lblCiudad";
             this.lblCiudad.Size = new System.Drawing.Size(56, 13);
@@ -159,6 +166,7 @@
             // lblNac
             // 
             this.lblNac.AutoSize = true;
+            this.lblNac.ForeColor = System.Drawing.Color.Red;
             this.lblNac.Location = new System.Drawing.Point(207, 230);
             this.lblNac.Name = "lblNac";
             this.lblNac.Size = new System.Drawing.Size(24, 13);
@@ -227,12 +235,12 @@
             this.txbTel.Size = new System.Drawing.Size(84, 20);
             this.txbTel.TabIndex = 6;
             // 
-            // txbDir
+            // txbCalle
             // 
-            this.txbDir.Location = new System.Drawing.Point(95, 175);
-            this.txbDir.Name = "txbDir";
-            this.txbDir.Size = new System.Drawing.Size(245, 20);
-            this.txbDir.TabIndex = 8;
+            this.txbCalle.Location = new System.Drawing.Point(95, 175);
+            this.txbCalle.Name = "txbCalle";
+            this.txbCalle.Size = new System.Drawing.Size(245, 20);
+            this.txbCalle.TabIndex = 8;
             // 
             // txbCiudad
             // 
@@ -241,12 +249,12 @@
             this.txbCiudad.Size = new System.Drawing.Size(100, 20);
             this.txbCiudad.TabIndex = 9;
             // 
-            // txbNacion
+            // txbCP
             // 
-            this.txbNacion.Location = new System.Drawing.Point(240, 227);
-            this.txbNacion.Name = "txbNacion";
-            this.txbNacion.Size = new System.Drawing.Size(100, 20);
-            this.txbNacion.TabIndex = 10;
+            this.txbCP.Location = new System.Drawing.Point(240, 227);
+            this.txbCP.Name = "txbCP";
+            this.txbCP.Size = new System.Drawing.Size(100, 20);
+            this.txbCP.TabIndex = 10;
             // 
             // btnAceptar
             // 
@@ -256,6 +264,7 @@
             this.btnAceptar.TabIndex = 13;
             this.btnAceptar.Text = "Aceptar";
             this.btnAceptar.UseVisualStyleBackColor = true;
+            this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
             // btnCancel
             // 
@@ -277,19 +286,19 @@
             this.chkActive.Text = "Activo";
             this.chkActive.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txbDpto
             // 
-            this.textBox1.Location = new System.Drawing.Point(95, 224);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 16;
+            this.txbDpto.Location = new System.Drawing.Point(95, 224);
+            this.txbDpto.Name = "txbDpto";
+            this.txbDpto.Size = new System.Drawing.Size(100, 20);
+            this.txbDpto.TabIndex = 16;
             // 
-            // textBox2
+            // txbPiso
             // 
-            this.textBox2.Location = new System.Drawing.Point(240, 201);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 17;
+            this.txbPiso.Location = new System.Drawing.Point(240, 201);
+            this.txbPiso.Name = "txbPiso";
+            this.txbPiso.Size = new System.Drawing.Size(100, 20);
+            this.txbPiso.TabIndex = 17;
             // 
             // label1
             // 
@@ -309,49 +318,52 @@
             this.label2.TabIndex = 19;
             this.label2.Text = "Dpto:";
             // 
-            // textBox3
+            // txbCUIL
             // 
-            this.textBox3.Location = new System.Drawing.Point(240, 123);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 20;
+            this.txbCUIL.Location = new System.Drawing.Point(240, 123);
+            this.txbCUIL.Name = "txbCUIL";
+            this.txbCUIL.Size = new System.Drawing.Size(100, 20);
+            this.txbCUIL.TabIndex = 20;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.Red;
             this.label4.Location = new System.Drawing.Point(186, 126);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(34, 13);
             this.label4.TabIndex = 21;
             this.label4.Text = "CUIL:";
             // 
-            // label5
+            // lbAltura
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(53, 206);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(30, 13);
-            this.label5.TabIndex = 22;
-            this.label5.Text = "Piso:";
+            this.lbAltura.AutoSize = true;
+            this.lbAltura.ForeColor = System.Drawing.Color.Red;
+            this.lbAltura.Location = new System.Drawing.Point(46, 204);
+            this.lbAltura.Name = "lbAltura";
+            this.lbAltura.Size = new System.Drawing.Size(37, 13);
+            this.lbAltura.TabIndex = 22;
+            this.lbAltura.Text = "Altura:";
             // 
-            // textBox4
+            // txbAltura
             // 
-            this.textBox4.Location = new System.Drawing.Point(95, 201);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 23;
+            this.txbAltura.Location = new System.Drawing.Point(95, 201);
+            this.txbAltura.Name = "txbAltura";
+            this.txbAltura.Size = new System.Drawing.Size(100, 20);
+            this.txbAltura.TabIndex = 23;
             // 
-            // comboBox1
+            // cbxTipoTar
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(80, 74);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(69, 21);
-            this.comboBox1.TabIndex = 24;
+            this.cbxTipoTar.FormattingEnabled = true;
+            this.cbxTipoTar.Location = new System.Drawing.Point(80, 74);
+            this.cbxTipoTar.Name = "cbxTipoTar";
+            this.cbxTipoTar.Size = new System.Drawing.Size(69, 21);
+            this.cbxTipoTar.TabIndex = 24;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.Red;
             this.label6.Location = new System.Drawing.Point(4, 77);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(67, 13);
@@ -361,56 +373,59 @@
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.Color.Red;
             this.label7.Location = new System.Drawing.Point(2, 108);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(66, 13);
             this.label7.TabIndex = 26;
             this.label7.Text = "Nro. Tarjeta:";
             // 
-            // textBox5
+            // txbNroTar
             // 
-            this.textBox5.Location = new System.Drawing.Point(80, 105);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(245, 20);
-            this.textBox5.TabIndex = 27;
+            this.txbNroTar.Location = new System.Drawing.Point(80, 105);
+            this.txbNroTar.Name = "txbNroTar";
+            this.txbNroTar.Size = new System.Drawing.Size(245, 20);
+            this.txbNroTar.TabIndex = 27;
             // 
-            // dateTimePicker1
+            // dtFVTar
             // 
-            this.dateTimePicker1.CustomFormat = "MM-yy";
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(256, 74);
-            this.dateTimePicker1.MinDate = new System.DateTime(1910, 1, 1, 0, 0, 0, 0);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(69, 20);
-            this.dateTimePicker1.TabIndex = 28;
-            this.dateTimePicker1.Value = new System.DateTime(2018, 7, 12, 0, 0, 0, 0);
+            this.dtFVTar.CustomFormat = "MM-yy";
+            this.dtFVTar.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtFVTar.Location = new System.Drawing.Point(256, 74);
+            this.dtFVTar.MinDate = new System.DateTime(1910, 1, 1, 0, 0, 0, 0);
+            this.dtFVTar.Name = "dtFVTar";
+            this.dtFVTar.Size = new System.Drawing.Size(69, 20);
+            this.dtFVTar.TabIndex = 28;
+            this.dtFVTar.Value = new System.DateTime(2018, 7, 12, 0, 0, 0, 0);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.Color.Red;
             this.label8.Location = new System.Drawing.Point(155, 77);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(101, 13);
             this.label8.TabIndex = 29;
             this.label8.Text = "Fecha Vencimiento:";
             // 
-            // textBox6
+            // txbApeTar
             // 
-            this.textBox6.Location = new System.Drawing.Point(80, 47);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(245, 20);
-            this.textBox6.TabIndex = 32;
+            this.txbApeTar.Location = new System.Drawing.Point(80, 47);
+            this.txbApeTar.Name = "txbApeTar";
+            this.txbApeTar.Size = new System.Drawing.Size(245, 20);
+            this.txbApeTar.TabIndex = 32;
             // 
-            // textBox7
+            // txbNomTar
             // 
-            this.textBox7.Location = new System.Drawing.Point(80, 21);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(245, 20);
-            this.textBox7.TabIndex = 30;
+            this.txbNomTar.Location = new System.Drawing.Point(80, 21);
+            this.txbNomTar.Name = "txbNomTar";
+            this.txbNomTar.Size = new System.Drawing.Size(245, 20);
+            this.txbNomTar.TabIndex = 30;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.Color.Red;
             this.label9.Location = new System.Drawing.Point(21, 50);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(47, 13);
@@ -420,6 +435,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
+            this.label10.ForeColor = System.Drawing.Color.Red;
             this.label10.Location = new System.Drawing.Point(21, 24);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(47, 13);
@@ -429,15 +445,15 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label10);
-            this.groupBox1.Controls.Add(this.textBox6);
-            this.groupBox1.Controls.Add(this.comboBox1);
-            this.groupBox1.Controls.Add(this.textBox7);
+            this.groupBox1.Controls.Add(this.txbApeTar);
+            this.groupBox1.Controls.Add(this.cbxTipoTar);
+            this.groupBox1.Controls.Add(this.txbNomTar);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.textBox5);
+            this.groupBox1.Controls.Add(this.txbNroTar);
             this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.dateTimePicker1);
+            this.groupBox1.Controls.Add(this.dtFVTar);
             this.groupBox1.Location = new System.Drawing.Point(12, 317);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(337, 141);
@@ -451,22 +467,22 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(430, 530);
+            this.ClientSize = new System.Drawing.Size(365, 530);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.txbAltura);
+            this.Controls.Add(this.lbAltura);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.txbCUIL);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txbPiso);
+            this.Controls.Add(this.txbDpto);
             this.Controls.Add(this.chkActive);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAceptar);
-            this.Controls.Add(this.txbNacion);
+            this.Controls.Add(this.txbCP);
             this.Controls.Add(this.txbCiudad);
-            this.Controls.Add(this.txbDir);
+            this.Controls.Add(this.txbCalle);
             this.Controls.Add(this.txbTel);
             this.Controls.Add(this.txbMail);
             this.Controls.Add(this.cbxtDoc);
@@ -516,28 +532,28 @@
         private System.Windows.Forms.ComboBox cbxtDoc;
         private System.Windows.Forms.TextBox txbMail;
         private System.Windows.Forms.TextBox txbTel;
-        private System.Windows.Forms.TextBox txbDir;
+        private System.Windows.Forms.TextBox txbCalle;
         private System.Windows.Forms.TextBox txbCiudad;
-        private System.Windows.Forms.TextBox txbNacion;
+        private System.Windows.Forms.TextBox txbCP;
         private System.Windows.Forms.Button btnAceptar;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.CheckBox chkActive;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txbDpto;
+        private System.Windows.Forms.TextBox txbPiso;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txbCUIL;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label lbAltura;
+        private System.Windows.Forms.TextBox txbAltura;
+        private System.Windows.Forms.ComboBox cbxTipoTar;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.TextBox txbNroTar;
+        private System.Windows.Forms.DateTimePicker dtFVTar;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox txbApeTar;
+        private System.Windows.Forms.TextBox txbNomTar;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.GroupBox groupBox1;
