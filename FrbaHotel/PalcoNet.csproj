@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{770CF46A-7F13-42E4-8148-20D838EB9CB8}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PalcoNet</RootNamespace>
+    <AssemblyName>FrbaHotel</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbmCliente\FrmCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmCliente\FrmCliente.Designer.cs">
+      <DependentUpon>FrmCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmCliente\FrmModCli.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmCliente\FrmModCli.Designer.cs">
+      <DependentUpon>FrmModCli.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMComprar\FrmComprar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMComprar\FrmComprar.Designer.cs">
+      <DependentUpon>FrmComprar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMComprar\FrmCompraUbi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMComprar\FrmCompraUbi.Designer.cs">
+      <DependentUpon>FrmCompraUbi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMEmpresa\FrmEmpresa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMEmpresa\FrmEmpresa.Designer.cs">
+      <DependentUpon>FrmEmpresa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMEmpresa\FrmModEmp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMEmpresa\FrmModEmp.Designer.cs">
+      <DependentUpon>FrmModEmp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmFactura\FrmFactura.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmFactura\FrmFactura.Designer.cs">
+      <DependentUpon>FrmFactura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMGrado\FrmModGrado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMGrado\FrmModGrado.Designer.cs">
+      <DependentUpon>FrmModGrado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMPremio\FrmCanje.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMPremio\FrmCanje.Designer.cs">
+      <DependentUpon>FrmCanje.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMPremio\FrmModPremio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMPremio\FrmModPremio.Designer.cs">
+      <DependentUpon>FrmModPremio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMPremio\FrmPremio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMPremio\FrmPremio.Designer.cs">
+      <DependentUpon>FrmPremio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMPublicacion\FrmModPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMPublicacion\FrmModPublicacion.Designer.cs">
+      <DependentUpon>FrmModPublicacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMPublicacion\FrmPubli.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMPublicacion\FrmPubli.Designer.cs">
+      <DependentUpon>FrmPubli.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmRol\FrmModifRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmRol\FrmModifRol.Designer.cs">
+      <DependentUpon>FrmModifRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmRol\FrmRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmRol\FrmRol.Designer.cs">
+      <DependentUpon>FrmRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmUsuario\FrmUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmUsuario\FrmUsuario.Designer.cs">
+      <DependentUpon>FrmUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmUsuario\FrmModUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmUsuario\FrmModUser.Designer.cs">
+      <DependentUpon>FrmModUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmInicio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmInicio.Designer.cs">
+      <DependentUpon>FrmInicio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmListado\FrmListado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmListado\FrmListado.Designer.cs">
+      <DependentUpon>FrmListado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Historial\FrmHistorial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial\FrmHistorial.Designer.cs">
+      <DependentUpon>FrmHistorial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\logHelper.cs" />
+    <Compile Include="Login\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\SelecRole.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\SelecRole.Designer.cs">
+      <DependentUpon>SelecRole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MenuMain\frmMenuMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MenuMain\frmMenuMain.Designer.cs">
+      <DependentUpon>frmMenuMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ABMRendicion\FrmRendicion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMRendicion\FrmRendicion.Designer.cs">
+      <DependentUpon>FrmRendicion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utility\FrmBuscador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utility\FrmBuscador.Designer.cs">
+      <DependentUpon>FrmBuscador.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utility\SP.cs" />
+    <Compile Include="Utility\Utils.cs" />
+    <EmbeddedResource Include="AbmCliente\FrmCliente.resx">
+      <DependentUpon>FrmCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmCliente\FrmModCli.resx">
+      <DependentUpon>FrmModCli.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMComprar\FrmComprar.resx">
+      <DependentUpon>FrmComprar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMComprar\FrmCompraUbi.resx">
+      <DependentUpon>FrmCompraUbi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMEmpresa\FrmEmpresa.resx">
+      <DependentUpon>FrmEmpresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMEmpresa\FrmModEmp.resx">
+      <DependentUpon>FrmModEmp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMGrado\FrmModGrado.resx">
+      <DependentUpon>FrmModGrado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmListado\FrmListado.resx">
+      <DependentUpon>FrmListado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMPremio\FrmCanje.resx">
+      <DependentUpon>FrmCanje.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMPremio\FrmModPremio.resx">
+      <DependentUpon>FrmModPremio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMPremio\FrmPremio.resx">
+      <DependentUpon>FrmPremio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMPublicacion\FrmModPublicacion.resx">
+      <DependentUpon>FrmModPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMPublicacion\FrmPubli.resx">
+      <DependentUpon>FrmPubli.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmRol\FrmModifRol.resx">
+      <DependentUpon>FrmModifRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmRol\FrmRol.resx">
+      <DependentUpon>FrmRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmUsuario\FrmUsuario.resx">
+      <DependentUpon>FrmUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmUsuario\FrmModUser.resx">
+      <DependentUpon>FrmModUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmInicio.resx">
+      <DependentUpon>FrmInicio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial\FrmHistorial.resx">
+      <DependentUpon>FrmHistorial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\SelecRole.resx">
+      <DependentUpon>SelecRole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuMain\frmMenuMain.resx">
+      <DependentUpon>frmMenuMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="ABMRendicion\FrmRendicion.resx">
+      <DependentUpon>FrmRendicion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utility\FrmBuscador.resx">
+      <DependentUpon>FrmBuscador.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ABMRubro\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
